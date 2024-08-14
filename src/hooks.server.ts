@@ -16,7 +16,8 @@ import { nanoid } from 'nanoid'
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export const handleFetch = async ({ event, request, fetch }) => {
-	request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
+	// console.log('request spec: ', request)
+  request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
 
 	return fetch(request)
 }

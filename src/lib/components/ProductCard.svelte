@@ -112,7 +112,7 @@ onMount(async () => {
 			{#if product_image_dimension == '1x1'}
 				{#if product.img || (product.images && product.images[0])}
 					<LazyImg
-						src="{product.img || (product.images && product.images[0])}"
+						src="{product.images[0].url}"
 						alt="{product.name}"
 						height="210"
 						aspect_ratio="1:1"
@@ -140,7 +140,7 @@ onMount(async () => {
 			{:else if product_image_dimension == '3x4'}
 				{#if product.img || (product.images && product.images[0])}
 					<LazyImg
-						src="{product.img || (product.images && product.images[0])}"
+						src="{product.images[0].url}"
 						alt="{product.name}"
 						height="280"
 						aspect_ratio="3:4"
@@ -168,7 +168,7 @@ onMount(async () => {
 			{:else if product_image_dimension == '4x3'}
 				{#if product.img || (product.images && product.images[0])}
 					<LazyImg
-						src="{product.img || (product.images && product.images[0])}"
+						src="{product.images[0].url}"
 						alt="{product.name}"
 						height="157"
 						aspect_ratio="4:3"
@@ -196,7 +196,7 @@ onMount(async () => {
 			{:else if product_image_dimension == '16x9'}
 				{#if product.img || (product.images && product.images[0])}
 					<LazyImg
-						src="{product.img || (product.images && product.images[0])}"
+						src="{product.images[0].url}"
 						alt="{product.name}"
 						height="236"
 						aspect_ratio="16:9"
@@ -224,7 +224,7 @@ onMount(async () => {
 			{:else if product_image_dimension == '9x16'}
 				{#if product.img || (product.images && product.images[0])}
 					<LazyImg
-						src="{product.img || (product.images && product.images[0])}"
+						src="{product.images[0].url}"
 						alt="{product.name}"
 						height="373"
 						aspect_ratio="9:16"
@@ -287,7 +287,7 @@ onMount(async () => {
 			<!-- View smilar button start-->
 
 			<!-- <div
-				class="flex justify-end 
+				class="flex justify-end
 					{product.relatedProducts?.length > 0 ? 'opacity-100' : 'opacity-0'}">
 				<button class="focus:outline-none" on:click="{() => (showRelatedProducts = true)}">
 					<div

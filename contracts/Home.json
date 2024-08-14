@@ -1,0 +1,32 @@
+{
+  "categories": [
+    {
+      "slug": "puppies-pet-collection",
+      "img": "https://misiki.gumlet.io/stores/6356502aca4ff28ed596cb1b/category/6-4-v8lkzIczWp4v-9Pq4vzRz9V4L.png?tr=w-288,h-288,ar-3-4",
+      "name": "Puppies"
+    }
+  ],
+  "trending": [
+    {
+      "slug": "pet-collection-labrador-puppy-001",
+      "tags": [
+        {
+          "name": "fresh",
+          "type": "Ribbon"
+        }
+      ],
+      "new": true,
+      "images": [
+        "https://misiki.gumlet.io/images/product/women/bee421f19aa7b776cc0a084aa647fbb6-138507240393.JPEG?tr=w-0,h-560,ar-3-4",
+        ""
+      ],
+      "name": "Labrador Puppy",
+      "brandName": "Pet Collection",
+      "price": 2314,
+      "mrp": 8492,
+      "relatedProducts": [
+        {}
+      ]
+    }
+  ]
+}

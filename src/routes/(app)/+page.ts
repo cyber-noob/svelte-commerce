@@ -1,4 +1,5 @@
 import { CollectionService, DealsService, HomeService, ProductService } from '$lib/services'
+import { fetchHome } from 'lib/services/petstore/home-service'
 
 export async function load({ params, parent, url }) {
 	const { store, storeId, origin, sid } = await parent()
@@ -16,11 +17,7 @@ export async function load({ params, parent, url }) {
 		fl[key] = value
 	})
 
-	const home = await HomeService.fetchHome({
-		origin,
-		storeId,
-		sid
-	})
+	const home = await fetchHome()
 
 	// const promises = [
 	//

@@ -40,6 +40,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 		let res: AllProducts | {} = {}
 
 		const med = await getMedusajsApi(`products`)
+    console.log('med: ', med)
 		res = mapMedusajsAllProducts(med)
 		return res || {}
 	} catch (e) {

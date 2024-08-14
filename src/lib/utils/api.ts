@@ -7,7 +7,8 @@ import cookie from 'cookie'
 let typingTimer
 
 const send = async ({ method, path, params, data, token, headers, origin }: any) => {
-	if (
+	console.log('send....')
+  if (
 		path.includes('.png') ||
 		path.includes('.jpg') ||
 		path.includes('.svg') ||
@@ -15,10 +16,12 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 		path.includes('.css') ||
 		path.includes('dev-sw')
 	) {
+    console.log('in if block')
 		return
 	}
 
 	let uri = new URL(path, origin)
+  console.log('uri: ', uri)
 
 	if (!path.includes('/api/')) {
 		// When microservice path provided
@@ -86,6 +89,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	}
 
 	const url = uri.toString()
+  console.log('url: ', url)
 
 	startDelayedLoadingIndicator()
 
