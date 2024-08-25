@@ -94,24 +94,24 @@ onMount(async () => {
 		<PreloadingIndicator />
 	{/if}
 
-	{#if !data?.store}
-		<!-- If store not found -->
+	<!--{#if !data?.store}-->
+	<!--	&lt;!&ndash; If store not found &ndash;&gt;-->
 
-		<div class="h-screen w-full bg-white flex items-center justify-center">
-			<a
-				href="https://litekart.in/"
-				class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
-				<img
-					src="/litekart-rectangular-logo-black.png"
-					alt=""
-					class="h-10 w-auto object-contain object-center" />
-			</a>
+	<!--	<div class="h-screen w-full bg-white flex items-center justify-center">-->
+	<!--		<a-->
+	<!--			href="https://litekart.in/"-->
+	<!--			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">-->
+	<!--			<img-->
+	<!--				src="/litekart-rectangular-logo-black.png"-->
+	<!--				alt=""-->
+	<!--				class="h-10 w-auto object-contain object-center" />-->
+	<!--		</a>-->
 
-			<div class="flex items-center justify-center p-10 bg-white text-center">
-				<img src="{noStoreFound}" alt="" class="h-80 w-auto object-contain object-center" />
-			</div>
-		</div>
-	{:else if data?.store && !data?.store?.closed}
+	<!--		<div class="flex items-center justify-center p-10 bg-white text-center">-->
+	<!--			<img src="{noStoreFound}" alt="" class="h-80 w-auto object-contain object-center" />-->
+	<!--		</div>-->
+	<!--	</div>-->
+	<!--{:else if data?.store && !data?.store?.closed}-->
 		<!-- If store found and is not closed -->
 
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
@@ -144,29 +144,29 @@ onMount(async () => {
 		<!-- {#if ReloadPrompt}
 			<svelte:component this="{ReloadPrompt}" />
 		{/if} -->
-	{:else}
-		<!-- If store found and is closed -->
+	<!--{:else}-->
+	<!--	&lt;!&ndash; If store found and is closed &ndash;&gt;-->
 
-		<div class="h-screen w-full bg-white flex items-center justify-center">
-			<div
-				class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
-				<LazyImg
-					src="{data?.store?.logo || '/litekart-rectangular-logo-black.png'}"
-					class="h-10 w-auto object-contain object-center" />
-			</div>
+	<!--	<div class="h-screen w-full bg-white flex items-center justify-center">-->
+	<!--		<div-->
+	<!--			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">-->
+	<!--			<LazyImg-->
+	<!--				src="{data?.store?.logo || '/litekart-rectangular-logo-black.png'}"-->
+	<!--				class="h-10 w-auto object-contain object-center" />-->
+	<!--		</div>-->
 
-			<div class="flex items-center justify-center p-10 bg-white text-center">
-				<div
-					class="p-10 flex flex-col gap-2 items-center justify-center border-4 rounded-3xl shadow-2xl">
-					<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
+	<!--		<div class="flex items-center justify-center p-10 bg-white text-center">-->
+	<!--			<div-->
+	<!--				class="p-10 flex flex-col gap-2 items-center justify-center border-4 rounded-3xl shadow-2xl">-->
+	<!--				<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />-->
 
-					<p>
-						{data?.store?.closedMessage}
-					</p>
-				</div>
-			</div>
-		</div>
-	{/if}
+	<!--				<p>-->
+	<!--					{data?.store?.closedMessage}-->
+	<!--				</p>-->
+	<!--			</div>-->
+	<!--		</div>-->
+	<!--	</div>-->
+	<!--{/if}-->
 
 	<!-- <FetchInit /> -->
 </main>

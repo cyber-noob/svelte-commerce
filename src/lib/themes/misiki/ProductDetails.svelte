@@ -95,6 +95,9 @@ export let data
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
 
+let photo_array = data.product?.photos
+let images = photo_array.map((photo) => photo.url)
+
 let seoProps = {
 	brand: `${$page.data.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
@@ -391,7 +394,7 @@ async function updateVariant(variant) {
 
 			<Breadcrumb
 				categoryPool="{data.product?.categoryPool}"
-				currentProductName="{data.product?.name}" />
+				currentProductName="{data?.product?.name || data?.product?.title}" />
 
 			<!-- Social share button -->
 
@@ -407,8 +410,8 @@ async function updateVariant(variant) {
 			<div class="col-span-1 h-auto lg:col-span-3">
 				<div
 					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-					{#if data?.product?.images?.length}
-						{#each data.product?.images as img, index}
+					{#if images?.length}
+						{#each images as img, index}
 							{#if img.includes('https://www.youtube.com/watch')}
 								<iframe
 									src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(img)}"
@@ -426,7 +429,7 @@ async function updateVariant(variant) {
 									{#if product_image_dimension === '1x1'}
 										<LazyImg
 											src="{img}"
-											alt="{data.product?.name} catelog {index}"
+											alt="{data.product?.title} catelog {index}"
 											height="512"
 											width="512"
 											aspect_ratio="1:1"
@@ -434,7 +437,7 @@ async function updateVariant(variant) {
 									{:else}
 										<LazyImg
 											src="{img}"
-											alt="{data.product?.name}"
+											alt="{data.product?.title}"
 											height="512"
 											class="object-contain object-top w-full h-auto first-line:text-xs" />
 									{/if}
@@ -485,12 +488,12 @@ async function updateVariant(variant) {
 						</div>
 					</div>
 
-					<!-- Name veg/non veg icon -->
+					<!-- Title & product category | Name veg/non veg icon -->
 
-					{#if data.product?.name}
+					{#if data?.product?.name || data?.product?.title}
 						<div class="flex justify-between gap-2">
-							<span class="flex-1 sm:text-lg text-zinc-500">
-								{data.product?.name}
+							<span class="flex-1 sm:text-lg text-zinc-900 font-bold">
+								{data.product?.title || data.product?.name}
 							</span>
 
 							{#if $page.data.store?.isFnb && data.product.foodType}
@@ -503,6 +506,11 @@ async function updateVariant(variant) {
 								</div>
 							{/if}
 						</div>
+            <div>
+              <span class="flex-1 sm:text-lg text-zinc-500">
+								{data.product?.collection}
+							</span>
+            </div>
 					{/if}
 
 					{#if $page.data.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && (data?.product?.vendor?.businessName || data?.product?.vendor?.name)}
@@ -1095,9 +1103,9 @@ async function updateVariant(variant) {
 				<!-- Product details (short description) -->
 
 				{#if loading}
-					<Skeleton extraSmall />
-				{:else if data?.moreProductDetails}
-					{#if data?.moreProductDetails?.description}
+					<Skeleton small />
+				{:else if data?.moreProductDetails || data?.product?.description}
+					{#if data?.moreProductDetails?.description || data?.product?.description}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Product Details</h5>
@@ -1118,7 +1126,7 @@ async function updateVariant(variant) {
 							</div>
 
 							<div class="prose max-w-none text-sm text-zinc-500">
-								{@html data?.moreProductDetails?.description}
+								{@html data?.moreProductDetails?.description || data?.product?.description}
 							</div>
 						</div>
 					{/if}

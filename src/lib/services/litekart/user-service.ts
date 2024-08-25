@@ -58,7 +58,7 @@ export const googleOneTapLoginService = async ({ data, storeId, origin, sid = nu
 		let res: any = {}
 
 		res = await post(`auth/google/onetap`, data, origin)
-
+    console.log('gauth: ', res)
 		return res
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)

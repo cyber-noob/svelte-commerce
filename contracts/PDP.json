@@ -1,0 +1,235 @@
+{
+  "origin":"http://localhost:3000",
+  "host":"localhost:3000",
+  "isDesktop":true,
+  "isShowBackButton":true,
+  "storeId":"644e75ac8939a6e83cc9b292",
+  "me":null,
+  "sid":"undefined",
+  "cartId":"undefined",
+  "currentPage":1,
+  "q":"",
+  "pathname":"/product/white-new-women-casual-o-neck-flare-sleeve-back-lace-up-blouse-tops",
+  "store":{
+    "id":"644e75ac8939a6e83cc9b292",
+    "address":"Odisha, India",
+    "alert":"",
+    "allowBackOrder":false,
+    "close":{
+
+    },
+    "currencyCode":"INR",
+    "currencySymbol":"₹",
+    "description":"",
+    "domain":"arialshop.com",
+    "email":"hi@litekart.in",
+    "facebookPixel":{
+      "id":""
+    },
+    "favicon":"./favicon.ico",
+    "themeColor":"#d62828",
+    "googleAnalytics":{
+      "id":""
+    },
+    "isCollections":true,
+    "isDeals":false,
+    "isDiscountCoupons":false,
+    "isFnb":false,
+    "isGDPR":false,
+    "isGuestCheckout":false,
+    "isHyperlocal":false,
+    "isIndianPincodes":false,
+    "isMultiVendor":true,
+    "isPartialCheckout":false,
+    "isProductReviewsAndRatings":false,
+    "isSecureCatalogue":false,
+    "isWishlist":false,
+    "keywords":"arialshop",
+    "loginUrl":"/auth/login",
+    "otpLogin":true,
+    "phone":"+912323232323",
+    "saasDomain":"https://litekart.in",
+    "imageCdn":{
+      "active":[
+        "Object"
+      ],
+      "provider":[
+        "Object"
+      ],
+      "url":[
+        "Object"
+      ]
+    },
+    "saasName":"Litekart",
+    "searchbarText":"Search for products, brands and more",
+    "storeCountries":[
+      [
+        "Object"
+      ]
+    ],
+    "storeCountry":{
+      "_id":"650bf42f76936613e992691c",
+      "default":true,
+      "name":"India",
+      "code":"IN",
+      "dialCode":"+91"
+    },
+    "storeCurrencies":[
+      [
+        "Object"
+      ]
+    ],
+    "storeCurrency":{
+      "_id":"644e75b58939a6e83cc9b2dd",
+      "isoCode":"INR",
+      "symbol":"₹",
+      "decimalDigits":2
+    },
+    "storeLanguage":{
+      "_id":"644e75b68939a6e83cc9b2ea",
+      "name":"English",
+      "code":"en"
+    },
+    "storeLanguages":[
+      [
+        "Object"
+      ]
+    ],
+    "title":"Arialshop",
+    "websiteLegalName":"",
+    "websiteName":"Arialshop",
+    "weightUnit":"lb"
+  },
+  "url":"/product/white-new-women-casual-o-neck-flare-sleeve-back-lace-up-blouse-tops",
+  "product":{
+    "_id":"645da3c21bf1d31fe2bc9364",
+    "updatedAt":"2024-07-25T12:53:37.458Z",
+    "createdAt":"2019-05-16T03:15:27.774Z",
+    "sku":"WhiteNewWomenCasualO-NeckFlareSleeveBackLaceUpBlouseTops-undefined",
+    "description":"100% Brand New.\n""+""Brand: Meaneor\n""+""Material: 95% Polyester, 5% Spandex\n""+""3 Colors: Black, White, Red\n""+""Collar: O-Neck\n""+""Sleeve: Flare Sleeve\n""+""Style: Blouse \n""+""Pattern: Solid\n""+""Decor: Back Hollow Lace Up\n""+""Occasion: Casual\n""+""Garment Care: Hand-Wash (Max 40 Degrees Celsius)\n""+""O-neck, fare sleeve, back lace up design.\n""+""Package Content: 1 x Women Blouse\n""+""Our Model Information: Height 172cm, Bust 90cm,  Waist 63cm, Hip 90cm.\n""+""Size: There are 4 sizes  (S/M/L/XL) available for the following listing. please allow 1-2cm differs due to manual measurement, thanks (All measurement in cm and please note 1cm=0.39inch)",
+    "name":"White New Women Casual O-Neck Flare Sleeve Back Lace Up Blouse Tops",
+    "metaDescription":"100% Brand New.\n""+""Brand: Meaneor\n""+""Material: 95% Polyester, 5% Spandex\n""+""3 Colors: Black, White, Red\n""+""Collar: O-Neck\n""+""Sleeve: Flare Sleeve\n""+""Style: Blouse \n""+""Pattern: Solid\n""+""Decor: Back Hollow Lace Up\n""+""Occasion: Casual\n""+""Garment Care: Hand-Wash (Max 40 Degrees Celsius)\n""+""O-neck, fare sleeve, back lace up design.\n""+""Package Content: 1 x Women Blouse\n""+""Our Model Information: Height 172cm, Bust 90cm,  Waist 63cm, Hip 90cm.\n""+""Size: There are 4 sizes  (S/M/L/XL) available for the following listing. please allow 1-2cm differs due to manual measurement, thanks (All measurement in cm and please note 1cm=0.39inch)",
+    "slug":"white-new-women-casual-o-neck-flare-sleeve-back-lace-up-blouse-tops",
+    "sizechart":"/product/3bea229aa72640c6e5e1ac9338d51d70-618346414162.JPEG",
+    "new":false,
+    "approved":true,
+    "active":true,
+    "popularity":47,
+    "discount":27,
+    "mrp":4257,
+    "price":3087,
+    "store":"644e75ac8939a6e83cc9b292",
+    "images":[
+      "https://s3.ap-south-1.amazonaws.com/litekart.in/images/product/women/0cfb765dcf9f056bf97804587ef90ef2-475887126852.JPEG",
+      "https://s3.ap-south-1.amazonaws.com/litekart.in/images/product/women/333d4a74c5c52337fbf81c25cc43aabe-389032414667.JPEG",
+      "https://s3.ap-south-1.amazonaws.com/litekart.in/images/product/women/6b654e0420215ef9567219c758af3db0-15197423023.JPEG",
+      "https://s3.ap-south-1.amazonaws.com/litekart.in/images/product/women/d427ac9628b597041a151f3f41247ded-145313116116.JPEG",
+      "https://s3.ap-south-1.amazonaws.com/litekart.in/images/product/women/34f91587ff3137bc0e9098562b7c45da-418941280777.JPEG"
+    ],
+    "styleId":"5cdcd5cffa390463fb5886d4",
+    "img":"https://s3.ap-south-1.amazonaws.com/litekart.in/images/product/women/0cfb765dcf9f056bf97804587ef90ef2-475887126852.JPEG",
+    "formattedMrp":"₹4257",
+    "formattedPrice":"₹3087",
+    "crossSells":[
+
+    ],
+    "deliveryDetails":"",
+    "expiryDate":null,
+    "files":[
+
+    ],
+    "foodType":"N",
+    "isCustomized":false,
+    "linkedProducts":[
+
+    ],
+    "mfgDate":null,
+    "relatedProducts":[
+
+    ],
+    "replaceAllowed":false,
+    "replaceValidityInDays":0,
+    "returnAllowed":false,
+    "returnValidityInDays":0,
+    "stock":0,
+    "tags":[
+
+    ],
+    "type":"physical",
+    "category":{
+      "_id":"6405e37ad1e27517b19662da",
+      "name":"Fashion",
+      "pathA":[
+
+      ],
+      "link":"/fashion",
+      "slug":"fashion",
+      "img":null
+    },
+    "categoryPool":[
+      [
+        "Object"
+      ],
+      [
+        "Object"
+      ],
+      [
+        "Object"
+      ],
+      [
+        "Object"
+      ],
+      [
+        "Object"
+      ]
+    ],
+    "collections":[
+
+    ],
+    "dimensionUnit":"cm",
+    "features":[
+
+    ],
+    "groupProduct":[
+
+    ],
+    "hasStock":true,
+    "options":[
+
+    ],
+    "productDetails":[
+
+    ],
+    "productMasterId":"21430450304285195540610-white",
+    "ratings":0,
+    "reviews":0,
+    "specifications":[
+
+    ],
+    "unit":"g",
+    "vendor":{
+      "_id":"638d6a28de0a19efe979d36b",
+      "slug":"misiki-admin",
+      "minimum_order_value":0,
+      "business_name":"Litekart",
+      "lead_time":2
+    },
+    "allow_back_order":false,
+    "attributes":[
+
+    ],
+    "case_size":1,
+    "min_order_qty":1,
+    "pack_size":1,
+    "ag":[
+      [
+        "Object"
+      ]
+    ],
+    "pg":[
+
+    ],
+    "cache":"HIT"
+  },
+  "deliveryDetails":"undefined"
+}

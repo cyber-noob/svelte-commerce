@@ -10,23 +10,24 @@ export const googleOneTap = (
 ) => {
 	if (!client_id) {
 		throw new Error('client_id is required')
-	}
-	if (typeof window !== 'undefined' && window.document && window.google) {
-		const contextValue = ['signin', 'signup', 'use'].includes(context) ? context : 'signin'
-		const googleScript = document.createElement('script')
-		googleScript.src = 'https://accounts.google.com/gsi/client'
-		googleScript.async = true
-		googleScript.defer = true
-		document.head.appendChild(googleScript)
-		window.google.accounts.id.initialize({
-			client_id: client_id,
-			callback: callback,
-			auto_select: auto_select,
-			cancel_on_tap_outside: cancel_on_tap_outside,
-			context: contextValue,
-			...otherOptions
-		})
-		window.google.accounts.id.prompt()
 	} else {
-	}
+    try {
+      const contextValue = ['signin', 'signup', 'use']
+      window.google.accounts.id.initialize({
+        client_id: client_id,
+        callback: callback,
+        auto_select: auto_select,
+        cancel_on_tap_outside: cancel_on_tap_outside,
+        context: contextValue,
+        ...otherOptions
+      })
+      google.accounts.id.renderButton(
+        document.getElementById("googleSignIn"),
+        { theme: "outline", size: "large" }  // customization attributes
+      )
+      window.google.accounts.id.prompt()
+    } catch (error) {
+      console.error("error creating googleOneTap", error)
+    }
+  }
 }

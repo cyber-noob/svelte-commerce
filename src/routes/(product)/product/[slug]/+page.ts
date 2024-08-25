@@ -1,6 +1,7 @@
 // import { getCache, setCache } from '$lib/server/redis'
 import { ProductService, ReviewService, WishlistService } from '$lib/services'
 import { error } from '@sveltejs/kit'
+import { fetchProductDetails } from 'lib/services/petstore/pdp-service'
 
 export async function load({ params, url, parent }) {
 	const { slug } = params
@@ -9,13 +10,7 @@ export async function load({ params, url, parent }) {
 
 	const getProductDetails = async () => {
 		try {
-			const product = await ProductService.fetchProduct({
-				origin,
-				sid,
-				slug,
-				id: slug,
-				storeId
-			})
+			const product = await fetchProductDetails(slug)
 
 			if (!product) {
 				error(404, { message: 'Product Not found.' })

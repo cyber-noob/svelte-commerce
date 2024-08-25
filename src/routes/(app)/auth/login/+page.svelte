@@ -52,22 +52,8 @@ onMount(() => {
 		},
 		async (res) => {
 			try {
-				const onetap = await UserService.googleOneTapLoginService({
-					data: res,
-					origin: $page.data.origin
-				})
-				const me = {
-					id: onetap.id,
-					email: onetap.email,
-					phone: onetap.phone,
-					firstName: onetap.firstName,
-					lastName: onetap.lastName,
-					avatar: onetap.avatar,
-					role: onetap.role,
-					verified: onetap.verified,
-					active: onetap.active
-				}
-				await cookies.set('me', me, { path: '/', maxAge: 31536000 })
+        console.log('gauth: ', res)
+				await cookies.set('me', res, { path: '/', maxAge: 31536000 })
 				let r = ref || '/'
 				if (browser) goto(r)
 			} catch (e) {
@@ -391,6 +377,7 @@ function changeNumber() {
 			<input type="hidden" name="password" value="{password || null}" />
 
 			<!-- Submit -->
+      <div id="googleSignIn"></div>
 
 			<PrimaryButton
 				type="submit"

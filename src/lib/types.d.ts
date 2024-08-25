@@ -60,6 +60,7 @@ interface Product {
 	hasStock?: boolean
 	height: number
 	hsn: string
+  photos?: Photos[]
 	images?: string[]
 	img?: string
 	isCustomized?: boolean
@@ -95,6 +96,11 @@ interface Product {
 	variants?: any[]
 	moreProductDetails?: any
 	isWishlisted: boolean
+}
+
+interface Photos {
+  url: String,
+  published_on: String
 }
 
 interface Brand {
