@@ -117,6 +117,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const zip = event.cookies.get('zip')
 		event.locals.sid = event.cookies.get('connect.sid')
 		event.locals.cartId = event.cookies.get('cartId')
+    event.locals.me = JSON.parse(event.cookies.get('me'))
 		if (zip) event.locals.zip = JSON.parse(zip)
 		// This makes a call to backend on every request
 

@@ -73,7 +73,7 @@ $: if (innerWidth < 640) {
 <svelte:window bind:innerHeight bind:innerWidth />
 
 <main class="minimum-width-rem">
-	<Nav me="{data.me}" store="{data.store}" bind:showCartSidebar bind:openSidebar />
+	<Nav me="{data.me}" store="{data.store}" bind:showCartSidebar bind:openSidebar data="{data}"/>
 
 	<div class="flex w-full antialiased" style="height: {slotHeightAccToPageHeight}px;">
 		{#if menu?.length > 0}

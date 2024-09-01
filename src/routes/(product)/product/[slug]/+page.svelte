@@ -6,7 +6,6 @@ import { ProductService, ReviewService, WishlistService } from '$lib/services'
 
 export let data: any = {}
 
-console.log('pdp data: ', data)
 </script>
 
 <ProductDetails {data} />

@@ -85,6 +85,14 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import ageIcon from '$lib/icons/age.svg'
+import breedIcon from '$lib/icons/breed.svg'
+import colorIcon from '$lib/icons/color.svg'
+import dewormingIcon from '$lib/icons/deworming.svg'
+import familyIcon from '$lib/icons/family.svg'
+import genderIcon from '$lib/icons/gender.svg'
+import vaccineIcon from '$lib/icons/vaccine.svg'
+import weightIcon from '$lib/icons/weight.svg'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
@@ -370,6 +378,8 @@ async function updateVariant(variant) {
 	await goto($page.url.toString())
 	await invalidateAll()
 }
+
+console.log('pdp data: ', data.product)
 </script>
 
 <SEO {...seoProps} />
@@ -1484,7 +1494,7 @@ async function updateVariant(variant) {
 
 				{#if loading}
 					<Skeleton extraSmall />
-				{:else if data?.moreProductDetails?.longDescription}
+				{:else if data?.moreProductDetails?.longDescription || data?.product?.longDescription}
 					<div class="flex flex-col border-t border-b">
 						<button
 							type="button"
@@ -1506,7 +1516,38 @@ async function updateVariant(variant) {
 
 						{#if showLongDescription}
 							<div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
-								{@html data?.moreProductDetails?.longDescription}
+                <div class="flex flex-row items-center">
+                  <img src={breedIcon} class="w-8 ml-4 mr-12">
+                  Labrador
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={familyIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.breed_type}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={genderIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.gender}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={ageIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.age} Weeks
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={colorIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.color}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={weightIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.weight} Kg
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={dewormingIcon} class="w-8 ml-4 mr-12">
+                  Dewormed
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={vaccineIcon} class="w-8 ml-4 mr-12">
+                  Vaccinated
+                </div>
 							</div>
 						{/if}
 					</div>

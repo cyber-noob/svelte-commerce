@@ -9,7 +9,7 @@
 import { CtrlS, SingleImageUpload } from '$lib/components'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import { UserService } from '$lib/services'
+import { UserService, PetStoreUserService } from '$lib/services'
 import { WhiteButton } from '$lib/ui'
 import { z } from 'zod'
 import Cookie from 'cookie-universal'
@@ -27,6 +27,7 @@ const seoProps = {
 }
 
 const cookies = Cookie()
+data.profile = cookies.get('me')
 
 let loading = false
 let formChanged = false
@@ -62,52 +63,26 @@ async function saveProfile() {
 		err = null
 		loading = true
 
-		let e = { ...data.profile }
-		e.company = 1
-		e.store = data.storeId
+		const profileData = { ...data.profile }
+    console.log('profileData: ', profileData)
 
-		if (e.dob) e.dob = dayjs(e.dob).format('YYYY-MM-DDTHH:mm')
-		else e.dob = null
-		// delete e.phone
+    let payload = {
+      id: profileData.id,
+      username: profileData.firstName + ' ' + profileData.lastName,
+      mobile: profileData.phone
+    }
 
-		const profileData = {
-			firstName: e.firstName,
-			lastName: e.lastName,
-			phone: e.phone
-		}
+    toast('Saving Profile Info...', 'warning')
 
-		try {
-			zodProfileSchema.parse(e)
-			zodError = {}
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				zodError = error.errors.reduce((acc, err) => {
-					acc[err.path[0]] = err.message
-					return acc
-				}, {})
-			}
-		}
+    await PetStoreUserService.updateUser(data.profile.token, payload)
 
-		if (Object.keys(zodError).length === 0) {
-			toast('Saving Profile Info...', 'warning')
+    data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
+    toast('Profile Info Saved.', 'success')
 
-			data.profile = await UserService.updateProfileService({
-				e: profileData,
-				origin: $page.data.origin,
-				sid: $page.data.sid,
-				storeId: $page.data.storeId
-			})
+    await cookies.set('me', data.profile, { path: '/', maxAge: 31536000 })
 
-			if (data.profile) {
-				data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
-				toast('Profile Info Saved.', 'success')
-			}
-
-			await cookies.set('me', data.profile, { path: '/', maxAge: 31536000 })
-
-			// $page.data.me = data.profile
-			// refreshData()
-		}
+    // $page.data.me = data.profile
+    // refreshData()
 	} catch (e) {
 		err = e
 		toast(e, 'error')

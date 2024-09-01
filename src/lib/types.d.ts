@@ -23,7 +23,8 @@ interface Me {
 	lastName?: string
 	phone?: string
 	role?: string
-	verified?: boolean
+	verified?: boolean,
+  token?: any
 }
 
 interface AllProducts {

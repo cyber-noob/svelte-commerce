@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { UserService } from '$lib/services'
+import { UserService, PetStoreUserService } from '$lib/services'
 import dayjs from 'dayjs'
 
 export async function load({ cookies, locals }) {
@@ -7,11 +7,7 @@ export async function load({ cookies, locals }) {
 	let profile = {}
 
 	try {
-		const data = await UserService.fetchMeData({
-			origin: locals.origin,
-			sid: cookies.get('connect.sid'),
-			storeId: locals.storeId
-		})
+		const data = await PetStoreUserService.fetchUser(me.token)
 
 		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
 
@@ -21,6 +17,8 @@ export async function load({ cookies, locals }) {
 			lastName: me.lastName || ''
 		}
 	} catch (e) {
+    console.log('/my error: ', e)
+
 		if (e.status === 401) {
 			redirect(307, '/auth/login')
 		}

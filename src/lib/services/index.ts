@@ -1,5 +1,6 @@
 // export * from './bigcommerce'
 import { services } from '@misiki/litekart-utils'
+export * from './petstore'
 export const {
 	AddressService,
 	AutocompleteService,
@@ -37,7 +38,7 @@ export const {
 	UserService,
 	VendorService,
 	WishlistService,
-	ZipService
+	ZipService,
 } = services
 
 // export * from './medusa'

@@ -6,7 +6,8 @@ import { redirect } from '@sveltejs/kit'
 export const prerender = false
 export async function load({ url, params, locals, parent }) {
 	const { me, sid, cart } = locals
-	if (!me || !sid) {
+
+	if (!me) {
 		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 	const isHome = url.pathname === '/'

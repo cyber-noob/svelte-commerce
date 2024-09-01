@@ -14,7 +14,7 @@ import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-import { UserService } from '$lib/services'
+import { UserService, PetStoreUserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -52,8 +52,8 @@ onMount(() => {
 		},
 		async (res) => {
 			try {
-        console.log('gauth: ', res)
-				await cookies.set('me', res, { path: '/', maxAge: 31536000 })
+        const me = await PetStoreUserService.addUser(res['credential'])
+				await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 				let r = ref || '/'
 				if (browser) goto(r)
 			} catch (e) {

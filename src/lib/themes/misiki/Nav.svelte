@@ -28,6 +28,7 @@ const cookies = Cookie()
 
 export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
+me = cookies.get('me')
 let clazz = ''
 export { clazz as class }
 
@@ -390,7 +391,7 @@ async function onSearchSubmit({ detail }) {
 					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
 					aria-label="Click to visit login"
-					data-sveltekit-preload-data>
+        >
 					<button
 						class="flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 						aria-label="/">

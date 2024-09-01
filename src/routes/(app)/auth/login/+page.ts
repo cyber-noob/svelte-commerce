@@ -1,4 +1,5 @@
 import { CountryService } from '$lib/services'
+import Cookie from 'cookie-universal'
 
 export const prerender = false
 
@@ -12,5 +13,8 @@ export async function load({ parent }) {
 	// 	origin
 	// })
 
-	return { countries }
+	return {
+    countries,
+    me: Cookie().get('me')
+  }
 }
