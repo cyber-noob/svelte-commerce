@@ -246,10 +246,10 @@ async function onSearchSubmit({ detail }) {
 				</svg>
 
 				<span class="hidden text-center text-xs font-semibold tracking-wider lg:block"> Cart </span>
-				{#if cart?.qty > 0}
+				{#if cart?.qty > 0 || cart?.quantity > 0}
 					<div
 						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-						{cart.qty}
+						{cart.qty || cart.quantity}
 					</div>
 				{/if}
 			</a>

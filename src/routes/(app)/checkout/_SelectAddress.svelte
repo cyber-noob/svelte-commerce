@@ -49,22 +49,22 @@ async function addressChanged(id) {
 	<div class="border-b p-4 sm:p-6">
 		<label class="flex w-full cursor-pointer flex-row gap-2 sm:gap-4">
 			<input
-				id="{nanoid()}"
+				id="{address.idAddress}"
 				bind:group="{selectedAddress}"
 				type="radio"
-				value="{address._id || address.id}"
+				value="{address._id || address.id || address.idAddress}"
 				name="shipping_address"
 				class="mt-1.5 h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
-				on:change="{() => addressChanged(address._id || address.id)}" />
+				on:change="{() => addressChanged(address._id || address.id || address.idAddress)}" />
 
 			<div class="flex w-full cursor-pointer flex-col gap-1 font-light">
 				<h6 class="flex-1 capitalize">
-					{#if address.firstName}
-						{address.firstName}
+					{#if address.first_name}
+						{address.first_name}
 					{/if}
 
-					{#if address.lastName}
-						{address.lastName}
+					{#if address.last_name}
+						{address.last_name}
 					{/if}
 				</h6>
 
@@ -87,8 +87,8 @@ async function addressChanged(id) {
 					{#if address.country}
 						, {address.country}
 					{/if}
-					{#if address.zip}
-						- {address.zip}
+					{#if address.pincode}
+						- {address.pincode}
 					{/if}
 				</p>
 
@@ -106,7 +106,7 @@ async function addressChanged(id) {
 			</div>
 		</label>
 
-		{#if selectedAddress === address.id || selectedAddress === address._id}
+		{#if selectedAddress === address.idAddress}
 			<div
 				transition:slide="{{ duration: 300 }}"
 				class="ml-6 mt-5 flex items-center gap-5 text-sm sm:ml-8">
@@ -129,7 +129,7 @@ async function addressChanged(id) {
 						}
 					}}"
 					class="w-full">
-					<input type="hidden" name="id" value="{address._id || address.id || null}" />
+					<input type="hidden" name="id" value="{address.idAddress || null}" />
 
 					<button
 						type="submit"

@@ -27,6 +27,7 @@ import ProductListingSearchPage from '$lib/themes/misiki/ProductListingSearchPag
 import ProductsListingPage from '$lib/themes/misiki/ProductsListingPage.svelte'
 import SimilarProductsFromCategorySlug from '$lib/themes/misiki/SimilarProductsFromCategorySlug.svelte'
 import TrendingProductsHome from '$lib/themes/misiki/TrendingProductsHome.svelte'
+import BookAVideoCall from 'lib/themes/misiki/BookAVideoCall.svelte'
 
 export {
 	CategoriesHome,
@@ -55,5 +56,6 @@ export {
 	ProductListingSearchPage,
 	ProductsListingPage,
 	SimilarProductsFromCategorySlug,
-	TrendingProductsHome
+	TrendingProductsHome,
+  BookAVideoCall
 }

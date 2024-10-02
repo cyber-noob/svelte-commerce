@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { AddressService, CartService, CountryService } from '$lib/services'
+import { AddressService, CartService, CountryService, PetStoreAddressService, PetStoreCartService } from '$lib/services'
 
 export const prerender = false
 
@@ -12,30 +12,17 @@ export async function load({ url, parent }) {
 		let err
 
 		const [cart, countries] = await Promise.all([
-			CartService.fetchRefreshCart({
-				cartId,
-				origin,
-				sid,
-				storeId
-			}),
-			CountryService.fetchCountries({
-				storeId,
-				origin,
-				sid
-			})
+			PetStoreCartService.fetchCart(me.token),
+			PetStoreAddressService.fetchCountries(me.token)
 		])
 
-		if (!cart?.qty) {
+		if (!cart.quantity) {
 			redirect(307, '/cart')
 		}
 
 		if (store?.isGuestCheckout) {
 			if (me) {
-				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
-					storeId,
-					origin,
-					sid
-				})
+				const { myAddresses, preSelectedAddress } = await PetStoreAddressService.fetchAddresses(me.token)
 
 				return {
 					cart,
@@ -61,12 +48,10 @@ export async function load({ url, parent }) {
 			if (!me) {
 				redirect(307, `/auth/login?ref=${url?.pathname}`)
 			} else {
-				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
-					storeId,
-					origin,
-					sid
-				})
+				let myAddresses = await PetStoreAddressService.fetchAddresses(me.token)
+        let preSelectedAddress = myAddresses.filter(address => address.is_default == 1)[0]
 
+        console.log('checkout +page.ts: \n', myAddresses, '\npreSelectedAddress', preSelectedAddress)
 				return {
 					cart,
 					countries,

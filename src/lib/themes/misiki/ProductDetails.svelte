@@ -93,6 +93,35 @@ import familyIcon from '$lib/icons/family.svg'
 import genderIcon from '$lib/icons/gender.svg'
 import vaccineIcon from '$lib/icons/vaccine.svg'
 import weightIcon from '$lib/icons/weight.svg'
+import videoCallIcon from '$lib/icons/vc.svg'
+import { BookAVideoCall } from 'lib/themes/misiki/index'
+import doggoGif from '$lib/icons/thanks.svg'
+
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function scrollToElement({ target }) {
+  showElement()
+  await sleep(600)
+  const el = document.querySelector(target.getAttribute('moveto'));
+  console.log('el: ', el)
+  if (!el) return;
+  // var headerOffset = 16 * 3; //5rem
+  var elementPosition = el.getBoundingClientRect().top;
+  var offsetPosition = elementPosition;
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: "smooth"
+  });
+}
+
+let display = false
+
+function showElement() {
+  display = true
+}
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
@@ -1239,9 +1268,72 @@ console.log('pdp data: ', data.product)
 					</div>
 				{/if}
 
+        <!-- Long Description -->
+
+        {#if loading}
+          <Skeleton extraSmall />
+        {:else if data?.moreProductDetails?.longDescription || data?.product?.longDescription}
+          <div class="flex flex-col border-t border-b">
+            <button
+              type="button"
+              class="py-5 w-full flex items-center gap-2 justify-between focus:outline-none"
+              on:click="{() => (showLongDescription = !showLongDescription)}">
+              <h5 class="uppercase">Description</h5>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-5 h-5 transition duration-300
+									{showLongDescription ? 'transform -rotate-45' : ''}">
+                <path
+                  d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+                ></path>
+              </svg>
+            </button>
+
+            {#if showLongDescription}
+              <div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
+                <div class="flex flex-row items-center">
+                  <img src={breedIcon} class="w-8 ml-4 mr-12">
+                  Labrador
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={familyIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.breed_type}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={genderIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.gender}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={ageIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.age} Weeks
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={colorIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.color}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={weightIcon} class="w-8 ml-4 mr-12">
+                  {data.product.longDescription.weight} Kg
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={dewormingIcon} class="w-8 ml-4 mr-12">
+                  Dewormed
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={vaccineIcon} class="w-8 ml-4 mr-12">
+                  Vaccinated
+                </div>
+              </div>
+            {/if}
+          </div>
+        {/if}
+
 				{#if !data.product?.isCustomized}
 					<div
-						class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
+						class="flex flex-row w-full md:grid gap-4 items-center uppercase static">
 						{#if $page.data.store?.isWishlist}
 							<div class="col-span-1">
 								<form
@@ -1424,12 +1516,12 @@ console.log('pdp data: ', data.product)
 
 														// await invalidateAll()
 														await applyAction(result)
+													} else {
+                            console.log('Unhandled Error....', result)
 													}
 												}
 											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id || null}" />
-
-											<input type="hidden" name="vid" value="{data?.product?._id || null}" />
+											<input type="hidden" name="pid" value="{data?.product?.uuid || null}" />
 
 											<input
 												type="hidden"
@@ -1487,69 +1579,15 @@ console.log('pdp data: ', data.product)
 								{/if}
 							</div>
 						{/if}
-					</div>
-				{/if}
-
-				<!-- Long Description -->
-
-				{#if loading}
-					<Skeleton extraSmall />
-				{:else if data?.moreProductDetails?.longDescription || data?.product?.longDescription}
-					<div class="flex flex-col border-t border-b">
-						<button
-							type="button"
-							class="py-5 w-full flex items-center gap-2 justify-between focus:outline-none"
-							on:click="{() => (showLongDescription = !showLongDescription)}">
-							<h5 class="uppercase">Description</h5>
-
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								class="w-5 h-5 transition duration-300
-									{showLongDescription ? 'transform -rotate-45' : ''}">
-								<path
-									d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-								></path>
-							</svg>
-						</button>
-
-						{#if showLongDescription}
-							<div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
-                <div class="flex flex-row items-center">
-                  <img src={breedIcon} class="w-8 ml-4 mr-12">
-                  Labrador
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={familyIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.breed_type}
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={genderIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.gender}
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={ageIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.age} Weeks
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={colorIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.color}
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={weightIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.weight} Kg
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={dewormingIcon} class="w-8 ml-4 mr-12">
-                  Dewormed
-                </div>
-                <div class="flex flex-row items-center">
-                  <img src={vaccineIcon} class="w-8 ml-4 mr-12">
-                  Vaccinated
-                </div>
-							</div>
-						{/if}
+            <button
+              type="submit"
+              on:click|preventDefault={scrollToElement}
+              moveto="#bookaslot"
+              loadingringsize="sm"
+              class="flex w-full text-sm bg-red-500 text-white font-bold p-2 content-center items-center justify-center">
+                <img src={videoCallIcon} alt="video call icon" class="w-8 ml-4 mr-12"/>
+                See your to be Companion?
+            </button>
 					</div>
 				{/if}
 
@@ -2176,6 +2214,8 @@ console.log('pdp data: ', data.product)
 			</div>
 		</div>
 
+    <BookAVideoCall show={display}/>
+
 		<div class="px-3 sm:px-10 lg:px-0 flex flex-col gap-5 sm:gap-10">
 			<!-- Frequently bought together -->
 
@@ -2277,7 +2317,7 @@ console.log('pdp data: ', data.product)
 	title="{data.product?.businessName}" />
 
 {#if bounceItemFromTop}
-	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
+	<AnimatedCartItem img="{doggoGif}" />
 {/if}
 
 <!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

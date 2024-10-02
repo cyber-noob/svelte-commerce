@@ -1,40 +1,26 @@
 import { error, redirect } from '@sveltejs/kit'
-import { AddressService, CartService, CountryService } from '$lib/services'
+import { PetStoreAddressService, AddressService, CartService, CountryService } from '$lib/services'
 import { z } from 'zod'
 
 export async function load({ locals, url }) {
 	const { me, origin, sid, store, storeId } = locals
 
-	if (!me || !sid) {
+	if (!me) {
 		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`);
 	}
 
-	try {
-		const countries = await CountryService.fetchCountries({
-			origin,
-			sid,
-			storeId
-		})
+  let address = await PetStoreAddressService.fetchAddresses(me.token)
+  let countries = await PetStoreAddressService.fetchCountries(me.token)
 
-		const { myAddresses, count } = await AddressService.fetchAddresses({
-			origin,
-			sid,
-			storeId
-		})
-
-		myAddresses.count = count
-
-		if (myAddresses) {
-			return { addresses: myAddresses, countries }
-		}
-	} catch (e) {
-		if (e.status === 401 || e.status === 403) {
-			redirect(307, '/auth/login');
-		}
-
-		error(e.status, e.message);
-	} finally {
-	}
+  return {
+    addresses: {
+      count: address.length,
+      data: address
+    },
+    countries: {
+      data: countries
+    }
+  }
 }
 
 const zodAddressSchema = z.object({
@@ -105,10 +91,11 @@ const zodAddressForGBSchema = z.object({
 })
 
 const saveAddress = async ({ request, cookies, locals }) => {
+  console.log('in save address ....')
+  const {me} = locals
 	const data = await request.formData()
 
-	const cartId = locals?.cartId
-	const isSameAsBillingAddress = data.get('isSameAsBillingAddress')
+  console.log('form data: ', data)
 
 	// for shipping address
 	const address = data.get('address')
@@ -122,7 +109,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
-	let selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
+	let selectedShippingAddressCity = data.get('selectedShippingAddressCity')
 
 	// for billing address
 	const billingAddressAddress = data.get('billingAddressAddress')
@@ -137,198 +124,33 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const showBillingAddressErrorMessage = data.get('showBillingAddressErrorMessage')
 	let selectedBillingAddressCountry = data.get('selectedBillingAddressCountry')
 
-	const sid = cookies.get('connect.sid')
-
-	selectedShippingAddressCountry = JSON.parse(selectedShippingAddressCountry)
-	selectedBillingAddressCountry = JSON.parse(selectedBillingAddressCountry)
-
 	let shipping_address = {
-		address: address,
-		city: city,
-		country: country,
-		email: email,
-		firstName: firstName,
-		lastName: lastName,
-		phone: phone,
-		state: state,
-		zip: zip
+		address: address || billingAddressAddress,
+		email: email || billingAddressEmail,
+		first_name: firstName || billingAddressFirstName,
+		last_name: lastName || billingAddressLastName,
+		phone: phone || billingAddressPhone,
+		pincode: zip || billingAddressZip,
+    customer_id: me.id,
+    city_id: JSON.parse(selectedShippingAddressCity).id,
+    is_default: 0
 	}
 
-	let res = {}
+  console.log('final payload: ', shipping_address)
 
-	// Case 1: Logged in
-	if (locals?.me) {
-		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
-			error(404, 'Please enter valid phone number')
-		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
-			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-		} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
-			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
-		} else {
-			if (shipping_address.phone) {
-				shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
+  let res = {}
 
-				if (shipping_address.phone.startsWith('0')) {
-					shipping_address.phone = shipping_address.phone.substring(1)
-				}
-
-				if (!shipping_address.phone.startsWith('+')) {
-					shipping_address.phone =
-						(selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
-				}
-			}
-
-			try {
-				if (selectedShippingAddressCountry?.code === 'IN') {
-					zodAddressForINSchema.parse(shipping_address)
-				} else if (selectedShippingAddressCountry?.code === 'GB') {
-					zodAddressForGBSchema.parse(shipping_address)
-				} else {
-					zodAddressSchema.parse(shipping_address)
-				}
-			} catch (err) {
-				const { fieldErrors: errors } = err.flatten()
-				const { address, city, ...rest } = shipping_address
-				error(404, {
-					data: rest,
-					errors
-				})
-			}
-
-			try {
-				res = await AddressService.saveAddress({
-					address,
-					city,
-					country,
-					email,
-					firstName,
-					id,
-					lastName,
-					phone,
-					state,
-					zip,
-					storeId: locals.storeId,
-					sid,
-					origin: locals?.origin
-				})
-			} catch (e) {
-				error(404, { data: res })
-			}
-		}
-	}
-
-	// Case 2: Not logged in
-	else {
-		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
-			error(404, 'Please enter valid phone number')
-		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
-			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-		} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
-			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
-		} else {
-			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
-
-			if (shipping_address.phone.startsWith('0')) {
-				shipping_address.phone = shipping_address.phone.substring(1)
-			}
-
-			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone =
-					(selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
-			}
-
-			try {
-				if (selectedShippingAddressCountry?.code === 'IN') {
-					zodAddressForINSchema.parse(shipping_address)
-				} else if (selectedShippingAddressCountry?.code === 'GB') {
-					zodAddressForGBSchema.parse(shipping_address)
-				} else {
-					zodAddressSchema.parse(shipping_address)
-				}
-			} catch (err) {
-				const { fieldErrors: errors } = err.flatten()
-				const { address, city, ...rest } = shipping_address
-				error(404, {
-					data: rest,
-					errors
-				})
-			}
-
-			const new_billing_address = {
-				address: isSameAsBillingAddress ? address : billingAddressAddress,
-				city: isSameAsBillingAddress ? city : billingAddressCity,
-				country: isSameAsBillingAddress ? country : billingAddressCountry,
-				email: isSameAsBillingAddress ? email : billingAddressEmail,
-				firstName: isSameAsBillingAddress ? firstName : billingAddressFirstName,
-				lastName: isSameAsBillingAddress ? lastName : billingAddressLastName,
-				phone: isSameAsBillingAddress ? phone : billingAddressPhone,
-				state: isSameAsBillingAddress ? state : billingAddressState,
-				zip: isSameAsBillingAddress ? zip : billingAddressZip
-			}
-
-			if (new_billing_address && new_billing_address?.firstName && new_billing_address?.zip) {
-				if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
-					error(404, 'Please enter valid phone number')
-				} else if (selectedBillingAddressCountry?.code === 'IN' && zip.length !== 6) {
-					error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-				} else if (selectedBillingAddressCountry?.code === 'GB' && zip.length !== 7) {
-					error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
-				} else {
-					if (new_billing_address?.phone) {
-						new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
-
-						if (new_billing_address.phone.startsWith('0')) {
-							new_billing_address.phone = new_billing_address.phone.substring(1)
-						}
-
-						if (!new_billing_address.phone.startsWith('+')) {
-							new_billing_address.phone =
-								(selectedBillingAddressCountry?.dialCode || '+91') + new_billing_address.phone
-						}
-					}
-
-					try {
-						if (selectedBillingAddressCountry?.code === 'IN') {
-							zodAddressForINSchema.parse(new_billing_address)
-						} else if (selectedBillingAddressCountry?.code === 'GB') {
-							zodAddressForGBSchema.parse(new_billing_address)
-						} else {
-							zodAddressSchema.parse(new_billing_address)
-						}
-					} catch (err) {
-						const { fieldErrors: errors } = err.flatten()
-						const { address, city, ...rest } = new_billing_address
-						error(404, {
-							data: rest,
-							billing_errors: errors
-						})
-					}
-				}
-			}
-
-			try {
-				res = await CartService.updateCart3({
-					cartId,
-					shipping_address,
-					billing_address: new_billing_address,
-					selfTakeout: false,
-					storeId: locals.storeId,
-					sid,
-					origin: locals?.origin
-				})
-			} catch (e) {
-				error(404, { data: res })
-			}
-		}
-	}
-
-	// Return the response
-
-	return res
+  try {
+    res = await PetStoreAddressService.addAddress(me.token, shipping_address)
+    return res
+  } catch (e) {
+    error(404, "Unable to Add Address. Please try again later")
+  }
 }
 
 const editAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
+  const {me} = locals
 
 	const address = data.get('address')
 	const city = data.get('city')
@@ -343,92 +165,52 @@ const editAddress = async ({ request, cookies, locals }) => {
 	let phone = data.get('phone')
 	let selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
 
-	const sid = cookies.get('connect.sid')
+  let selectedShippingAddressCity = data.get('selectedShippingAddressCity')
 
-	let formData = {
-		address: address,
-		city: city,
-		country: country,
-		email: email,
-		firstName: firstName,
-		lastName: lastName,
-		phone: phone,
-		state: state,
-		zip: zip
-	}
+  // for billing address
+  const billingAddressAddress = data.get('billingAddressAddress')
+  const billingAddressCity = data.get('billingAddressCity')
+  const billingAddressCountry = data.get('billingAddressCountry')
+  const billingAddressEmail = data.get('billingAddressEmail')
+  const billingAddressFirstName = data.get('billingAddressFirstName')
+  const billingAddressLastName = data.get('billingAddressLastName')
+  const billingAddressPhone = data.get('billingAddressPhone')
+  const billingAddressState = data.get('billingAddressState')
+  const billingAddressZip = data.get('billingAddressZip')
+  const showBillingAddressErrorMessage = data.get('showBillingAddressErrorMessage')
+  let selectedBillingAddressCountry = data.get('selectedBillingAddressCountry')
 
-	if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
-		error(404, 'Please enter valid phone number')
-	} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
-		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-	} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
-		error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
-	} else {
-		if (phone) {
-			phone = phone.replace(/[a-zA-Z ]/g, '')
+  let shipping_address = {
+    address: address || billingAddressAddress,
+    email: email || billingAddressEmail,
+    first_name: firstName || billingAddressFirstName,
+    last_name: lastName || billingAddressLastName,
+    phone: phone || billingAddressPhone,
+    pincode: zip || billingAddressZip,
+    customer_id: me.id,
+    city_id: JSON.parse(selectedShippingAddressCity).id,
+    is_default: 0
+  }
 
-			if (phone.startsWith('0')) {
-				phone = phone.substring(1)
-			}
+  console.log('final payload: ', shipping_address)
 
-			if (!phone.startsWith('+')) {
-				phone = (selectedShippingAddressCountry?.dialCode || '+91') + phone
-			}
-		}
+  let res = {}
 
-		try {
-			if (selectedShippingAddressCountry?.code === 'IN') {
-				zodAddressForINSchema.parse(formData)
-			} else if (selectedShippingAddressCountry?.code === 'GB') {
-				zodAddressForGBSchema.parse(formData)
-			} else {
-				zodAddressSchema.parse(formData)
-			}
-		} catch (err) {
-			const { fieldErrors: errors } = err.flatten()
-			const { address, city, ...rest } = formData
-			error(404, {
-				data: rest,
-				errors
-			})
-		}
-		try {
-			const res = await AddressService.saveAddress({
-				address,
-				city,
-				country,
-				email,
-				firstName,
-				id,
-				lastName,
-				phone,
-				state,
-				zip,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
-
-			return res
-		} catch (e) {
-			console.log('e', e)
-			return null
-		}
-	}
+  try {
+    res = await PetStoreAddressService.editAddress(me.token, id, shipping_address)
+    return res
+  } catch (e) {
+    error(404, "Unable to Add Address. Please try again later")
+  }
 }
 
 const deleteAddress = async ({ request, cookies, locals }) => {
 	// if (confirm('Are you sure to delete?')) {
+  const {me} = locals
 	const data = await request.formData()
 	const id = data.get('id')
-	const sid = cookies.get('connect.sid')
 	try {
-		const res = await AddressService.deleteAddress({
-			id,
-			storeId: locals.storeId,
-			sid,
-			origin: locals?.origin
-		})
+		const res = await PetStoreAddressService.deleteAddresses(me.token, id)
 
 		return res
 	} catch (e) {

@@ -1,0 +1,17 @@
+{
+  "count": 3,
+  "data": [
+    {
+      "firstName": "Ajay",
+      "lastName": "Noob",
+      "address": "Platina PG, Green Glenn Layout, Chaayos",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "country": "India",
+      "zip": "560103",
+      "email": "ajay0912.dpi@gmail.com",
+      "phone": "96003128420",
+      "isHome": true
+    }
+  ]
+}

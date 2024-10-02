@@ -1,3 +1,6 @@
 export * as PetStoreHomeService from './home-service'
 export * as PetStorePDPService from './pdp-service'
 export * as PetStoreUserService from './user-service'
+export * as PetStoreAddressService from './address-service'
+export * as PetStoreCartService from './cart-service'
+export * as PetStoreOrderService from './order-service'

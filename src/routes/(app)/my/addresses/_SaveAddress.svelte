@@ -5,18 +5,23 @@ import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
-import { CountryService, ZipService } from '$lib/services'
+import { PetStoreAddressService, CountryService, ZipService } from '$lib/services'
 import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
+import Cookie from 'cookie-universal'
 
 const IS_DEV = import.meta.env.DEV
 
 export let billing_address = {}
 export let countries = []
+export let states = []
+export let city = []
 export let editAddress = false
 export let selectedAddress = ''
 export let selectedBillingAddress = ''
 export let shipping_address = {}
+
+let cookie = Cookie()
 
 if (!shipping_address?.firstName) {
 	shipping_address = IS_DEV
@@ -46,8 +51,12 @@ let isSameAsBillingAddress = true
 
 // Shipping variables
 let loadingForShippingAddressStates = false
+let loadingForShippingAddressCities = false
 let selectedShippingAddressCountry = {}
+let selectedShippingAddressStates = {}
+let selectedShippingAddressCity = {}
 let shippingAddressStates = []
+let shippingAddressCities = []
 let showShippingAddressErrorMessage = false
 let zodShippingErrors = null
 
@@ -101,6 +110,38 @@ onMount(async () => {
 	}
 })
 
+function onShippingAddressStateChange(state) {
+  shipping_address.city = null
+  fetchShippingAddressCities(state)
+  getShippingAddressSelectedStates()
+}
+
+async function fetchShippingAddressCities(state) {
+  try {
+    err = null
+    loadingForShippingAddressCities = true
+
+    shippingAddressCities = await PetStoreAddressService.fetchCities(cookie.get('me').token, state)
+
+    shippingAddressCities = shippingAddressCities.map((s) => {
+      s.name = s.name.toUpperCase()
+      return s
+    })
+  } catch (e) {
+    err = e
+  } finally {
+    loadingForShippingAddressCities = false
+  }
+}
+
+function getShippingAddressSelectedStates() {
+  selectedShippingAddressStates = states.filter((s) => {
+    if (s.code === shipping_address.state) {
+      return s
+    }
+  })[0]
+}
+
 function getShippingAddressSelectedCountry() {
 	selectedShippingAddressCountry = countries.filter((c) => {
 		if (c.code === shipping_address.country) {
@@ -129,16 +170,58 @@ async function onBillingAddressCountryChange(country) {
 	getBillingAddressSelectedCountry()
 }
 
+async function onBillingAddressStateChange(state) {
+  billing_address.state = null
+  fetchBillingAddressCities(state)
+  getBillingAddressSelectedState()
+}
+
+async function fetchBillingAddressCities(state) {
+  try {
+    err = null
+    loadingForShippingAddressCities = true
+
+    shippingAddressCities = await PetStoreAddressService.fetchCities(cookie.get('me').token, state)
+
+    shippingAddressCities = shippingAddressCities.map((s) => {
+      s.name = s.name.toUpperCase()
+      return s
+    })
+  } catch (e) {
+    err = e
+  } finally {
+    loadingForShippingAddressCities = false
+  }
+}
+
+function getBillingAddressSelectedState() {
+  selectedShippingAddressStates = states.filter((s) => {
+    if (s.code === shipping_address.state) {
+      return s
+    }
+  })[0]
+}
+
+async function onBillingAddressCityChange() {
+  getBillingAddressSelectedCity()
+}
+
+function getBillingAddressSelectedCity() {
+  selectedShippingAddressCity = shippingAddressCities.filter((s) => {
+    if (s.name === shipping_address.city || billing_address.city) {
+      return s
+    }
+  })[0]
+
+  console.log('selected city: ', selectedShippingAddressCity)
+}
+
 async function fetchShippingAddressStates(country) {
 	try {
 		err = null
 		loadingForShippingAddressStates = true
 
-		shippingAddressStates = await CountryService.fetchStates({
-			countryCode: country,
-			storeId: $page.data.storeId,
-			origin: $page.data?.origin
-		})
+		shippingAddressStates = await PetStoreAddressService.fetchStates(cookie.get('me').token, country)
 
 		shippingAddressStates = shippingAddressStates.map((s) => {
 			s.name = s.name.toUpperCase()
@@ -156,11 +239,7 @@ async function fetchBillingAddressStates(country) {
 		err = null
 		loadingForBillingAddressStates = true
 
-		billingAddressStates = await CountryService.fetchStates({
-			countryCode: country,
-			storeId: $page.data.storeId,
-			origin: $page.data?.origin
-		})
+		billingAddressStates = await PetStoreAddressService.fetchStates(cookie.get('me').token, country)
 
 		billingAddressStates = billingAddressStates.map((s) => {
 			s.name = s.name.toUpperCase()
@@ -446,15 +525,21 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				</h6>
 
 				<div class="w-full">
-					<Textbox
-						type="text"
-						placeholder="Enter City"
-						bind:value="{shipping_address.city}"
-						required />
-
-					{#if zodShippingErrors?.city}<p class="mt-1 text-xs text-red-600">
-							{zodShippingErrors?.city}
-						</p>{/if}
+          <select
+            class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+            bind:value="{shipping_address.city}"
+            disabled="{!shipping_address.state || loadingForShippingAddressCities}"
+            on:change={() => onBillingAddressCityChange()}
+            required>
+            <option value="{null}" disabled selected>-- Select a City --</option>
+            {#each shippingAddressCities as s}
+              {#if s}
+                <option value="{s.name.toUpperCase()}">
+                  {s.name}
+                </option>
+              {/if}
+            {/each}
+          </select>
 				</div>
 			</div>
 
@@ -473,6 +558,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
 							bind:value="{shipping_address.state}"
 							disabled="{!shipping_address.country || loadingForShippingAddressStates}"
+              on:change="{() => onShippingAddressStateChange(shipping_address.state)}"
 							required>
 							<option value="{null}" disabled selected>-- Select a State --</option>
 							{#each shippingAddressStates as s}
@@ -483,10 +569,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 								{/if}
 							{/each}
 						</select>
-
-						{#if zodShippingErrors?.state}<p class="mt-1 text-xs text-red-600">
-								{zodShippingErrors?.state}
-							</p>{/if}
 					</div>
 				</div>
 			{/if}
@@ -518,18 +600,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 								{/if}
 							{/each}
 						</select>
-
-						{#if zodShippingErrors?.country}<p class="mt-1 text-xs text-red-600">
-								{zodShippingErrors?.country}
-							</p>{/if}
-					{:else}
-						<a
-							href="/contact-us"
-							aria-label="contact us"
-							class="py-2 text-sm text-zinc-500 hover:text-zinc-800 hover:underline">
-							Contact the website admin to enable your country
-						</a>
-					{/if}
+          {/if}
 				</div>
 			</div>
 		</div>
@@ -718,15 +789,21 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							</h6>
 
 							<div class="w-full">
-								<Textbox
-									type="text"
-									placeholder="Enter City"
-									bind:value="{billing_address.city}"
-									required />
-
-								{#if zodBillingErrors?.city}
-									<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.city}</p>
-								{/if}
+                <select
+                  class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+                  bind:value="{shipping_address.city}"
+                  disabled="{!shipping_address.city || loadingForShippingAddressCities}"
+                  on:change="{() => onBillingAddressCityChange()}"
+                  required>
+                  <option value="{null}" disabled selected>-- Select a City --</option>
+                  {#each shippingAddressCities as s}
+                    {#if s}
+                      <option value="{s.name.toUpperCase()}">
+                        {s.name}
+                      </option>
+                    {/if}
+                  {/each}
+                </select>
 							</div>
 						</div>
 
@@ -743,8 +820,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 								<div class="w-full">
 									<select
 										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
-										bind:value="{billing_address.state}"
-										disabled="{!billing_address.country || loadingForBillingAddressStates}"
+                    bind:value="{billing_address.state}"
+                    disabled="{!billing_address.country || loadingForBillingAddressStates}"
+                    on:change="{() => onBillingAddressStateChange(billing_address.state)}"
 										required>
 										<option value="{null}" disabled selected>-- Select a State --</option>
 										{#each billingAddressStates as s}
@@ -846,6 +924,10 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 			type="hidden"
 			name="selectedShippingAddressCountry"
 			value="{JSON.stringify(selectedShippingAddressCountry) || null}" />
+    <input
+      type="hidden"
+      name="selectedShippingAddressCity"
+      value="{JSON.stringify(selectedShippingAddressCity) || null}" />
 		<input
 			type="hidden"
 			name="showShippingAddressErrorMessage"

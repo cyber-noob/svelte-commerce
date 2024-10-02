@@ -29,6 +29,8 @@ let selectedBillingAddress = data?.cart?.billing_address_id || data?.preSelected
 let shipping_address = data?.cart?.shipping_address || {}
 let showAddNewAddressModal = false
 
+console.log('checkout +page.svelte selectedAddress: ', selectedAddress)
+
 onMount(() => {
 	// Here we are not taking id for if condition, because in case of guest checkout both id will be same 'new'
 
@@ -44,6 +46,8 @@ onMount(() => {
 	} else {
 		isSameAsBillingAddressWithLogIn = false
 	}
+
+  console.log('checkout +page.svelte: ', data)
 })
 
 function addressChanged(detail) {
@@ -118,9 +122,9 @@ async function refreshAddress() {
 
 				<h2 class="mb-5">Select Delivery Address</h2>
 
-				{#if data.myAddresses?.data?.length}
+				{#if data.myAddresses?.length}
 					<ul class="mb-5 p-0 list-none rounded-lg border bg-white shadow-lg">
-						{#each data.myAddresses.data as ads, adsIndex}
+						{#each data.myAddresses as ads, adsIndex}
 							{#if displayAllDeliveryAddress ? true : adsIndex < 2}
 								<li transition:slide="{{ duration: 300 }}">
 									<SelectAddress
@@ -134,7 +138,7 @@ async function refreshAddress() {
 							{/if}
 						{/each}
 
-						{#if data.myAddresses.data?.length > 2}
+						{#if data.myAddresses?.length > 2}
 							<button
 								type="button"
 								class="w-full p-5 focus:outline-none"
@@ -171,7 +175,7 @@ async function refreshAddress() {
 								<h2 class="mb-5">Select Billing Address</h2>
 
 								<ul class="mb-5 p-0 list-none rounded-lg border bg-white shadow-lg">
-									{#each data.myAddresses.data as ads}
+									{#each data.myAddresses as ads}
 										<li>
 											<SelectBillingAddress
 												address="{ads}"
@@ -189,7 +193,7 @@ async function refreshAddress() {
 				{/if}
 
 				<div>
-					{#if !data.myAddresses?.data?.length}
+					{#if !data.myAddresses?.length}
 						<hr class="mb-5" />
 					{/if}
 

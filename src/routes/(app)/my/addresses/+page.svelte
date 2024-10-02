@@ -144,8 +144,8 @@ async function searchData(search) {
 						<div class="flex items-start gap-3 p-4 sm:p-6">
 							<div class="flex flex-1 flex-col gap-1 text-sm">
 								<span class="text-base font-semibold">
-									{add.firstName || '_'}
-									{add.lastName || '_'}
+									{add.first_name || '_'}
+									{add.last_name || '_'}
 								</span>
 
 								<span>
@@ -157,7 +157,7 @@ async function searchData(search) {
 
 									<br />
 
-									{add.zip || '_'}
+									{add.pincode || '_'}
 								</span>
 
 								<span> {add.email || '_'} </span>
@@ -165,7 +165,7 @@ async function searchData(search) {
 								<span> {add.phone || '_'} </span>
 							</div>
 
-							{#if add.isHome}
+							{#if add.is_default}
 								<div
 									class="shrink-0 rounded-full border-2 border-zinc-200 bg-zinc-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide">
 									Home

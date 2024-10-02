@@ -234,6 +234,7 @@ interface Cart {
 	store: Store
 	storeCurrency: ID
 	qty: Int
+  quantity: Int
 	currencyCode: string
 	currencyName: string
 	currencySymbol: string

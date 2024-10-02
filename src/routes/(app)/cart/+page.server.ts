@@ -1,6 +1,10 @@
 import { error, fail, redirect } from '@sveltejs/kit'
 import { CartService, WishlistService } from '$lib/services'
 import type { Action, Actions, PageServerLoad } from './$types'
+import { PetStoreCartService } from '$lib/services'
+import Cookie from 'cookie-universal'
+
+let cookie = Cookie()
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
 	const { store, storeId, origin } = locals
@@ -11,36 +15,29 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	try {
 		loading = true
 
-		const cartId = cookies.get('cartId')
-		// const cartQty = cookies.get('cartQty')
-		const sid = cookies.get('connect.sid')
+    const res = await PetStoreCartService.fetchCart(JSON.parse(cookies.get('me')).token)
 
-		if (sid) {
-			const res = await CartService.fetchRefreshCart({
-				cartId,
-				origin: origin,
-				sid,
-				storeId
-			})
+    if (res) {
+      cart = {
+        cart_id: res?.cart_id,
+        currencySymbol: res?.currencySymbol,
+        discount: res?.discount,
+        formattedAmount: res?.formattedAmount,
+        items: res?.items,
+        quantity: res?.quantity,
+        savings: res?.savings,
+        selfTakeout: res?.selfTakeout,
+        shipping: res?.shipping,
+        subtotal: res?.pricing?.subtotal,
+        tax: res?.pricing?.tax,
+        total: res?.pricing?.total,
+        unavailableItems: res?.unavailableItems
+      }
 
-			if (res) {
-				cart = {
-					cartId: res?.cart_id,
-					currencySymbol: res?.currencySymbol,
-					discount: res?.discount,
-					formattedAmount: res?.formattedAmount,
-					items: res?.items,
-					qty: res?.qty,
-					savings: res?.savings,
-					selfTakeout: res?.selfTakeout,
-					shipping: res?.shipping,
-					subtotal: +res?.subtotal,
-					tax: +res?.tax,
-					total: +res?.total,
-					unavailableItems: res?.unavailableItems
-				}
-			}
-		}
+      locals.cartId = res?.cart_id
+      cookies.set('cartId', locals.cartId, { path: '/', maxAge: 31536000 })
+      console.log('cart: ', cart)
+    }
 	} catch (e) {
 		if (e?.status === 401) {
 			redirect(307, `/auth/login?ref=${url?.pathname}`)
@@ -52,103 +49,90 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	return { loadingCart: loading, cart }
 }
 
-const add: Action = async ({ request, cookies, locals }) => {
-	const data = Object.fromEntries(await request.formData())
-	const pid = data.pid
-	const vid = data.vid
-	const line_id = data.line_id
-	const variantsLength = +data.variantsLength
-	const currentVariantId = data.currentVariantId
-	const qty = +data.qty
-	const linkedItems = JSON.parse(data.linkedItems || '[]')
-	const options = JSON.parse(data.options || '[]') //data.options //
-	const customizedImg = data.customizedImg
-	const customizedData = data.customizedData
-	let cartId = locals.cartId
-	let sid = cookies.get('connect.sid')
+const add: Action = async ({ url, request, cookies, locals }) => {
+  const data = Object.fromEntries(await request.formData())
+  const pid = data.pid
+  const line_id = data.line_id
+  const variantsLength = +data.variantsLength
+  const currentVariantId = data.currentVariantId
+  const qty = +data.qty
+  const linkedItems = JSON.parse(data.linkedItems || '[]')
+  const options = JSON.parse(data.options || '[]') //data.options //
+  const customizedImg = data.customizedImg
+  const customizedData = data.customizedData
+  let cartId = locals.cartId
 
-	if (variantsLength > 0 && !currentVariantId) {
-		return 'choose variant'
-	}
+  if (variantsLength > 0 && !currentVariantId) {
+    return 'choose variant'
+  }
 
-	if (typeof pid !== 'string' || !pid) {
-		return fail(400, { invalid: true })
-	}
-	try {
-		let cart = await CartService.addToCartService({
-			pid,
-			vid: currentVariantId || vid,
-			qty,
-			options,
-			customizedImg,
-			customizedData,
-			storeId: locals.storeId,
-			cartId,
-			origin: locals.origin,
-			line_id,
-			sid
-		})
-		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
-		cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
-		cookies.set('cartId', cartId, { path: '/', maxAge: 31536000 })
-		// }
+  console.log('+page.server qty: ', qty)
+  let option: string = null;
 
-		if (!sid) {
-			sid = cart.sid
-			cookies.set('connect.sid', sid, { path: '/' })
-		}
+  if (qty >= 0)
+    option = 'plus'
+  if (qty < 0)
+    option = 'minus'
 
-		if (linkedItems?.length) {
-			for (const i of linkedItems) {
-				cart = await CartService.addToCartService({
-					pid: i,
-					vid: i,
-					qty: 1,
-					storeId: locals.storeId,
-					cartId,
-					origin: locals.origin,
-					sid,
-					options,
-					customizedImg,
-					customizedData
-				})
-			}
-		}
+  console.log('pid: ', pid)
+  if (typeof pid !== 'string' || !pid) {
+    return fail(400, { invalid: true })
+  }
+  try {
+    let cart = await PetStoreCartService.addToCart(JSON.parse(cookies.get('me')).token, option, {
+      product_id: pid,
+      quantity: 1
+    })
+    console.log('cart response: ', cart)
+    // if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
+    cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
+    cookies.set('cartId', cartId, { path: '/', maxAge: 31536000 })
+    // }
 
-		if (cart) {
-			const cartObj = {
-				cartId: cart?.cart_id,
-				currencySymbol: cart?.currencySymbol,
-				discount: cart?.discount,
-				formattedAmount: cart?.formattedAmount,
-				items: cart?.items,
-				qty: cart?.qty,
-				savings: cart?.savings,
-				selfTakeout: cart?.selfTakeout,
-				shipping: cart?.shipping,
-				subtotal: cart?.subtotal,
-				tax: cart?.tax,
-				total: cart?.total,
-				unavailableItems: cart?.unavailableItems
-			}
-			locals.cart = cartObj
-			locals.cartId = cartObj.cartId
-			// locals.cartQty = cartObj.qty
+    if (linkedItems?.length) {
+      for (const i of linkedItems) {
+        cart = await PetStoreCartService.addToCart(JSON.parse(cookies.get('me')).token, option, {
+          product_id: pid,
+          quantity: 1
+        })
+      }
+    }
 
-			if (!sid) {
-				cookies.set('connect.sid', cart.sid, { path: '/' })
-			}
+    if (cart) {
+      const cartObj = {
+        cartId: cart?.cart_id,
+        currencySymbol: cart?.currencySymbol,
+        discount: cart?.discount,
+        formattedAmount: cart?.formattedAmount,
+        items: cart?.items,
+        quantity: cart?.quantity,
+        savings: cart?.savings,
+        selfTakeout: cart?.selfTakeout,
+        shipping: cart?.shipping,
+        subtotal: cart?.pricing?.subtotal,
+        tax: cart?.pricing?.tax,
+        total: cart?.pricing?.total,
+        unavailableItems: cart?.unavailableItems
+      }
 
-			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/', maxAge: 31536000 })
+      console.log('cartObj: ', cartObj)
+      locals.cart = cartObj
+      locals.cartId = cartObj.cartId
+      locals.cartQty = cartObj.qty
 
-			return cartObj
-		} else {
-			return {}
-		}
-	} catch (e) {
-		console.log(e.status, e.body?.message)
-		throw e
-	}
+      if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/', maxAge: 31536000 })
+
+      return cartObj
+    } else {
+      return {}
+    }
+  } catch (e) {
+    console.log('aj -> ', e)
+    if (e?.status === 401)
+      throw redirect(307, `/auth/login?ref=${url?.pathname}`)
+
+    error(400, e?.body?.message || e)
+  }
 }
 
 const createBackOrder: Action = async ({ request, cookies, locals }) => {

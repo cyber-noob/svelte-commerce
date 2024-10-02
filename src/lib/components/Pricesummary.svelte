@@ -36,14 +36,14 @@ async function submit() {
 	if (text === 'Select Address') {
 		if (checkedCartItems?.length) {
 			try {
-				const res = await CartService.updateCart2({
-					cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
-					selected_products_for_checkout: checkedCartItems,
-					origin: $page.data?.origin,
-					storeId: $page.data.storeId
-				})
-
-				updateCartStore({ data: res })
+				// const res = await CartService.updateCart2({
+				// 	cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
+				// 	selected_products_for_checkout: checkedCartItems,
+				// 	origin: $page.data?.origin,
+				// 	storeId: $page.data.storeId
+				// })
+        //
+				// updateCartStore({ data: res })
 
 				if (nextpage) {
 					goto(nextpage)
@@ -72,8 +72,8 @@ async function submit() {
 			<h5>Price Summary</h5>
 
 			<p>
-				({cart?.qty}
-				{#if cart?.qty > 1}
+				({cart?.quantity}
+				{#if cart?.quantity > 1}
 					items
 				{:else}
 					item
@@ -158,6 +158,8 @@ async function submit() {
 							class="border border-accent-500 text-accent-500 uppercase px-1.5 py-0.5 rounded text-xs">
 							Free
 						</span>
+          {:else if cart?.formattedAmount?.shipping}
+            {cart?.formattedAmount?.shipping}
 					{:else}
 						{currency(
 							cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
@@ -170,7 +172,7 @@ async function submit() {
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
-		{#if cart?.formattedAmount?.total?.value || cart?.subtotal}
+		{#if cart?.formattedAmount?.total?.value || cart?.formattedAmount?.total || cart?.subtotal}
 			<h5 class="my-2 mb-5 flex items-center justify-between">
 				<span>Total Amount</span>
 
@@ -201,7 +203,7 @@ async function submit() {
 			<div class="hidden"></div>
 		{:else}
 			<div class="hidden md:block">
-				{#if cart?.qty > 0 && !hideCheckoutButton}
+				{#if cart?.quantity > 0 && !hideCheckoutButton}
 					<PrimaryButton
 						roundedNone
 						type="submit"
@@ -229,7 +231,7 @@ async function submit() {
 			</div>
 
 			<div class="fixed inset-x-0 bottom-0 z-50 block w-full md:hidden">
-				{#if cart?.qty > 0 && !hideCheckoutButton}
+				{#if cart?.quantity > 0 && !hideCheckoutButton}
 					<PrimaryButton
 						roundedNone
 						type="submit"

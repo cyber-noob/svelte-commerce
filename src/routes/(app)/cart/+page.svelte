@@ -11,7 +11,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
 import { selectedCartItemsStore } from '$lib/store/selected-cart-items'
-import { CartService, CouponService, ProductService } from '$lib/services'
+import { CartService, CouponService, PetStoreCartService, ProductService } from '$lib/services'
 import { storeStore } from '$lib/store/store.js'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -54,20 +54,17 @@ onMount(async () => {
 		// storeStore.subscribe((value) => (store = value))
 		// console.log('store', store)
 		cartStore.subscribe((value) => {
-			cart = value
+			cart = JSON.parse(JSON.stringify(value))
+      console.log('cart items --- ', cart)
 		})
 
 		if (!cart?.items) {
-			cart = await getCartFromStore({
-				origin: $page.data.origin,
-				storeId: $page.data.storeId,
-				cartId: $page.data.cartId,
-				forceUpdate: true
-			})
+			cart = await PetStoreCartService.fetchCart(cookies.get('me').token)
 		}
 
 		cartLoadingStore.subscribe((value) => {
 			isCartLoading = value
+      console.log('+page isCartLoading: ', isCartLoading)
 		})
 
 		selectedCartItemsStore.subscribe((value) => {
@@ -210,7 +207,7 @@ function handleCheckedAllCartItems() {
 			checkedCartItems = []
 
 			cart?.items.forEach((item, ix) => {
-				updateCheckedCartItems(item.pid)
+				updateCheckedCartItems(item.uuid)
 			})
 		} else {
 			checkedCartItems = []
@@ -255,7 +252,7 @@ function updateCheckedCartItemsInGroup() {
 					<Skeleton />
 				{/each}
 			</div>
-		{:else if cart?.qty > 0}
+		{:else if cart?.quantity > 0}
 			<div class="mb-14 lg:mb-0 flex flex-col gap-10 lg:flex-row lg:justify-center xl:gap-20">
 				<div class="w-full flex-1">
 					<div class="items-center justify-between h-10 sm:h-14 sm:flex">
@@ -267,9 +264,9 @@ function updateCheckedCartItemsInGroup() {
 							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
 							<p>
-								{cart?.qty || ''}
+								{cart?.quality || ''}
 
-								{#if cart?.qty > 1}
+								{#if cart?.quantity > 1}
 									Items
 								{:else}
 									Item
@@ -411,7 +408,7 @@ function updateCheckedCartItemsInGroup() {
 							</div>
 						{/if}
 
-						{#if cart?.qty}
+						{#if cart?.quantity}
 							<div class="flex flex-col divide-y">
 								{#if data.store?.isPartialCheckout}
 									<div class="py-5 px-2">
@@ -435,7 +432,7 @@ function updateCheckedCartItemsInGroup() {
 									</div>
 								{/if}
 
-								{#each cart?.items as item, ix (item.id || item._id)}
+								{#each cart?.items as item, ix}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
 									<div
@@ -446,8 +443,8 @@ function updateCheckedCartItemsInGroup() {
 											{#if data.store?.isPartialCheckout}
 												<input
 													type="checkbox"
-													id="{item.pid}"
-													value="{item.pid}"
+													id="{item.idItem}"
+													value="{item.idItem}"
 													class="absolute top-2 left-2 z-10 h-4 w-4 rounded"
 													bind:group="{checkedCartItems}"
 													on:change="{updateCheckedCartItemsInGroup}" />
@@ -458,10 +455,10 @@ function updateCheckedCartItemsInGroup() {
 													<LazyImg
 														src="{item.isCustomized ? item.customizedImg : item.img}"
 														alt=" "
-														width="80"
-														height="192"
+														width="590"
+														height="384"
 														aspect_ratio="3:4"
-														class="object-contain object-top h-28 w-20 text-xs" />
+														class="object-contain object-top h-28 w-100 text-xs" />
 												</a>
 											{:else}
 												<a href="/product/{item?.slug}" aria-label="Click to visit product details">
@@ -493,7 +490,7 @@ function updateCheckedCartItemsInGroup() {
 													href="/product/{item?.slug}"
 													aria-label="Click to visit product details"
 													class="flex-1 cursor-pointer text-zinc-500 hover:underline">
-													{item?.name}
+													{item?.title}
 												</a>
 
 												{#if $page.data.store?.isFnb && item.foodType}
@@ -531,12 +528,12 @@ function updateCheckedCartItemsInGroup() {
 
 											<div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
 												<span class="text-sm sm:text-base font-bold whitespace-nowrap">
-													{item?.formattedItemAmount?.price}
+													{item?.formattedPrice?.price}
 												</span>
 
 												{#if item?.mrp > item?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
-														{item?.formattedItemAmount?.mrp}
+														{item?.formattedPrice?.mrp}
 													</span>
 
 													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
@@ -595,17 +592,20 @@ function updateCheckedCartItemsInGroup() {
 														use:enhance="{() => {
 															loading[ix] = true
 															return async ({ result }) => {
+                                console.log('+page item: ', item)
+                                console.log('+page result: ', result)
+
 																fireGTagEvent('remove_from_cart', item)
-																if (item.qty === 1) {
-																	updateCheckedCartItems(item.pid)
+																if (item.quantity === 1) {
+																	updateCheckedCartItems(item.uuid)
 																}
-																updateCartStore({ data: result?.data })
+																await updateCartStore({ data: result?.data })
 																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid || null}" />
+														<input type="hidden" name="pid" value="{item.pid || item.uuid || null}" />
 														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
@@ -649,7 +649,7 @@ function updateCheckedCartItemsInGroup() {
 																alt="loading"
 																class="h-auto w-4 object-contain object-center" />
 														{:else}
-															<span>{item?.qty}</span>
+															<span>{item?.quantity}</span>
 														{/if}
 													</div>
 
@@ -668,7 +668,7 @@ function updateCheckedCartItemsInGroup() {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid || null}" />
+														<input type="hidden" name="pid" value="{item.pid || item.uuid || null}" />
 														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
