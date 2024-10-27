@@ -1,26 +1,23 @@
 import { error, redirect } from '@sveltejs/kit'
-import { WishlistService } from '$lib/services'
+import { PetStoreWishlistService, WishlistService } from '$lib/services'
 
 export async function load({ cookies, locals, url }) {
 	try {
 		const { me, origin, sid, store, storeId } = locals
 
-		if (!me || !sid) {
+		if (!me) {
 			redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 		}
 
-		const wishlistedProducts = await WishlistService.fetchWishlist({
-			origin: locals.origin,
-			sid: cookies.get('connect.sid'),
-			storeId: locals.storeId
-		})
+		const wishlistedProducts = await PetStoreWishlistService.fetchWishlist(me.token)
 
-		if (wishlistedProducts) {
-			return wishlistedProducts
-		}
+		if (wishlistedProducts)
+      return {
+        wishlistedProducts: wishlistedProducts
+      }
 	} catch (e) {
 		if (e.status === 401 || e.status === 403) {
-			redirect(307, '/auth/login')
+      redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 		}
 
 		error(e.status, e.message)

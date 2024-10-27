@@ -2,7 +2,7 @@
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { AutocompleteService } from '$lib/services'
+import { AutocompleteService, PetStoreSearchService } from '$lib/services'
 import { slide } from 'svelte/transition'
 import Cookie from 'cookie-universal'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -33,32 +33,12 @@ onMount(() => {
 
 function submit() {
 	showSuggestionOptions = false
-
-	if (autocomplete?.length && autocomplete[0].slug && autocomplete[0].type === 'products') {
-		goto(`/product/${autocomplete[0].slug}`)
-	} else if (
-		autocomplete?.length &&
-		autocomplete[0].slug &&
-		autocomplete[0].type === 'categories'
-	) {
-		goto(`/${autocomplete[0].slug}`)
-	} else {
-		goto(`/search?q=${q}`)
-	}
+  goto(`/search?q=${q}`)
 }
 
 function onselect(v: any) {
 	showSuggestionOptions = false
-
-	if (v) {
-		if (v.type === 'products') {
-			goto(`/product/${v.slug}`)
-		} else if (v.type === 'categories') {
-			goto(`/${v.slug}`)
-		} else {
-			goto(`/search?q=${encodeURIComponent(v.key)}`)
-		}
-	}
+  goto(`/search?q=${encodeURIComponent(v.title)}`)
 }
 
 async function getData(e: any) {
@@ -75,16 +55,17 @@ async function getData(e: any) {
 	}
 
 	clearTimeout(typingTimer)
+  console.log('on Autocomplete getData... query: ', q)
 
 	typingTimer = setTimeout(async () => {
 		try {
-			autocomplete = await AutocompleteService.fetchAutocompleteData({
-				q: q,
-				origin: $page?.data?.origin,
-				storeId: $page.data.storeId
-			})
+			autocomplete = await PetStoreSearchService.search({
+        query: q
+      })
+
+      console.log('autocomplete', autocomplete)
 		} catch (e) {}
-	}, 200)
+	}, 500)
 }
 
 onMount(async () => {
@@ -133,26 +114,26 @@ onMount(async () => {
 		</button>
 	</button>
 
-	{#if autocomplete?.length && showSuggestionOptions}
+	{#if autocomplete?.found && showSuggestionOptions}
 		<ul
 			transition:slide="{{ duration: 300 }}"
 			class="absolute top-10 z-50 m-0 p-0 list-none w-full border bg-white divide-y rounded shadow-xl overflow-hidden">
-			{#each autocomplete || [] as v}
+			{#each autocomplete?.hits || [] as v}
 				<li>
 					<button
 						type="button"
 						class="p-3 flex w-full items-center justify-between text-left text-zinc-500 hover:bg-zinc-100"
 						on:click="{() => onselect(v)}">
 						<div class="flex-1 flex items-center gap-2 justify-start">
-							{#if v.img}
+							{#if v.document.photos[0].url}
 								<LazyImg
-									src="{v.img}"
+									src="{v.document.photos[0].url}"
 									alt=""
 									height="40"
 									class="h-10 object-contain w-auto object-center" />
 							{/if}
 
-							<span class="w-full truncate text-sm capitalize">{v.key}</span>
+							<span class="w-full truncate text-sm capitalize">{v.document.title}</span>
 						</div>
 
 						<svg

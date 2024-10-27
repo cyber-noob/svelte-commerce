@@ -1,0 +1,28 @@
+{
+  "currencySymbol": "",
+  "products": [
+    {
+      "slug": "",
+      "new": true,
+      "name": "",
+      "img": "",
+      "brandName": "",
+      "price": 1000,
+      "mrp": 3000,
+      "relatedProducts": {
+        "slug": "",
+        "new": false,
+        "name": "",
+        "brandName": "",
+        "price": 8000,
+        "mrp": 3000
+      }
+    }
+  ],
+  "category": {
+    "name": "",
+    "topDescription": ""
+  },
+  "count": 4,
+  "facets": {}
+}

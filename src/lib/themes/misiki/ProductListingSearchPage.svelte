@@ -29,6 +29,8 @@ export let data
 
 let today = dayjs(new Date()).toISOString()
 
+console.log('PLP data: ', data.products)
+
 let seoProps = {
 	brand: $page.data.store?.title,
 	// breadcrumbs: data.category?.children,
@@ -80,14 +82,19 @@ let showSort = false
 let y
 
 if (
-	data.products?.facets?.all_aggs?.price_stats?.max > 0 &&
-	data.products?.facets?.all_aggs?.price_stats?.min >= 0
+	data.products?.facet_counts[0]?.stats?.max > 0 &&
+  data.products?.facet_counts[0]?.stats?.min >= 0
 ) {
 	priceRange = generatePriceRange(
-		data.products?.facets?.all_aggs?.price_stats,
-		data.store?.currencySymbol
+    {
+      min: data.products?.facet_counts[0]?.stats?.min,
+      max: data.products?.facet_counts[0]?.stats?.max
+    },
+		'₹'
 	)
 }
+
+console.log('priceRange: ', priceRange)
 
 $: innerWidth = 0
 
@@ -340,8 +347,8 @@ function handleFilterTags() {
 		{/if}
 
 		<p>
-			{#if data.products?.count}
-				{data.products?.count}
+			{#if data.products?.found}
+				{data.products?.found}
 
 				Items
 			{:else}
@@ -353,7 +360,7 @@ function handleFilterTags() {
 
 <div class="h-full min-h-screen">
 	<!-- Mobile black product count indicator -->
-	{#if !hidden && innerWidth <= 1024 && data.products?.length}
+	{#if !hidden && innerWidth <= 1024 && data.products?.found}
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
@@ -370,17 +377,17 @@ function handleFilterTags() {
 				></path>
 			</svg>
 
-			<span class="flex-1">{data.products?.length} / {data.products?.count}</span>
+			<span class="flex-1">{data.products?.found} / {data.products?.out_of}</span>
 		</button>
 	{/if}
 
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.products.facets}
+		{#if data.products.facet_counts}
 			<DesktopFilter
-				class="sticky hidden lg:block {$page.data.store?.hellobar?.active?.val
+				class="sticky hidden lg:block {true
 					? 'top-32'
 					: 'top-24'}"
-				facets="{data.products.facets}"
+				facets="{data.products.facet_counts}"
 				{priceRange}
 				query="{data.query}"
 				on:clearAll="{refreshData}" />
@@ -389,14 +396,14 @@ function handleFilterTags() {
 				bind:showFilter
 				bind:showSort
 				class="fixed bottom-0 border-t z-40 block lg:hidden"
-				facets="{data.products.facets}"
+				facets="{data.products.facet_counts}"
 				{priceRange}
 				selected="{selectedFilter}"
 				on:clearAll="{refreshData}" />
 		{/if}
 
 		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
-			{#if data.products?.count}
+			{#if data.products?.found}
 				<div class="flex flex-col gap-5">
 					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<!-- Name and count -->
@@ -409,13 +416,13 @@ function handleFilterTags() {
 							<p>
 								-
 
-								{#if data.products?.count}
-									{data.products?.count}
+								{#if data.products?.found}
+									{data.products?.found}
 								{:else}
 									No
 								{/if}
 
-								{#if data.products?.count}
+								{#if data.products?.found}
 									items
 								{:else}
 									item
@@ -446,9 +453,9 @@ function handleFilterTags() {
 
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products?.data as p, px (p._id)}
+					{#each data.products?.hits as p, px (p.document.uuid)}
 						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
-							<ProductCard product="{p}" />
+							<ProductCard product="{p.document}" />
 						</li>
 
 						<!-- Filter by tags -->

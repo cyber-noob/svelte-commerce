@@ -409,6 +409,7 @@ async function updateVariant(variant) {
 }
 
 console.log('pdp data: ', data.product)
+console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlisted)
 </script>
 
 <SEO {...seoProps} />
@@ -705,13 +706,13 @@ console.log('pdp data: ', data.product)
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2">
 							<span class="text-2xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, $page.data.store?.currencySymbol)}
+								{currency(currentVariantPrice, data.product?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, $page.data.store?.currencySymbol)}
+										{currency(data.product?.mrp, data.product?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -728,7 +729,7 @@ console.log('pdp data: ', data.product)
 								{#if data.moreProductDetails?.igst}
 									Inclusive {currency(
 										data.moreProductDetails?.igst,
-										$page.data.store?.currencySymbol
+                  data.product?.currencySymbol
 									)} GST
 								{:else}
 									Inclusive of all taxes
@@ -1331,11 +1332,11 @@ console.log('pdp data: ', data.product)
           </div>
         {/if}
 
-				{#if !data.product?.isCustomized}
 					<div
-						class="flex flex-row w-full md:grid gap-4 items-center uppercase static">
-						{#if $page.data.store?.isWishlist}
-							<div class="col-span-1">
+						class="flex sm:flex-row flex-col w-full md:grid gap-4 items-center uppercase static">
+
+            <!-- Wishlist Button -->
+            <div class="col-span-1 w-full">
 								<form
 									id="toggle_wishlist_1"
 									action="/my/wishlist?/toggleWishlist"
@@ -1404,10 +1405,10 @@ console.log('pdp data: ', data.product)
 									</WhiteButton>
 								</form>
 							</div>
-						{/if}
 
+            <!-- Add to Cart Button -->
 						{#if currentVariantPrice > 0}
-							<div class="col-span-1">
+							<div class="col-span-1 w-full">
 								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 									<a
 										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
@@ -1579,6 +1580,8 @@ console.log('pdp data: ', data.product)
 								{/if}
 							</div>
 						{/if}
+
+            <!-- Video Call Button -->
             <button
               type="submit"
               on:click|preventDefault={scrollToElement}
@@ -1589,7 +1592,7 @@ console.log('pdp data: ', data.product)
                 See your to be Companion?
             </button>
 					</div>
-				{/if}
+
 
 				<!-- Delivery Options Desktop -->
 
@@ -1711,10 +1714,9 @@ console.log('pdp data: ', data.product)
 					on:exitViewport="{cartButtonExitViewport}">
 				</div>
 
-				{#if showStickyCartButton && !data.product?.isCustomized}
 					<div
 						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
-						{#if $page.data.store?.isWishlist}
+						{#if $page.data.product?.isWishlist}
 							<div class="col-span-2">
 								<form
 									id="toggle_wishlist_2"
@@ -1960,11 +1962,10 @@ console.log('pdp data: ', data.product)
 							</div>
 						{/if}
 					</div>
-				{/if}
 
-				{#if !data.product?.isCustomized}
+
 					<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
-						{#if $page.data.store?.isWishlist}
+						{#if $page.data.product?.isWishlist}
 							<div class="col-span-2">
 								<form
 									id="toggle_wishlist_3"
@@ -2210,7 +2211,7 @@ console.log('pdp data: ', data.product)
 							</div>
 						{/if}
 					</div>
-				{/if}
+
 			</div>
 		</div>
 

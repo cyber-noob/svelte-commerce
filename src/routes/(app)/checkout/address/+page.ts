@@ -16,54 +16,32 @@ export async function load({ url, parent }) {
 			PetStoreAddressService.fetchCountries(me.token)
 		])
 
+    console.log('aj debugger cart: ', cart)
+
 		if (!cart.quantity) {
 			redirect(307, '/cart')
 		}
 
-		if (store?.isGuestCheckout) {
-			if (me) {
-				const { myAddresses, preSelectedAddress } = await PetStoreAddressService.fetchAddresses(me.token)
+    console.log('store: ', store)
+    if (!me) {
+      redirect(307, `/auth/login?ref=${url?.pathname}`)
+    }
 
-				return {
-					cart,
-					countries,
-					currentPage,
-					err,
-					myAddresses,
-					q,
-					preSelectedAddress,
-					url: url.href
-				}
-			} else {
-				return {
-					cart,
-					countries,
-					currentPage,
-					err,
-					q,
-					url: url.href
-				}
-			}
-		} else {
-			if (!me) {
-				redirect(307, `/auth/login?ref=${url?.pathname}`)
-			} else {
-				let myAddresses = await PetStoreAddressService.fetchAddresses(me.token)
-        let preSelectedAddress = myAddresses.filter(address => address.is_default == 1)[0]
+    console.log('aj debugger ....')
+    let myAddresses = await PetStoreAddressService.fetchAddresses(me.token)
+    let preSelectedAddress = myAddresses.filter(address => address.is_default == 1)[0]
 
-        console.log('checkout +page.ts: \n', myAddresses, '\npreSelectedAddress', preSelectedAddress)
-				return {
-					cart,
-					countries,
-					currentPage,
-					err,
-					myAddresses,
-					q,
-					preSelectedAddress,
-					url: url.href
-				}
-			}
-		}
+    console.log('checkout +page.ts: \n', myAddresses, '\npreSelectedAddress', preSelectedAddress)
+    return {
+      cart,
+      countries,
+      currentPage,
+      err,
+      myAddresses,
+      q,
+      preSelectedAddress,
+      url: url.href
+    }
 	} catch (e) {
 		if (e.status === 307 && e.location === '/cart') {
 			redirect(307, '/cart')

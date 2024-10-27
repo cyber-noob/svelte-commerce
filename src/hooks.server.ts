@@ -41,6 +41,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const protocol = !IS_DEV && !dev ? `https://` : `http://`
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
+
+    console.log('host: ', host)
 		event.locals.host = url.host
 
 		const userAgent = event.request.headers.get('user-agent')
@@ -50,60 +52,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
-
-		const storeId = event.cookies.get('storeId')
-		// const store = event.cookies.get('store') || '{}'
-		// const storeAsJson = JSON.parse(store)
-		if (storeId && storeId != 'undefined') {
-			event.locals.storeId = storeId
-			// event.locals.store = storeAsJson
-		} else {
-			try {
-				const { storeOne } = await InitService.fetchInit({
-					host: DOMAIN || host,
-					origin: event.locals.origin
-				})
-				const storeId = storeOne?._id
-				// const store = {
-				// 	id: storeOne?.id,
-				// 	currencyCode: storeOne?.currencyCode,
-				// 	description: storeOne?.description,
-				// 	domain: storeOne?.domain,
-				// 	email: storeOne?.email,
-				// 	phone: storeOne?.phone,
-				// 	favicon: storeOne?.favicon,
-				// 	fontFamily: storeOne?.fontFamily,
-				// 	keywords: storeOne?.keywords,
-				// 	logo: storeOne?.logo,
-				// 	metaDescription: storeOne?.metaDescription,
-				// 	socialSharingButtons: storeOne?.socialSharingButtons,
-				// 	themeColor: storeOne?.themeColor,
-				// 	title: storeOne?.title,
-				// 	websiteName: storeOne?.websiteName,
-				// 	isMultiVendor: storeOne?.isMultiVendor,
-				// 	adminUrl: storeOne?.adminUrl,
-				// 	address: storeOne?.address,
-				// 	saasName: storeOne?.saasName,
-				// 	saasDomain: storeOne?.saasDomain,
-				// 	guaranteed_response_time: storeOne?.guaranteed_response_time,
-				// 	product_image_dimension: storeOne?.product_image_dimension,
-				// 	isSecureCatalogue: storeOne?.isSecureCatalogue,
-				// 	store_timings: storeOne?.store_timings,
-				// 	isHyperlocal: storeOne?.isHyperlocal,
-				// 	IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
-				// }
-				if (!storeId || storeId == 'undefined') {
-					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
-				}
-
-				event.cookies.set('storeId', storeId, { path: '/' })
-				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
-				event.locals.storeId = storeId
-				// event.locals.store = store
-			} catch (e) {
-				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
-			}
-		}
 
 		// This calls init only when store data not present in browser cookies
 		// const { storeOne } = await fetchStoreData(event)
@@ -117,7 +65,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const zip = event.cookies.get('zip')
 		event.locals.sid = event.cookies.get('connect.sid')
 		event.locals.cartId = event.cookies.get('cartId')
-    event.locals.me = JSON.parse(event.cookies.get('me'))
+
+    let me = event.cookies.get('me')
+    if (me)
+      event.locals.me = JSON.parse(me)
+
 		if (zip) event.locals.zip = JSON.parse(zip)
 		// This makes a call to backend on every request
 
@@ -147,6 +99,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return response
 	} catch (e) {
 		// If the store is not found, throw a 404 error
-		error(404, 'Store Not Found')
+    console.error('hook err: ', e)
+		// error(404, 'Store Not Found')
 	}
 }

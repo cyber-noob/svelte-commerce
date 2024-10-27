@@ -17,6 +17,7 @@ export async function load({ url, locals, cookies }) {
 	const failed_url = `/checkout/payment-options?order_no=${order_no}&pg=${paymentMode || pg}`
 	const success_url = `/payment/success?order_no=${order_no}&pg=${paymentMode || pg}`
 
+  console.log('On process page ...')
 	try {
 		// let payment_status = 'FAILED'
 
@@ -36,27 +37,18 @@ export async function load({ url, locals, cookies }) {
 		// 	throw { status: 307, url: failed_url }
 		// } else {
 		// payment_status = 'SUCCESS'
-		if (pg !== 'Paypal') {
-			// This is already done at backend for paypal
-			await OrdersService.paySuccessPageHit({
-				orderId,
-				paymentMode,
-				paymentReferenceId,
-				status: payment_status,
-				sid,
-				storeId,
-				origin: locals.origin
-			})
-		}
 
 		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
 
+    console.log('rp url: ', url)
 		throw { status: 307, url: success_url }
 		// }
 	} catch (e) {
 		if (e.status == 307) {
+      console.log('on catch: ', e)
 			redirect(307, e.url)
 		} else {
+      console.log('on catch: ', e)
 			redirect(307, failed_url)
 		}
 	}

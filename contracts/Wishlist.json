@@ -1,0 +1,41 @@
+{
+  "length": 4,
+  "products": [
+    {
+      "id": "dadkj2232",
+      "slug": "testing-data-124",
+      "image": "https://www.team-bhp.com/forum/attachments/super-cars-imports-india/1683867d1689828361t-porsche-911-gt3-launched-india-rs-2-31-crore-pme17_0104_fine.jpg",
+      "name": "Aston Martin Vanquish",
+      "mrp": 5000,
+      "price": 3000,
+      "currencySymbol": "₹"
+    },
+    {
+      "id": "dadkj2232",
+      "slug": "testing-data-124",
+      "image": "https://www.oldcarsweekly.com/.image/t_share/MTczMzEwOTA4NDg1ODcxMjE5/1959-cadillac-coupe-de-ville.png",
+      "name": "Aston Martin Vanquish",
+      "mrp": 4000,
+      "price": 7000,
+      "currencySymbol": "₹"
+    },
+    {
+      "id": "dadkj2232",
+      "slug": "testing-data-124",
+      "image": "https://i.ytimg.com/vi/SJekuYgEUBQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDusk8vxE__DFRc8Mh4mUYUllUakQ",
+      "name": "Aston Martin Vanquish",
+      "mrp": 7000,
+      "price": 1000,
+      "currencySymbol": "₹"
+    },
+    {
+      "id": "dadkj2232",
+      "slug": "testing-data-124",
+      "image": "https://pimwp.s3.ap-south-1.amazonaws.com/2024/04/Untitled-design-57-2-jpg.webp",
+      "name": "Aston Martin Vanquish",
+      "mrp": 4300,
+      "price": 14000,
+      "currencySymbol": "₹"
+    }
+  ]
+}

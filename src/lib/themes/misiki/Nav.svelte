@@ -80,6 +80,7 @@ function slideFade(node, params) {
 async function onSearchSubmit({ detail }) {
 	let newUrl
 
+  console.log('nav.svelte detail: ', detail)
 	if (detail.type === 'category') {
 		const u = new URL(`/${detail.slug}`, $page.data.origin)
 		newUrl = u.toString()
@@ -197,7 +198,7 @@ async function onSearchSubmit({ detail }) {
 
 		<div class="hidden w-full min-w-[200px] max-w-4xl flex-1 lg:block">
 			<Autocomplete
-				placeholder="{$page.data.store?.searchbarText || 'Search...'}"
+				placeholder="{'Search...'}"
 				on:search="{onSearchSubmit}" />
 		</div>
 

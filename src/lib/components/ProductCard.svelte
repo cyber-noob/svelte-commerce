@@ -40,6 +40,8 @@ import { onMount } from 'svelte'
 
 export let product = {}
 
+console.log('ProductCard.svelte product: ', product)
+
 if (product?._source) {
 	product = product?._source
 }
@@ -110,10 +112,10 @@ onMount(async () => {
 			{/if}
 
 			{#if product_image_dimension == '1x1'}
-				{#if product.img || (product.images && product.images[0])}
+				{#if product.photos}
 					<LazyImg
-						src="{product.images[0].url}"
-						alt="{product.name}"
+						src="{product.photos[0].url}"
+						alt="{product.title}"
 						height="210"
 						aspect_ratio="1:1"
 						class="object-contain object-bottom w-[210px] h-[210px] text-xs rounded" />
@@ -138,10 +140,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '3x4'}
-				{#if product.img || (product.images && product.images[0])}
+				{#if product.photos}
 					<LazyImg
-						src="{product.images[0].url}"
-						alt="{product.name}"
+						src="{product.photos[0].url}"
+						alt="{product.title}"
 						height="280"
 						aspect_ratio="3:4"
 						class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
@@ -166,10 +168,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '4x3'}
-				{#if product.img || (product.images && product.images[0])}
+				{#if product.photos}
 					<LazyImg
-						src="{product.images[0].url}"
-						alt="{product.name}"
+						src="{product.photos[0].url}"
+						alt="{product.title}"
 						height="157"
 						aspect_ratio="4:3"
 						class="object-contain object-bottom w-[210px] h-[157px] text-xs" />
@@ -194,10 +196,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '16x9'}
-				{#if product.img || (product.images && product.images[0])}
+				{#if product.photos}
 					<LazyImg
-						src="{product.images[0].url}"
-						alt="{product.name}"
+						src="{product.photos[0].url}"
+						alt="{product.title}"
 						height="236"
 						aspect_ratio="16:9"
 						class="object-contain object-bottom w-[420px] h-[236px] text-xs" />
@@ -222,10 +224,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '9x16'}
-				{#if product.img || (product.images && product.images[0])}
+				{#if product.photos}
 					<LazyImg
-						src="{product.images[0].url}"
-						alt="{product.name}"
+						src="{product.photos[0].url}"
+						alt="{product.title}"
 						height="373"
 						aspect_ratio="9:16"
 						class="object-contain object-bottom w-[210px] h-[373px] text-xs" />
@@ -461,7 +463,7 @@ onMount(async () => {
 					<div class="flex gap-2 justify-between">
 						<h4
 							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 line-clamp-2 w-full group-hover:underline">
-							{product.name || '_'}
+							{product.title || '_'}
 						</h4>
 
 						{#if $page.data.store?.isFnb && product.foodType}
@@ -503,12 +505,12 @@ onMount(async () => {
 								? 'hidden'
 								: 'flex'} mt-1 flex-wrap items-baseline justify-start gap-1.5 text-xs leading-3">
 							<span class="text-base font-bold whitespace-nowrap leading-3">
-								{currency(product.price, store?.currencySymbol)}
+								{currency(product.price, product?.currencySymbol)}
 							</span>
 
 							{#if product.mrp > product.price}
 								<span class="text-zinc-500 line-through whitespace-nowrap">
-									{currency(product.mrp, store?.currencySymbol)}
+									{currency(product.mrp, product?.currencySymbol)}
 								</span>
 
 								{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}

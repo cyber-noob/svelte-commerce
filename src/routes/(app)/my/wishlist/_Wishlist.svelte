@@ -47,6 +47,8 @@ async function removeFromWishlist(id, wx) {
 		loadingProduct[wx] = false
 	}
 }
+
+console.log('wishlisted products: ', wishlistedProducts)
 </script>
 
 <div class="w-full">
@@ -92,13 +94,12 @@ async function removeFromWishlist(id, wx) {
 			</header>
 
 			<div class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
-				{#each wishlistedProducts as w, wx}
-					{#if w.product}
+				{#each wishlistedProducts.products as w, wx}
 						<div class="cols-span-1 relative flex flex-col justify-between border overflow-hidden">
 							<BlackButton
 								type="button"
 								class="absolute top-2 right-2 z-10"
-								on:click="{() => removeFromWishlist(w.product?._id, wx)}">
+								on:click="{() => removeFromWishlist(w?.id, wx)}">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									class="h-6 w-6"
@@ -113,15 +114,15 @@ async function removeFromWishlist(id, wx) {
 								</svg>
 							</BlackButton>
 
-							<a href="/product/{w.product?.slug}" aria-label="Click to view the product details">
+							<a href="/product/{w?.slug}" aria-label="Click to view the product details">
 								<div
-									class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-48 flex flex-col gap-4">
+									class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-56 flex flex-col gap-4">
 									<div class="h-auto w-full">
 										<LazyImg
-											src="{w.product?.img}"
+											src="{w?.image}"
 											alt="{w.name}"
 											width="192"
-											class="h-full w-full object-contain object-bottom text-xs" />
+											class="h-60 w-full object-contain object-bottom text-xs" />
 									</div>
 
 									<div class="flex flex-col gap-2 items-center justify-center text-center">
@@ -137,7 +138,7 @@ async function removeFromWishlist(id, wx) {
 
 										<div class="flex items-start justify-center">
 											<p class="flex-1 line-clamp-2">
-												{w.product?.name}
+												{w?.name}
 											</p>
 
 											{#if $page.data.store?.isFnb && w.product?.foodType}
@@ -154,18 +155,18 @@ async function removeFromWishlist(id, wx) {
 										<div
 											class="flex flex-wrap items-baseline justify-center gap-1.5 text-xs leading-3">
 											<span class="text-base font-bold whitespace-nowrap leading-3">
-												{currency(w.product?.price, $page.data.store?.currencySymbol)}
+												{currency(w?.price, w?.currencySymbol)}
 											</span>
 
-											{#if w.product?.mrp > w.product?.price}
+											{#if w?.mrp > w?.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(w.product?.mrp, $page.data.store?.currencySymbol)}
+													{currency(w?.mrp, w?.currencySymbol)}
 												</span>
 
-												{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
+												{#if Math.floor(((w?.mrp - w?.price) / w?.mrp) * 100) > 0}
 													<span class="whitespace-nowrap text-secondary-500">
 														({Math.floor(
-															((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100
+															((w?.mrp - w?.price) / w?.mrp) * 100
 														)}% off)
 													</span>
 												{/if}
@@ -187,13 +188,13 @@ async function removeFromWishlist(id, wx) {
 											bounceItemFromTop = false
 										}, 3000)
 
-										await removeFromWishlist(w.product?._id, wx)
+										await removeFromWishlist(w?.id, wx)
 										// await invalidateAll()
 										await applyAction(result)
 									}
 								}}">
-								<input type="hidden" name="pid" value="{w.product?._id || null}" />
-								<input type="hidden" name="vid" value="{w.product?._id || null}" />
+								<input type="hidden" name="pid" value="{w?.id || null}" />
+								<input type="hidden" name="vid" value="{w?.id || null}" />
 								<input type="hidden" name="qty" value="{1}" />
 								<input
 									type="hidden"
@@ -234,13 +235,8 @@ async function removeFromWishlist(id, wx) {
 						</div>
 
 						{#if bounceItemFromTop}
-							<AnimatedCartItem img="{w.product?.img}" />
+							<AnimatedCartItem img="{w?.image}" />
 						{/if}
-					{:else}
-						<div class="cols-span-1 sm:w-48 p-4 text-center bg-zinc-200 text-sm text-zinc-500">
-							It has no product, please delete from backend
-						</div>
-					{/if}
 				{/each}
 
 				{#each { length: 8 } as _}

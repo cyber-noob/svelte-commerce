@@ -1,159 +1,124 @@
 <script lang="ts">
-// import logo from '$lib/assets/logo.png'
-// import ProductTab from '$lib/components/Product/ProductTab.svelte'
-import { Home } from '$lib/theme-config'
-import { onMount } from 'svelte'
-import { page } from '$app/stores'
-import Cookie from 'cookie-universal'
-import dayjs from 'dayjs'
-import SEO from '$lib/components/SEO/index.svelte'
-import { CollectionService, DealsService, ProductService } from '$lib/services'
-
-const cookies = Cookie()
-let today = dayjs(new Date()).toISOString()
-
-export let data: any = {}
-
-let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
-	brand: $page.data.store?.title,
-	// breadcrumbs: '',
-	caption: $page.data.store?.title,
-	category: $page.data.store?.title,
-	contentUrl: $page.data.store?.logo,
-	createdAt: today,
-	// depth: { unitCode: '', value: '' },
-	email: `${$page.data.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
-	id: $page?.url?.href,
-	image: $page.data.store?.logo,
-	logo: $page.data.store?.logo,
-	ogSquareImage: { url: '', width: 56, height: 56 },
-	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 08:00-13:00'],
-	// popularity: product.popularity,
-	// postalCode: '764036',
-	// price: product.price,
-	// priceRange: `${product.price}-${product.mrp}`,
-	// ratingCount: 1,
-	// ratingValue: +product.ratings + 1,
-	// sku: product.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
-	timeToRead: 0,
-	updatedAt: today,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
-	metaDescription: $page.data.store?.metaDescription,
-	// article: false,
-	datePublished: today,
-	description: $page.data.store?.description,
-	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
-	featuredImage: {
-		url: $page.data.store?.logo,
-		width: 675,
-		height: 380,
-		caption: $page.data.store?.title
-	},
-	keywords: $page.data.store?.keywords,
-	lastUpdated: today,
-	msapplicationTileImage: $page.data.store?.logo,
-	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page.data.store?.logo}`,
-	ogImageType: 'image/jpeg',
-	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
-	// productAvailability: `${product.stock}`,
-	productBrand: $page.data.store?.title,
-	productName: $page.data.store?.title,
-	// productPriceAmount: `${product.price}`,
-	productPriceCurrency: `${$page.data.store?.currencyCode}`,
-	slug: `/`,
-	// timeToRead: 0,
-	title: $page.data.store?.title,
-	twitterImage: { url: $page.data.store?.logo }
-}
-
-let showFooter = false
-let showPinCodeEntryModal = false
-
-onMount(async () => {
-	const pin = cookies.get('zip')
-	if (pin && pin.toString()?.length === 6) {
-		showPinCodeEntryModal = false
-	} else {
-		showPinCodeEntryModal = true
-	}
-	try {
-		if ($page.data.store?.isDeals && !$page.data.store?.isCollections) {
-			const [deals, products] = await Promise.all([
-				DealsService.fetchDeals({
-					origin,
-					storeId: $page.data.storeId
-				}),
-				ProductService.fetchProducts({
-					query: data.query,
-					origin,
-					storeId: $page.data.storeId
-				})
-			])
-			data.deals = deals
-			data.products = products
-		} else if (!$page.data.store?.isDeals && $page.data.store?.isCollections) {
-			const [collections, products] = await Promise.all([
-				CollectionService.fetchCollections({
-					origin,
-					storeId: $page.data.storeId
-				}),
-				ProductService.fetchProducts({
-					query: data.query,
-					origin,
-					storeId: $page.data.storeId
-				})
-			])
-			data.collections = collections
-			data.products = products
-		} else if ($page.data.store?.isDeals && $page.data.store?.isCollections) {
-			const [deals, collections, products] = await Promise.all([
-				DealsService.fetchDeals({
-					origin,
-					storeId: $page.data.storeId
-				}),
-				CollectionService.fetchCollections({
-					origin,
-					storeId: $page.data.storeId
-				}),
-				ProductService.fetchProducts({
-					query: data.query,
-					origin,
-					storeId: $page.data.storeId
-				})
-			])
-			data.deals = deals
-			data.collections = collections
-			data.products = products
-		} else {
-			const [products] = await Promise.all([
-				ProductService.fetchProducts({
-					query: data.query,
-					origin,
-					storeId: $page.data.storeId
-				})
-			])
-			data.products = products
-		}
-	} catch (e) {
-		console.log('e', e)
-	}
-})
+  import HeaderImg from '$lib/assets/dogg-removebg-preview.png'
+  import RoundTable from '$lib/assets/round-table.jpg'
+  import OwnPuppy from '$lib/icons/own_puppy.svg'
+  import Accessories from '$lib/icons/puppy_accessories.svg'
+  import Health from '$lib/icons/puppy_health.svg'
 </script>
+<section class="m-8">
+  <div class="flex content-center items-center h-72 bg-zinc-950">
+    <img
+      alt="logo"
+      src={HeaderImg}
+      class="object-fill h-72"
+    />
+    <p class="text-5xl font-extrabold text-white">YOUR ONE STOP SHOP</p>
+  </div>
+  <div id="our story" class="flex mt-8">
+    <img
+      alt="logo"
+      src={RoundTable}
+    />
+    <div class="m-8">
+      <div class="text-zinc-900 text-3xl font-bold border-l-4 border-green-400 p-4">
+        OUR STORY
+      </div>
+      <div class="prose max-w-none text-lg text-zinc-500 mt-4">
+        We are a bunch of passionate folks who banded together over our love n hate relationship
+        with buying and owning pets but spending our limited time over research weren't feasible.
+        And so --title-- came by here to provide you one stop shop on owning and
+        maintaing your cuddly little companions!
+      </div>
+      <div class="mt-8">
+        Read More about our story below:
+        <p class="underline underline-offset-8 text-blue-500">Click here ...</p>
+      </div>
+    </div>
+  </div>
+  <div class="mt-8 border-l-4 border-green-400 text-zinc-900 text-3xl p-4">
+    OUR EXPERT SERVICES
+  </div>
+  <div class="flex flex-row flex-wrap mt-8">
+    <div class="flex w-96 h-32 bg-zinc-100 border-2 border-green-400 p-4 m-4">
+      <div class="flex items-center">
+        <img
+          src={OwnPuppy}
+          alt="logo"
+          class="w-16 h-16"
+        />
+      </div>
+      <div class="flex flex-col ml-8">
+        <div class="border-l-4 border-green-400 text-zinc-900 text-xl font-bold pl-4 mt-4">First Time Pet Owner ?</div>
+        <div class="mt-4 prose max-w-none text-sm text-zinc-500">
+          Read our curated blogs about your new lil companion
+        </div>
+      </div>
+    </div>
 
-<SEO {...seoProps} />
+    <a href="/pets">
+      <div class="flex w-96 h-32 bg-zinc-100 border-2 border-green-400 p-4 m-4">
+        <div class="flex items-center">
+          <img
+            src={OwnPuppy}
+            alt="logo"
+            class="w-16 h-16"
+          />
+        </div>
+        <div class="flex flex-col ml-8">
+          <div class="border-l-4 border-green-400 text-zinc-900 text-xl font-bold pl-4 mt-4">Buy Puppy</div>
+          <div class="mt-4 prose max-w-none text-sm text-zinc-500">
+            Click here to explore pets catalog
+          </div>
+        </div>
+      </div>
+    </a>
 
-<Home {data} {showFooter} {showPinCodeEntryModal} />
+    <div class="flex w-96 h-32 bg-zinc-100 border-2 border-green-400 p-4 m-4">
+      <div class="flex items-center">
+        <img
+          src={Accessories}
+          alt="logo"
+          class="w-16 h-16"
+        />
+      </div>
+      <div class="flex flex-col ml-8">
+        <div class="border-l-4 border-green-400 text-zinc-900 text-xl font-bold pl-4 mt-4">Puppy Accessories</div>
+        <div class="mt-4 prose max-w-none text-sm text-zinc-500">
+          Click here to explore unique and exciting pet accessories
+        </div>
+      </div>
+    </div>
+
+    <div class="flex w-96 h-32 bg-zinc-100 border-2 border-green-400 p-4 m-4">
+      <div class="flex items-center">
+        <img
+          src={Health}
+          alt="logo"
+          class="w-16 h-16"
+        />
+      </div>
+      <div class="flex flex-col ml-8">
+        <div class="border-l-4 border-green-400 text-zinc-900 text-xl font-bold pl-4 mt-4">Health Care</div>
+        <div class="mt-4 prose max-w-none text-sm text-zinc-500">
+          Click here to book an appointment with a vetenerian and for pet consultation
+        </div>
+      </div>
+    </div>
+
+    <div class="flex w-96 h-32 bg-zinc-100 border-2 border-green-400 p-4 m-4">
+      <div class="flex items-center">
+        <img
+          src={OwnPuppy}
+          alt="logo"
+          class="w-16 h-16"
+        />
+      </div>
+      <div class="flex flex-col ml-8">
+        <div class="border-l-4 border-green-400 text-zinc-900 text-xl font-bold pl-4 mt-4">Grooming</div>
+        <div class="mt-4 prose max-w-none text-sm text-zinc-500">
+          Click here for pet grooming
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

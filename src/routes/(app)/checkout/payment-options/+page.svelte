@@ -9,7 +9,8 @@ import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { OrdersService } from '$lib/services'
+import { OrdersService, PetStoreOrderService } from '$lib/services'
+import Cookie from 'cookie-universal'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -17,6 +18,8 @@ const seoProps = {
 }
 
 export let data
+
+let cookie = Cookie()
 
 let addressId = $page.url.searchParams.get('address') || ''
 let cashfreeReady = false
@@ -67,276 +70,68 @@ function paymentMethodChanged(pm) {
 	errorMessage = null
 }
 
-async function submit(pm) {
-	if (!data?.cart?.qty) {
+async function submit() {
+	if (!data?.cart?.quantity) {
 		goto('/my/orders?sort=-updatedAt')
 		return
 	}
 
 	fireGTagEvent('add_payment_info', data?.cart)
 
-	if (!pm || pm === undefined) {
-		disabled = true
-		errorMessage = 'Please select a payment option'
-		toast('Please select a payment option', 'error')
-		return
-	}
+  try {
+    console.log('On Razorpay method ....')
+    data.err = null
+    loading = true
+    loadingForPaymentProcessingSteps = true
 
-	const paymentMethod = pm.value || pm.id
+    const rp = await PetStoreOrderService.createOrder(cookie.get('me').token)
+    orderNo = rp?.order_no || rp?.orderNo || rp?.id || ''
 
-	if (
-		paymentMethod === 'COD' ||
-		paymentMethod === 'manual' ||
-		paymentMethod === 'BankTransfer' ||
-		paymentMethod === 'Cashfree' ||
-		paymentMethod === 'Phonepe' ||
-		paymentMethod === 'Stripe' ||
-		paymentMethod === 'Paypal' ||
-		paymentMethod === 'Razorpay'
-	) {
-		if (paymentMethod === 'COD' || paymentMethod === 'manual') {
-			try {
-				data.err = null
-				loading = true
-				loadingForPaymentProcessingSteps = true
+    if (orderNo === '')
+      toast('Something went wrong', 'error')
 
-				const res = await OrdersService.codCheckout({
-					address: addressId,
-					cartId: $page.data.cartId,
-					paymentMethod: 'COD',
-					prescription: data.prescription?._id,
-					origin: $page.data.origin,
-					storeId: $page.data.storeId,
-					paymentProviderId: 'manual'
-				})
+    console.log('order no: ', orderNo)
+    gotoOrder(orderNo)
+    const options = {
+      key: "rzp_test_fJLPcc02TCY2NS", // Enter the Key ID generated from the Dashboard
+      description: `Order ${orderNo}`,
+      amount: rp.amount,
+      order_id: rp.id,
+      async handler(response) {
+        try {
+          const capture = await PetStoreOrderService.validatePayment(cookie.get('me').token, {
+            order_id: response.razorpay_order_id,
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature
+          })
 
-				goto(
-					`/payment/process?order_no=${res?.order_no || res?.orderNo || ''}&status=PAYMENT_SUCCESS&provider=COD`
-				)
-			} catch (e) {
-				data.err = e
-				gotoOrder(orderNo)
-			} finally {
-				loading = false
-			}
-		} else if (paymentMethod === 'BankTransfer') {
-			if (comment) {
-				try {
-					data.err = null
-					loading = true
-					loadingForPaymentProcessingSteps = true
-
-					const res = await OrdersService.codCheckout({
-						address: addressId,
-						cartId: data?.cartId,
-						comment,
-						paymentMethod: 'COD',
-						prescription: data.prescription?._id,
-						origin: $page.data.origin,
-						storeId: $page.data.storeId
-					})
-
-					comment = ''
-
-					goto(
-						`/payment/process?order_no=${res?.order_no || res?.orderNo || ''}&status=PAYMENT_SUCCESS&provider=COD`
-					)
-				} catch (e) {
-					data.err = e
-					gotoOrder(orderNo)
-				} finally {
-					loading = false
-				}
-			} else {
-				toast('Please enter your transaction id to place your order', 'info')
-
-				commentMissing = true
-
-				setTimeout(() => {
-					commentMissing = false
-				}, 820)
-			}
-		} else if (paymentMethod === 'Cashfree') {
-			try {
-				data.err = null
-				loading = true
-				loadingForPaymentProcessingSteps = true
-
-				const res = await OrdersService.cashfreeCheckout({
-					address: addressId,
-					orderNo,
-					origin: $page.data.origin,
-					storeId: $page.data.storeId,
-					cartId: $page.data.cartId
-				})
-
-				orderNo = res?.order_no || res?.orderNo || ''
-
-				if (!res.payment_session_id) {
-					data.err = 'Payment failed. Try again'
-					toast('Payment failed. Try again', 'error')
-				}
-
-				const cashfree = Cashfree({ mode: res.payment_mode })
-
-				cashfree
-					.checkout({
-						paymentSessionId: res.payment_session_id,
-						redirectTarget: '_parent',
-						returnUrl: res.order_meta?.return_url
-					})
-					.then(function () {})
-
-				// if (res?.redirectUrl && res?.redirectUrl !== null) {
-				// 	goto(`${res?.redirectUrl}`)
-				// } else {
-				// 	toast('Something went wrong', 'error')
-				// }
-			} catch (e) {
-				data.err = e
-				toast(`Payment failed, please try again`, 'error')
-				gotoOrder(orderNo)
-
-				// goto(`/payment/failed?id=${addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
-			} finally {
-				loading = false
-			}
-		} else if (paymentMethod === 'Phonepe') {
-			try {
-				data.err = null
-				loading = true
-				loadingForPaymentProcessingSteps = true
-				const res = await OrdersService.phonepeCheckout({
-					address: addressId,
-					origin: $page.data.origin,
-					cartId: $page.data.cartId,
-					storeId: $page.data.storeId,
-					orderNo
-				})
-
-				if (res?.redirectUrl && res?.redirectUrl !== null) {
-					goto(`${res?.redirectUrl}`)
-				} else {
-					toast('Something went wrong', 'error')
-				}
-			} catch (e) {
-				data.err = e
-				gotoOrder(orderNo)
-			} finally {
-				loading = false
-			}
-		} else if (paymentMethod === 'Stripe') {
-			try {
-				data.err = null
-				loading = true
-				loadingForPaymentProcessingSteps = true
-
-				const sv2 = await OrdersService.stripeCheckoutV2({
-					address: addressId,
-					cartId: $page.data.cartId,
-					origin: $page.data.origin,
-					storeId: $page?.data?.storeId,
-					paymentMethodId: 'Stripe'
-				})
-
-				window.location.replace(sv2.url)
-			} catch (e) {
-				data.err = e
-				toast(`Payment failed, please try again`, 'error')
-				gotoOrder(orderNo)
-			} finally {
-				loading = false
-			}
-		} else if (paymentMethod === 'Paypal') {
-			try {
-				data.err = null
-				loading = true
-				loadingForPaymentProcessingSteps = true
-
-				const res = await OrdersService.paypalCheckout({
-					address: addressId,
-					orderNo,
-					cartId: $page.data.cartId,
-					origin: $page.data.origin,
-					storeId: $page.data.storeId
-				})
-
-				orderNo = res?.order_no || res?.orderNo || ''
-				gotoOrder(orderNo)
-
-				if (res?.redirect_url && res?.redirect_url !== null) {
-					window.location = res?.redirect_url
-				} else {
-					toast('Something went wrong', 'error')
-				}
-			} catch (e) {
-				data.err = e
-				gotoOrder(orderNo)
-			} finally {
-				loading = false
-			}
-		} else if (paymentMethod === 'Razorpay') {
-			try {
-				data.err = null
-				loading = true
-				loadingForPaymentProcessingSteps = true
-
-				const rp = await OrdersService.razorpayCheckout({
-					address: addressId,
-					orderNo,
-					cartId: $page.data.cartId,
-					origin: $page.data.origin,
-					storeId: $page.data.storeId
-				})
-				orderNo = rp?.order_no || rp?.orderNo || ''
-				gotoOrder(orderNo)
-				const options = {
-					key: rp.keyId, // Enter the Key ID generated from the Dashboard
-					description: `Order ${orderNo}`,
-					amount: rp.amount,
-					order_id: rp.id,
-					async handler(response) {
-						try {
-							const capture = await OrdersService.razorpayCapture({
-								rpOrderId: response.razorpay_order_id,
-								rpPaymentId: response.razorpay_payment_id,
-								origin: $page.data.origin,
-								storeId: $page.data.storeId
-							})
-
-							toast('Payment success', 'success')
-							goto(
-								`/payment/process?pg=razorpay&order_no=${capture?.order_no || capture?.orderNo || ''}`
-							)
-						} catch (e) {
-							data.err = e
-						} finally {
-						}
-					},
-					prefill: {
-						name: `${data.me.firstName} ${data.me.lastName}`,
-						phone: data.me.phone,
-						email: data.me?.email || data.cart?.shipping_address?.email || 'help@litekart.in',
-						contact: data.me.phone || data.cart?.shipping_address?.phone
-					}
-				}
-				const rzp1 = new Razorpay(options)
-				rzp1.open()
-			} catch (e) {
-				data.err = e
-				toast(`Payment failed, please try again`, 'error')
-				gotoOrder(orderNo)
-			} finally {
-				loading = false
-			}
-		}
-	} else {
-		paymentDenied = true
-
-		setTimeout(() => {
-			paymentDenied = false
-		}, 820)
-	}
+          toast('Payment success', 'success')
+          goto(
+            `/payment/process?pg=razorpay&order_no=${orderNo}`
+          )
+            .then(() => console.log('Navigated to payment page successfully ....'))
+            .catch((error) => console.error('failed to navigate: ', error))
+        } catch (e) {
+          data.err = e
+        } finally {
+        }
+      },
+      prefill: {
+        name: `${data.me.firstName} ${data.me.lastName}`,
+        phone: data.me.phone,
+        email: data.me?.email || data.cart?.shipping_address?.email || 'help@litekart.in',
+        contact: data.me.phone || data.cart?.shipping_address?.phone
+      }
+    }
+    const rzp1 = new Razorpay(options)
+    rzp1.open()
+  } catch (e) {
+    data.err = e
+    toast(`Payment failed, please try again`, 'error')
+    gotoOrder(orderNo)
+  } finally {
+    loading = false
+  }
 }
 
 function gotoOrder(orderNo) {
@@ -359,104 +154,6 @@ function checkIfStripeCardValid({ detail }) {
 
 	<div
 		class="mb-14 lg:mb-0 mt-5 md:mt-10 flex flex-col lg:flex-row lg:justify-center gap-10 xl:gap-20">
-		<div class="w-full flex-1">
-			<h2 class="mb-5">Payment Options</h2>
-
-			{#if data.paymentMethods?.length}
-				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
-					{#each data.paymentMethods as pm}
-						<label
-							class="flex items-start w-full cursor-pointer gap-2 rounded border border-zinc-200 p-5 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
-							<input
-								bind:group="{selectedPaymentMethod}"
-								type="radio"
-								value="{pm}"
-								name="group"
-								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
-								on:click="{() => paymentMethodChanged(pm)}" />
-
-							<div class="w-full flex-1 flex flex-col gap-2">
-								<div class="flex justify-between gap-4">
-									<div class="flex-1">
-										<h4 style="color:{pm?.color}" class="leading-3 capitalize">
-											{pm?.name || pm?.value || pm?.id}
-										</h4>
-
-										<p class="mt-2">
-											{#if pm?.text}
-												{@html pm.text}
-											{:else}
-												Payment securly
-											{/if}
-										</p>
-									</div>
-
-									<div class="shrink-0">
-										{#if pm?.img}
-											<img
-												src="{pm.img}"
-												alt="{pm.name}"
-												width="48"
-												height="48"
-												class="h-10 w-10 rounded-full border object-cover object-center text-xs" />
-										{:else}
-											<div
-												class="flex h-10 w-10 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
-												<span class="w-full truncate">
-													{pm?.name || pm?.value || pm?.id}
-												</span>
-											</div>
-										{/if}
-									</div>
-								</div>
-
-								{#if pm?.value === 'BankTransfer' && selectedPaymentMethod?.value === 'BankTransfer'}
-									<div transition:slide="{{ duration: 300 }}" class:wiggle="{commentMissing}">
-										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
-									</div>
-								{/if}
-
-								<!-- {#if pm?.value === 'Stripe'}
-									<div transition:slide="{{ duration: 300 }}">
-										<svelte:component
-											this="{Stripe}"
-											address="{addressId}"
-											isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
-											stripePublishableKey="{pm.app_id}"
-											on:isStripeCardValid="{checkIfStripeCardValid}" />
-									</div>
-								{/if} -->
-							</div>
-						</label>
-					{/each}
-				</div>
-			{:else}
-				<div class="flex flex-col h-1/2 items-center justify-center p-4 text-zinc-500 text-center">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="mb-2 w-10 h-10">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-						></path>
-					</svg>
-					<h6 class="mb-2 capitalize">We are very sorry!!</h6>
-
-					<p>
-						<span> Payment method is not setup yet, </span>
-
-						<a href="/contact-us" class="block underline hover:text-zinc-800">
-							Please contact the store admin.
-						</a>
-					</p>
-				</div>
-			{/if}
-		</div>
 
 		<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 			<h2 class="mb-5">Cart Summary</h2>
@@ -600,7 +297,7 @@ function checkIfStripeCardValid({ detail }) {
 			<Pricesummary
 				text="{errorMessage || 'Confirm Order'}"
 				{loading}
-				on:submit="{() => submit(selectedPaymentMethod)}" />
+				on:submit="{() => submit()}" />
 
 			<TrustBaggeContainer class="mt-5" />
 		</div>

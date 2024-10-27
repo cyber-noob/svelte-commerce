@@ -1,0 +1,37 @@
+{
+  "amount": {
+    "total": 11000,
+    "subtotal": 18000,
+    "currencySymbol": "₹"
+  },
+  "orderNo": "068571b3-b7ed-4ba6-ac87-38cfba6cb40b",
+  "paymentMode": 0,
+  "shipping_address": {
+    "firstName": "Lav",
+    "lastName": "Reddy",
+    "country": "India",
+    "pincode": "560703",
+    "address": "Platina Pg Gents, Green Glenn Layout, Bellandur",
+    "city": "Bengaluru",
+    "phone": "9848901390"
+  },
+  "items": [
+    {
+      "image": "https://www.rover.com/blog/wp-content/uploads/2021/06/denvers_golden_life-1024x1024.jpg",
+      "quantity": 5,
+      "price": 9000,
+      "name": "Rottweiler Puppies At Mylapore",
+      "mrp": 13000,
+      "slug": "Rottweiler-Puppies-At-Mylapore-Pet-Accessories-white-Female-55cf64c2-faa4-4373-acde-29723cfc3eb1"
+    },
+    {
+      "image": "https://www.rover.com/blog/wp-content/uploads/2021/06/denvers_golden_life-1024x1024.jpg",
+      "quantity": 3,
+      "price": 2000,
+      "name": "Golden Retreiver Puppies At Mylapore",
+      "mrp": 5000,
+      "slug": "Golden-Retreiver-Puppies-At-Mylapore-Pet-Accessories-white-Female-0309dcd3-5c2a-4e1e-9f28-55341836f785"
+    }
+  ],
+  "paymentStatus": "Paid"
+}

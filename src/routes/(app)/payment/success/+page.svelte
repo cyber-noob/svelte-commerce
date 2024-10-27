@@ -73,6 +73,8 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import { PetStoreCartService } from '$lib/services'
+import Cookie from 'cookie-universal'
 
 export let data
 
@@ -81,21 +83,17 @@ const seoProps = {
 	metaDescription: 'Payment Success '
 }
 
-// let store = {}
-$: store = $page.data.store
+const cookies = Cookie()
 let cart = {}
 onMount(async () => {
 	if (browser) {
-		cart = await getCartFromStore({
-			origin: $page.data?.origin,
-			storeId: $page.data.storeId,
-			cartId: data.cartId,
-			forceUpdate: true
-		})
+		cart = await PetStoreCartService.fetchCart(JSON.parse(cookies.get('me')).token)
 		fireGTagEvent('purchase', data?.order)
 		updateCartStore({ data: cart })
 	}
 })
+
+console.log('success page.svelte: ', data.order)
 </script>
 
 <SEO {...seoProps} />
@@ -196,7 +194,7 @@ onMount(async () => {
 										<span class="mr-2 w-32">Subtotal</span>
 
 										<span>
-											: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
+											: &nbsp; {currency(data.order?.amount.subtotal, data.order?.amount?.currencySymbol)}
 										</span>
 									</p>
 
@@ -206,17 +204,17 @@ onMount(async () => {
 										<span>
 											: &nbsp;
 
-											{currency(data.order?.amount.discount, store?.currencySymbol)}
+											{currency(data.order?.amount.discount, data.order?.amount?.currencySymbol)}
 										</span>
 									</p>
 
-									{#if data.order?.coupon.code}
+									{#if data.order?.coupon?.code}
 										<p class="flex items-center">
 											<span class="mr-2 w-32">Applied Coupon</span>
 
 											<span>
 												: &nbsp;
-												{data.order?.coupon.code}
+												{data.order?.coupon?.code}
 											</span>
 										</p>
 									{/if}
@@ -227,7 +225,7 @@ onMount(async () => {
 										<span>
 											: &nbsp;
 											{#if data.order?.amount.shipping}
-												{currency(data.order?.amount.shipping, store?.currencySymbol)}
+												{currency(data.order?.amount.shipping, data.order?.amount?.currencySymbol)}
 											{:else}
 												Free
 											{/if}
@@ -240,7 +238,7 @@ onMount(async () => {
 
 											<span>
 												: &nbsp;
-												{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
+												{currency(data.order?.amount.cod_charges, data.order?.amount?.currencySymbol)}
 											</span>
 										</p>
 									{/if}
@@ -251,7 +249,7 @@ onMount(async () => {
 										<span class="mr-2 w-32">Total</span>
 
 										<span>
-											: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
+											: &nbsp; {currency(data.order?.amount.total, data.order?.amount?.currencySymbol)}
 										</span>
 									</div>
 								</div>
@@ -291,15 +289,15 @@ onMount(async () => {
 					<!-- {#if data.order?.seats?.length > 0}
 							<div>
 								<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Booking Information</h4>
-	
+
 								<div class="items-start flex flex-col divide-y text-sm">
 									{#each data.order?.seats as seat}
 										<div class="flex flex-col gap-2 py-4">
 											<span><span>Seat Number : &nbsp; </span> {seat.seatNo} </span>
-	
+
 											<span>
 												<span>Seat Type : &nbsp; </span>
-	
+
 												{#if seat.seatType === 'horizontal_sleeper'}
 													Sleeper
 												{:else}
@@ -439,24 +437,14 @@ onMount(async () => {
 														{item.name}
 													</p>
 												</a>
-
-												{#if $page.data.store?.isFnb && item.foodType}
-													<div>
-														{#if item.foodType === 'veg'}
-															<img src="{productVeg}" alt="veg" class="h-5 w-5" />
-														{:else if item.foodType === 'nonveg'}
-															<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
-														{/if}
-													</div>
-												{/if}
 											</div>
 
-											{#if item.qty}
+											{#if item.quantity}
 												<span>
 													Qty :
 
 													<b>
-														{item.qty}
+														{item.quantity}
 													</b>
 												</span>
 											{/if}
@@ -502,13 +490,13 @@ onMount(async () => {
 												Item price :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.price, store?.currencySymbol)}
+													{currency(item.price, data.order?.amount?.currencySymbol)}
 												</span>
 
 												{#if item?.mrp > item?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.mrp, store?.currencySymbol)}
+															{currency(item.mrp, data.order?.amount?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -524,13 +512,13 @@ onMount(async () => {
 												Sub Total :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.subtotal, store?.currencySymbol)}
+													{currency(item.subtotal, data.order?.amount?.currencySymbol)}
 												</span>
 
 												{#if item?.total > item?.subtotal}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.total, store?.currencySymbol)}
+															{currency(item.total, data.order?.amount?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -577,7 +565,7 @@ onMount(async () => {
 		x="{[-5, 5]}"
 		y="{[0, 0.1]}"
 		delay="{[50, 2000]}"
-		duration="2000"
-		amount="500"
+		duration={2000}
+		amount={500}
 		fallDistance="100vh" />
 </div>

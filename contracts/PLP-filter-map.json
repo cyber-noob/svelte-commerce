@@ -1,0 +1,10 @@
+{
+  "Recommended": "",
+  "Whats New": "sort=-updatedAt",
+  "Price High to Low": "sort=-price",
+  "Price Low to High": "sort=price",
+  "Discount High to Low": "sort=-discount",
+  "Discount Low to High": "sort=discount",
+  "Name Asc": "sort=name",
+  "Name Desc": "sort=-name"
+}

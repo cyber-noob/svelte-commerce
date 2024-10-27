@@ -9,13 +9,15 @@ let seoProps = {
 	title: `Wishlist`,
 	description: `Wishlist`
 }
+
+console.log('wishlist +page.svelte: ', data)
 </script>
 
 <SEO {...seoProps} />
 
 <section>
 	<div class="mb-20">
-		<Wishlist wishlistedProducts="{data.data}" />
+		<Wishlist wishlistedProducts="{data.wishlistedProducts}" />
 	</div>
 
 	<!-- MOBILE FOOTER -->

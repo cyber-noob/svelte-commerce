@@ -41,6 +41,7 @@ let allColors = []
 let allDiscount = []
 let allFeatures = []
 let allGenders = []
+let allBreeds = []
 let allPromotions = []
 let allSizes = []
 let allTags = []
@@ -66,6 +67,7 @@ function clearFilters() {
 function goCheckbox(e) {
 	fl[e.detail.model] = e.detail.selectedItems
 	fl.q = $page.url.searchParams.get('q')
+  console.log('fl: ', fl)
 	let url = constructURL2(`${$page.url.pathname}`, fl)
 	appliedFilters = { ...fl }
 	delete appliedFilters?.page
@@ -94,41 +96,25 @@ onMount(async () => {
 })
 
 function getFacetsWithProducts() {
-	if (facets?.all_aggs?.age?.all?.buckets?.length) {
-		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.attributes?.all?.key?.buckets?.length) {
-		allAttributes = facets?.all_aggs?.attributes?.all?.key?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.brands?.all?.buckets?.length) {
-		allBrands = facets?.all_aggs?.brands?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
-		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
-		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.features?.all?.buckets?.length) {
-		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.genders?.all?.buckets?.length) {
-		allGenders = facets?.all_aggs?.genders?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.promotions?.all?.buckets?.length) {
-		allPromotions = facets?.all_aggs?.promotions?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.sizes?.all?.buckets?.length) {
-		allSizes = facets?.all_aggs?.sizes?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.tags?.all?.buckets?.length) {
-		allTags = facets?.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.types?.all?.buckets?.length) {
-		allTypes = facets?.all_aggs?.types?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.vendors?.all?.buckets?.length) {
-		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
+	if (facets) {
+		allColors = facets?.filter((t) => t.field_name === 'longDescription.color')
+    allColors = [{key: '#FFFF00', doc_count: 3}]
+    // allColors[0].counts.map((item) => allColors.push({key: "Gold", doc_count: item.count}))
+
+    allGenders = facets?.filter((t) => t.field_name === 'longDescription.gender')
+    allGenders[0].counts.map((item) => allGenders.push({key: item.value, doc_count: item.count}))
+
+    allAges = facets?.filter((t) => t.field_name === 'longDescription.age')
+    allAges[0].counts.map((item) => allAges.push({key: item.value, doc_count: item.count}))
+
+    allBreeds = facets?.filter((t) => t.field_name === 'longDescription.breed_type')
+    allBreeds[0].counts.map((item) => allBreeds.push({key: item.value, doc_count: item.count}))
+
+    console.log('allColors: ', allColors)
+    console.log('allGenders: ', allGenders)
+    console.log('allAges: ', allAges)
+    console.log('allBreeds: ', allBreeds)
+    console.log('priceRange: ', priceRange)
 	}
 }
 
@@ -461,19 +447,6 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
-	{#if allAges?.length > 0}
-		<div transition:slide="{{ duration: 300 }}" class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{allAges}"
-				model="age"
-				selectedItems="{fl.age || []}"
-				showSearchBox
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
 	{#if allAttributes?.length > 0}
 		{#each allAttributes as attribute}
 			<div transition:slide="{{ duration: 300 }}" class="my-3">
@@ -545,7 +518,6 @@ function handleToggleSubCategory2(c, cx) {
 	{#if allGenders?.length > 0}
 		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
-
 			<CheckboxEs
 				items="{allGenders}"
 				title="Genders"
@@ -554,6 +526,30 @@ function handleToggleSubCategory2(c, cx) {
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}
+
+  {#if allAges?.length > 0}
+    <div transition:slide="{{ duration: 300 }}" class="my-3">
+      <hr class="mb-3 w-full" />
+      <CheckboxEs
+        items="{allAges}"
+        title="Age"
+        model="age"
+        selectedItems="{fl.age || []}"
+        on:go="{goCheckbox}" />
+    </div>
+  {/if}
+
+  {#if allBreeds?.length > 0}
+    <div transition:slide="{{ duration: 300 }}" class="my-3">
+      <hr class="mb-3 w-full" />
+      <CheckboxEs
+        items="{allBreeds}"
+        title="Breed"
+        model="breed"
+        selectedItems="{fl.breed || []}"
+        on:go="{goCheckbox}" />
+    </div>
+  {/if}
 
 	{#if allPromotions?.length > 0}
 		<div transition:slide="{{ duration: 300 }}" class="my-3">

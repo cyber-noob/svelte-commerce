@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { CartService, PaymentMethodService } from '$lib/services'
+import { CartService, PaymentMethodService, PetStoreCartService } from '$lib/services'
 
 export const prerender = false
 
@@ -10,22 +10,13 @@ export async function load({ url, parent }) {
 	let err
 
 	try {
-		const [cart, paymentMethods] = await Promise.all([
-			CartService.fetchRefreshCart({
-				cartId,
-				origin,
-				sid,
-				storeId
-			}),
-			PaymentMethodService.fetchPaymentMethods({
-				storeId,
-				cartId,
-				sid,
-				origin
-			})
-		])
+		const cart = await PetStoreCartService.fetchCart(me.token)
 
-		if (!cart?.qty) {
+    const paymentMethods = [{
+      id: 'Razorpay'
+    }]
+
+		if (!cart?.quantity) {
 			redirect(307, '/cart')
 		}
 
@@ -41,6 +32,7 @@ export async function load({ url, parent }) {
 		if (e.status === 307 && e.location === '/cart') {
 			redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {
+      console.log('payment-methods cart +page.ts: ', e)
 			redirect(307, `/auth/login?ref=${url?.pathname}`)
 		} else {
 			error(500, e?.message)

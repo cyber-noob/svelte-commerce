@@ -13,5 +13,5 @@ export let data
 <SEO {...seoProps} />
 
 <section>
-	<MyOrder orders="{data}" />
+	<MyOrder orders="{data.orders}" />
 </section>

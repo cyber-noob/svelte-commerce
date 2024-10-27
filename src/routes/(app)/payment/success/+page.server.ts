@@ -1,10 +1,11 @@
-import { OrdersService } from '$lib/services'
+import { OrdersService, PetStoreOrderService } from '$lib/services'
 import { getCartFromStore } from '$lib/store/cart'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
 export async function load({ url, locals, cookies }) {
+  const {me} = locals
 	const cartId = cookies.get('cartId')
 	const orderNo = url.searchParams.get('order_no')
 	const paymentMode = url.searchParams.get('provider')
@@ -23,13 +24,10 @@ export async function load({ url, locals, cookies }) {
 	try {
 		loading = true
 
-		order = await OrdersService.fetchOrder({
-			orderNo,
-			cartId,
-			sid,
-			storeId,
-			origin: locals.origin
-		})
+		order = await PetStoreOrderService.fetchOrders(me.token, {
+      latest: true
+    })
+
 	} catch (e) {
 		error(e?.status, e?.body?.message || e?.data?.message || e?.message)
 	} finally {

@@ -9,8 +9,9 @@ import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SelectBillingAddress from '../_SelectBillingAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { CartService } from '$lib/services'
+import { CartService, PetStoreOrderService } from '$lib/services'
 import { toast } from 'lib/utils'
+import Cookie from 'cookie-universal'
 
 export let data
 
@@ -18,6 +19,8 @@ const seoProps = {
 	title: 'Address ',
 	metaDescription: 'Address'
 }
+
+let cookie = Cookie()
 
 let billing_address = data?.cart?.billing_address || {}
 let displayAllDeliveryAddress = false
@@ -64,37 +67,9 @@ function billingAddressChanged(detail) {
 
 async function updateCart() {
 	try {
-		if (isSameAsBillingAddressWithLogIn) {
-			selectedBillingAddress = selectedAddress
-		}
-
-		const selectedAddressFullObject = data.myAddresses?.data.filter((add) => {
-			return add.id === selectedAddress || add._id === selectedAddress
-		})
-
-		const selectedBillingAddressFullObject = data.myAddresses?.data.filter((add) => {
-			return add.id === selectedBillingAddress || add._id === selectedBillingAddress
-		})
-
-		if (selectedAddressFullObject[0] && selectedBillingAddressFullObject[0]) {
-			const res = await CartService.updateCart({
-				billingAddress: selectedBillingAddressFullObject[0],
-				billing_address_id: selectedBillingAddress,
-				shipping_address_id: selectedAddress,
-				shippingAddress: selectedAddressFullObject[0],
-				selfTakeout: false,
-				cartId: data?.cartId,
-				origin: $page.data?.origin,
-				storeId: $page.data.storeId
-			})
-			if (data.prescriptionId) {
-				goto(
-					`/checkout/payment-options?address=${selectedAddress}&prescription=${data.prescriptionId}`
-				)
-			} else {
-				goto(`/checkout/payment-options?address=${selectedAddress}`)
-			}
-		}
+    console.log('[update] checkout +page.svelte selectedAddress: ', selectedAddress)
+		await PetStoreOrderService.updateAddress(cookie.get('me').token, selectedAddress)
+    goto(`/checkout/payment-options?address=${selectedAddress}`)
 	} catch (e) {
 		toast(e)
 	} finally {

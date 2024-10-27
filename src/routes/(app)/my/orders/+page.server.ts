@@ -1,17 +1,17 @@
 import { error, redirect } from '@sveltejs/kit'
-import { OrdersService } from '$lib/services'
+import { OrdersService, PetStoreOrderService } from '$lib/services'
+import type { Cart } from 'lib/types'
 
 export async function load({ cookies, locals }) {
-	try {
-		const res = await OrdersService.fetchOrders({
-			origin: locals.origin,
-			sid: cookies.get('connect.sid'),
-			storeId: locals.storeId
-		})
+  const {me} = locals
 
-		if (res) {
-			return res
-		}
+	try {
+		const res = await PetStoreOrderService.fetchOrders(me.token)
+
+		if (res)
+      return {
+        orders: res
+      }
 	} catch (e) {
 		redirect(307, '/auth/login')
 	}

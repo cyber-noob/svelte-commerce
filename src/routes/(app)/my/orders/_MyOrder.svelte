@@ -69,20 +69,17 @@ $: store = $page.data.store
 			</header>
 
 			<ul>
-				{#each orders.data as order}
-					{#if order?.items?.length}
+				{#each orders.orders as order}
 						<!-- Desktop UI of order -->
-
 						<li class="mb-4 hidden sm:mb-10 xl:block">
 							<div class="mb-3 flex items-center justify-between text-zinc-500 sm:mb-4">
-								<p>Order No : #{order.orderNo || '_'}</p>
+								<p>Order No : #{order?.orderNo || '_'}</p>
 
-								<p>Order Date : {date(order.createdAt)}</p>
+								<p>Order Date : {date(order?.createdAt) || '-'}</p>
 							</div>
 
 							<table
-								class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 shadow-md"
-								on:click="{() => goto(`/my/orders/${order.orderNo}`)}">
+								class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 shadow-md">
 								<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 									<tr>
 										<!-- <th class="px-5 py-3 text-zinc-500"> # </th> -->
@@ -119,9 +116,9 @@ $: store = $page.data.store
 															src="{item.customizedImg}"
 															alt="customizedImg"
 															class="h-auto w-14 object-contain object-top" />
-													{:else if item.img}
+													{:else if item.image}
 														<LazyImg
-															src="{item.img}"
+															src="{item.image}"
 															alt=" "
 															width="56"
 															class="h-auto w-14 object-contain object-top" />
@@ -148,15 +145,9 @@ $: store = $page.data.store
 												</div>
 											</td>
 
-											{#if $page.data.store?.isMultiVendor}
-												<td class="p-3">
-													{item.vendorBusinessName || '_'}
-												</td>
-											{/if}
-
 											<td class="p-3">
 												<div class="flex w-60 items-center gap-2">
-													<span>{item.name || '_'}</span>
+													<span>{item?.name || '_'}</span>
 
 													{#if store?.isFnb && item.foodType}
 														<div class="shrink-0">
@@ -171,28 +162,28 @@ $: store = $page.data.store
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{item.qty || '_'}
+												{item.quantity || '_'}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{item.size || '_'}
+												{item?.size || '_'}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.price, store?.currencySymbol)}
+												{currency(item?.price, order.amount?.currencySymbol)}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.shippingCharges, store?.currencySymbol)}
+												{currency(item?.shippingCharges, order.amount?.currencySymbol)}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.total, store?.currencySymbol)}
+												{currency(item?.mrp, order.amount?.currencySymbol)}
 											</td>
 
 											<td class="p-3">
 												<span class="whitespace-nowrap font-semibold capitalize">
-													{item.status || '_'}
+													{item?.status || '_'}
 												</span>
 											</td>
 										</tr>
@@ -207,11 +198,11 @@ $: store = $page.data.store
 							<div class="mb-3 flex items-center justify-between sm:mb-4 text-zinc-500">
 								<p>
 									Order No :
-									{order.orderNo || '_'}
+									{order?.orderNo || '_'}
 								</p>
 
 								<p>
-									{date(order.createdAt)}
+									{date(order?.createdAt)}
 								</p>
 							</div>
 
@@ -229,7 +220,7 @@ $: store = $page.data.store
 													class="h-auto w-14 object-contain object-top" />
 											{:else}
 												<LazyImg
-													src="{item.img}"
+													src="{item?.image}"
 													alt=" "
 													width="56"
 													class="h-auto w-14 object-contain object-top" />
@@ -248,7 +239,7 @@ $: store = $page.data.store
 												{/if} -->
 
 											<div class="mb-2 flex items-start justify-between">
-												<p class="flex-1">{item.name || '_'}</p>
+												<p class="flex-1">{item?.name || '_'}</p>
 
 												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
@@ -266,7 +257,7 @@ $: store = $page.data.store
 													<p>Price :</p>
 
 													<b>
-														{currency(item.price, store?.currencySymbol)}
+														{currency(item?.price, order.amount?.currencySymbol)}
 													</b>
 												</div>
 
@@ -274,7 +265,7 @@ $: store = $page.data.store
 													<p>Qty :</p>
 
 													<b>
-														{item.qty || '_'}
+														{item?.quantity || '_'}
 													</b>
 												</div>
 
@@ -293,7 +284,7 @@ $: store = $page.data.store
 														<p>Shipping Charges :</p>
 
 														<b>
-															{currency(item.shippingCharges, store?.currencySymbol)}
+															{currency(item.shippingCharges, order.amount?.currencySymbol)}
 														</b>
 													</div>
 												{/if}
@@ -302,7 +293,7 @@ $: store = $page.data.store
 													<p>Total :</p>
 
 													<b>
-														{currency(item.total, store?.currencySymbol)}
+														{currency(item?.mrp, order.amount?.currencySymbol)}
 													</b>
 												</div>
 
@@ -310,7 +301,7 @@ $: store = $page.data.store
 													<p>Status :</p>
 
 													<b class="capitalize">
-														{item.status || '_'}
+														{item?.status || '_'}
 													</b>
 												</div>
 
@@ -329,13 +320,12 @@ $: store = $page.data.store
 								{/each}
 							</a>
 						</li>
-					{/if}
 				{/each}
 			</ul>
 
 			<Pagination
-				count="{Math.ceil((orders.count || 1) / orders.pageSize)}"
-				current="{orders.currentPage || 1}" />
+				count="{Math.ceil((orders?.count || 1) / orders?.pageSize)}"
+				current="{orders?.currentPage || 1}" />
 		</div>
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
