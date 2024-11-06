@@ -1,5 +1,6 @@
 import { getAPI, post, put } from 'lib/utils'
 import { error } from '@sveltejs/kit'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 const isServer = import.meta.env.SSR
 
@@ -8,7 +9,7 @@ export const addUser = async (token: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('user/profile/connection', {}, 'http://localhost:8082', {
+    res = await post('user/profile/connection', {}, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -42,7 +43,7 @@ export const fetchUser = async (token: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('user/profile/fetch', 'http://localhost:8082', {
+    res = await getAPI('user/profile/fetch', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

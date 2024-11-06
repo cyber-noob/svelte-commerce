@@ -1,5 +1,6 @@
 import { del, getAPI, post } from 'lib/utils'
 import { error } from '@sveltejs/kit'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 const isServer = import.meta.env.SSR
 
@@ -8,7 +9,7 @@ export const fetchAddresses = async (token: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('user/address/list', 'http://localhost:8082', {
+    res = await getAPI('user/address/list', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -26,7 +27,7 @@ export const fetchCountries = async (token: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('user/address/countries', 'http://localhost:8082', {
+    res = await getAPI('user/address/countries', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -44,7 +45,7 @@ export const fetchStates = async (token: string, country_code: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('user/address/states?country_code=' + country_code, 'http://localhost:8082', {
+    res = await getAPI('user/address/states?country_code=' + country_code, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -62,7 +63,7 @@ export const fetchCities = async (token: string, state: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('user/address/cities?state=' + state, 'http://localhost:8082', {
+    res = await getAPI('user/address/cities?state=' + state, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -80,7 +81,7 @@ export const deleteAddresses = async (token: string, id: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await del('user/address/remove?id=' + id, 'http://localhost:8082', {
+    res = await del('user/address/remove?id=' + id, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -98,7 +99,7 @@ export const addAddress = async (token: string, body: {}) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('user/address/add', body, 'http://localhost:8082', {
+    res = await post('user/address/add', body, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -116,7 +117,7 @@ export const editAddress = async (token: string, address_id: string, body: {}) =
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('user/address/update?id=' + address_id, body, 'http://localhost:8082', {
+    res = await post('user/address/update?id=' + address_id, body, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

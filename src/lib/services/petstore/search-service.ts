@@ -1,5 +1,6 @@
 import { getAPI } from 'lib/utils'
 import { error } from '@sveltejs/kit'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 const isServer = import.meta.env.SSR
 
@@ -14,7 +15,7 @@ export const search = async (params: {}) => {
 
     queryParams = queryParams.slice(0, -1)
 
-    const res = await getAPI('search/products?' + queryParams, 'http://localhost:8082')
+    const res = await getAPI('search/products?' + queryParams, PUBLIC_PETSTORE_MONOLITH)
     console.log('search results:\n', res)
 
     return res

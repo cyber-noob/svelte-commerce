@@ -133,7 +133,10 @@ onMount(async () => {
 									class="h-10 object-contain w-auto object-center" />
 							{/if}
 
-							<span class="w-full truncate text-sm capitalize">{v.document.title}</span>
+              <div class="flex flex-col gap-0.5">
+                <span class="w-full truncate text-lg font-bold text-zinc-950 capitalize">{v.document.title}</span>
+                <span class="w-full truncate text-sm font-bold text-zinc-500 capitalize">{v.document.collection}</span>
+              </div>
 						</div>
 
 						<svg

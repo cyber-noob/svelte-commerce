@@ -44,6 +44,7 @@ let allColors = []
 let allDiscount = []
 let allFeatures = []
 let allGenders = []
+let allBreeds = []
 let allPromotions = []
 let allSizes = []
 let allTags = []
@@ -72,42 +73,26 @@ onMount(async () => {
 })
 
 function getFacetsWithProducts() {
-	if (facets?.all_aggs?.age?.all?.buckets?.length) {
-		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.attributes?.all?.key?.buckets?.length) {
-		allAttributes = facets?.all_aggs?.attributes?.all?.key?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.brands?.all?.buckets?.length) {
-		allBrands = facets?.all_aggs?.brands?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
-		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
-		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.features?.all?.buckets?.length) {
-		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.genders?.all?.buckets?.length) {
-		allGenders = facets?.all_aggs?.genders?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.promotions?.all?.buckets?.length) {
-		allPromotions = facets?.all_aggs?.promotions?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.sizes?.all?.buckets?.length) {
-		allSizes = facets?.all_aggs?.sizes?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.tags?.all?.buckets?.length) {
-		allTags = facets?.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.types?.all?.buckets?.length) {
-		allTypes = facets?.all_aggs?.types?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-	if (facets?.all_aggs?.vendors?.all?.buckets?.length) {
-		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
+  if (facets) {
+    allColors = facets?.filter((t) => t.field_name === 'longDescription.color')
+    allColors = [{key: '#FFFF00', doc_count: 3}]
+    // allColors[0].counts.map((item) => allColors.push({key: "Gold", doc_count: item.count}))
+
+    allGenders = facets?.filter((t) => t.field_name === 'longDescription.gender')
+    allGenders[0].counts.map((item) => allGenders.push({key: item.value, doc_count: item.count}))
+
+    allAges = facets?.filter((t) => t.field_name === 'longDescription.age')
+    allAges[0].counts.map((item) => allAges.push({key: item.value, doc_count: item.count}))
+
+    allBreeds = facets?.filter((t) => t.field_name === 'longDescription.breed_type')
+    allBreeds[0].counts.map((item) => allBreeds.push({key: item.value, doc_count: item.count}))
+
+    console.log('allColors: ', allColors)
+    console.log('allGenders: ', allGenders)
+    console.log('allAges: ', allAges)
+    console.log('allBreeds: ', allBreeds)
+    console.log('priceRange: ', priceRange)
+  }
 }
 
 // let allMegamenu
@@ -196,7 +181,9 @@ function getSelected() {
 		selected = 'Features'
 	} else if (allGenders?.length > 0) {
 		selected = 'Genders'
-	} else if (allPromotions?.length > 0) {
+	}else if (allBreeds?.length > 0) {
+    selected = 'Breeds'
+  } else if (allPromotions?.length > 0) {
 		selected = 'Promotions'
 	} else if (allSizes?.length > 0) {
 		selected = 'Sizes'
@@ -261,6 +248,7 @@ function goCheckbox(e) {
 function applyFilter() {
 	showFilter = false
 	fl.q = $page.url.searchParams.get('q')
+  console.log('mobile fl: ', fl)
 	let url = constructURL2(`${$page.url.pathname}`, fl)
 	appliedFilters = { ...fl }
 	delete appliedFilters?.page
@@ -536,6 +524,23 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
+        {#if allBreeds?.length > 0}
+          <button
+            class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
+						{selected === 'Breeds'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-zinc-100 bg-transparent'}"
+            on:click="{() => (selected = 'Breeds')}">
+            <span> Breeds </span>
+
+            {#if fl.breeds?.length}
+              <div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+            {/if}
+          </button>
+
+          <hr class="w-full" />
+        {/if}
+
 				{#if allPromotions?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
@@ -780,6 +785,21 @@ $: {
 						{/if}
 					</div>
 				{/if}
+
+        {#if selected === 'Breeds'}
+          <div
+            class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+            in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+            {#if allBreeds?.length > 0}
+              <CheckboxEs
+                items="{allBreeds}"
+                model="breeds"
+                selectedItems="{fl.breed || []}"
+                showSearchBox
+                on:go="{goCheckbox}" />
+            {/if}
+          </div>
+        {/if}
 
 				{#if selected === 'Promotions'}
 					<div

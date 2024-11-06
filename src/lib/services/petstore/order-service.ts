@@ -1,5 +1,6 @@
 import { getAPI, post } from 'lib/utils'
 import { error } from '@sveltejs/kit'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 const isServer = import.meta.env.SSR
 
@@ -8,7 +9,7 @@ export const updateAddress = async (token: string, address_id) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('order/address?id=' + address_id, {}, 'http://localhost:8082', {
+    res = await post('order/address?id=' + address_id, {}, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -26,7 +27,7 @@ export const createOrder = async (token: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('order/', {}, 'http://localhost:8082', {
+    res = await post('order/', {}, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -44,7 +45,7 @@ export const validatePayment = async (token: string, body: {}) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('order/payment', body, 'http://localhost:8082', {
+    res = await post('order/payment', body, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -71,7 +72,7 @@ export const fetchOrders = async (token: string, params: {} = {}) => {
 
     queryParams = queryParams.slice(0, -1)
 
-    res = await getAPI('order/orders?' + queryParams, 'http://localhost:8082', {
+    res = await getAPI('order/orders?' + queryParams, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

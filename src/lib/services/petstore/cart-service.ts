@@ -2,13 +2,14 @@ import { getAPI, post } from 'lib/utils'
 import { error } from '@sveltejs/kit'
 
 const isServer = import.meta.env.SSR
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 export const fetchCart = async (token: string) => {
   try {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('cart/items', 'http://localhost:8082', {
+    res = await getAPI('cart/items', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -26,7 +27,7 @@ export const addToCart = async (token: string, options, body: {}) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('cart/item?option=' + options, body, 'http://localhost:8082', {
+    res = await post('cart/item?option=' + options, body, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

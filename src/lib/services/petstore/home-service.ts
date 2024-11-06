@@ -1,5 +1,6 @@
 import { getAPI } from 'lib/utils'
 import { error } from '@sveltejs/kit'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 const isServer = import.meta.env.SSR
 
@@ -8,7 +9,7 @@ export const fetchHome = async () => {
     let categories = {}
     let res: any = {}
 
-    res = await getAPI('pdp/home', 'http://localhost:8082')
+    res = await getAPI('pdp/home', PUBLIC_PETSTORE_MONOLITH)
 
     if (res?.categories?.length) {
       categories = res?.categories

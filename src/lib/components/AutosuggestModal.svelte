@@ -5,7 +5,7 @@ import { navigateToProperPath } from '$lib/utils'
 import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { AutocompleteService, CategoryService } from '$lib/services'
+import { AutocompleteService, CategoryService, PetStoreSearchService } from '$lib/services'
 import { getCategoriesFromStore } from '$lib/store/categories'
 
 const dispatch = createEventDispatcher()
@@ -75,16 +75,17 @@ async function getData(e: any) {
 	}
 
 	clearTimeout(typingTimer)
+  console.log('on Autocomplete getData... query: ', q)
 
-	typingTimer = setTimeout(async () => {
-		try {
-			autocomplete = await AutocompleteService.fetchAutocompleteData({
-				q: q,
-				origin: $page?.data?.origin,
-				storeId: $page.data.storeId
-			})
-		} catch (e) {}
-	}, 200)
+  typingTimer = setTimeout(async () => {
+    try {
+      autocomplete = await PetStoreSearchService.search({
+        query: q
+      })
+
+      console.log('autocomplete', autocomplete)
+    } catch (e) {}
+  }, 500)
 }
 
 function resetInput() {
@@ -184,26 +185,29 @@ onMount(async () => {
 								</div>
 							</form>
 
-							{#if autocomplete?.length}
+							{#if autocomplete?.found}
 								<ul
 									transition:slide="{{ duration: 300 }}"
 									class="mt-1 m-0 p-0 list-none w-full overflow-auto rounded border-zinc-400 bg-white scrollbar-none">
-									{#each autocomplete || [] as v}
+									{#each autocomplete?.hits || [] as v}
 										<li>
 											<button
 												type="button"
 												class="p-3 flex w-full items-center justify-between text-left border-b text-zinc-500 hover:bg-zinc-100"
 												on:click="{() => onselect(v)}">
 												<div class="flex-1 flex items-center gap-2 justify-start">
-													{#if v.img}
+													{#if v.document.photos[0].url}
 														<LazyImg
-															src="{v.img}"
+															src="{v.document.photos[0].url}"
 															alt=""
 															height="40"
 															class="h-10 object-contain w-auto object-center" />
 													{/if}
 
-													<span class="w-full truncate text-sm capitalize">{v.key}</span>
+                          <div class="flex flex-col gap-0.5">
+                            <span class="w-full truncate text-lg font-bold text-zinc-950 capitalize">{v.document.title}</span>
+                            <span class="w-full truncate text-sm font-bold text-zinc-500 capitalize">{v.document.collection}</span>
+                          </div>
 												</div>
 
 												<svg

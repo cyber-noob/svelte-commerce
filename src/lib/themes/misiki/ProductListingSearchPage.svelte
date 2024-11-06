@@ -452,7 +452,7 @@ function handleFilterTags() {
 				<!-- Products -->
 
 				<ul
-					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
+					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6 gap-4 m-4">
 					{#each data.products?.hits as p, px (p.document.uuid)}
 						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
 							<ProductCard product="{p.document}" />

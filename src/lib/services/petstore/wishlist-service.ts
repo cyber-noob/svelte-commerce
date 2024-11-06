@@ -1,12 +1,13 @@
 import { getAPI } from 'lib/utils'
 import { error } from '@sveltejs/kit'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 const isServer = import.meta.env.SSR
 
 export const fetchWishlist = async (token: string) => {
   try {
 
-    const res =  getAPI('wishlist/items', 'http://localhost:8082', {
+    const res =  getAPI('wishlist/items', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
