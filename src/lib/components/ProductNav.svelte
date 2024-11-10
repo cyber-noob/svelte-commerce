@@ -135,10 +135,10 @@ onMount(() => {
 					></path>
 				</svg>
 
-				{#if cart?.qty > 0}
+				{#if cart?.qty > 0 || cart?.quantity > 0}
 					<div
 						class="absolute -top-1 -right-1 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-						{cart.qty}
+						{cart.qty || cart?.quantity}
 					</div>
 				{/if}
 			</a>

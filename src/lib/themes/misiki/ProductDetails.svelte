@@ -1359,12 +1359,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?._id || data?.product?.id || null}" />
-
-									<input
-										type="hidden"
-										name="vid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value="{data?.product?.uuid || null}" />
 
 									<WhiteButton
 										type="submit"

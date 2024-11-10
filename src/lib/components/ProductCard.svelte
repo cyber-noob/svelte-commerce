@@ -254,7 +254,7 @@ onMount(async () => {
 			{/if}
 		</a>
 
-		<div class="p-4">
+		<div class="flex flex-col pt-4 gap-2">
 			<!-- View smilar button start-->
 
 			<!-- <div class="{product.relatedProducts?.length > 0 ? 'absolute bottom-24 right-4' : 'hidden'}">
@@ -435,12 +435,6 @@ onMount(async () => {
 					data-sveltekit-preload-data>
 					<!-- <div class="mb-1.5 flex items-center justify-between"> -->
 
-					{#if product.brand?.name || product.brandName}
-						<h3 class="text-xs sm:text-sm truncate">
-							{product.brand?.name || product.brandName}
-						</h3>
-					{/if}
-
 					<!-- Wishlist -->
 
 					<!-- <div class="sm:hidden">
@@ -462,7 +456,7 @@ onMount(async () => {
 
 					<div class="flex gap-2 justify-between">
 						<h4
-							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 line-clamp-2 w-full group-hover:underline">
+							class="flex-1 text-xs sm:text-sm font-semibold line-clamp-2 w-full group-hover:underline">
 							{product.title || '_'}
 						</h4>
 
@@ -491,6 +485,12 @@ onMount(async () => {
 				{/if}
 			</div>
 			<!-- {/if} -->
+
+      {#if product?.collection}
+        <h3 class="text-xs sm:text-sm text-zinc-500 truncate">
+          {product.collection}
+        </h3>
+      {/if}
 
 			{#if product.price}
 				<a

@@ -1,5 +1,6 @@
 import { error, redirect } from '@sveltejs/kit'
 import { PetStoreWishlistService, WishlistService } from '$lib/services'
+import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 export async function load({ cookies, locals, url }) {
 	try {
@@ -29,21 +30,16 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 
 	const pid = data.get('pid')
-	const vid = data.get('vid')
 
 	const { me, origin, sid, storeId } = locals
 
-	if (!me || !sid) {
+	if (!me) {
 		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}
 	try {
-		const res = await WishlistService.toggleWishlistService({
-			pid: pid,
-			vid: vid,
-			origin: locals.origin,
-			sid: cookies.get('connect.sid'),
-			storeId: locals.storeId
-		})
+		const res = await PetStoreWishlistService.addToWishlist(me.token, {
+      "product_id": pid
+    })
 
 		return res
 	} catch (e) {

@@ -722,7 +722,7 @@ function updateCheckedCartItemsInGroup() {
 														}
 													}}">
 													<input type="hidden" name="line_id" value="{item.id || null}" />
-													<input type="hidden" name="pid" value="{item.pid || null}" />
+													<input type="hidden" name="pid" value="{item.uuid || null}" />
 													<input type="hidden" name="vid" value="{item.vid || null}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
 													<input

@@ -71,8 +71,10 @@ const add: Action = async ({ url, request, cookies, locals }) => {
 
   if (qty >= 0)
     option = 'plus'
-  if (qty < 0)
+  if (qty < 0) {
+    console.log('minus qty: ', qty)
     option = 'minus'
+  }
 
   console.log('pid: ', pid)
   if (typeof pid !== 'string' || !pid) {
@@ -81,7 +83,7 @@ const add: Action = async ({ url, request, cookies, locals }) => {
   try {
     let cart = await PetStoreCartService.addToCart(JSON.parse(cookies.get('me')).token, option, {
       product_id: pid,
-      quantity: 1
+      quantity: qty || 1
     })
     console.log('cart response: ', cart)
     // if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies

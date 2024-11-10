@@ -12,7 +12,7 @@ let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
 {#if data.home?.trending?.length > 0}
 	<div in:fly="{{ y: 20, duration: 700 }}">
 		<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-			TRENDING ON {$page.data.store?.websiteName}
+			TRENDING ON Pawsome Pethouse
 		</h2>
 
 		<ul
