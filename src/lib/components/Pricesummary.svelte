@@ -106,7 +106,7 @@ async function submit() {
 					<span>
 						{currency(
 							cart?.formattedAmount?.savings?.value || cart?.savings,
-							cart?.formattedAmount?.subtotal?.currency
+							cart?.currencySymbol
 						)}
 					</span>
 				</div>
@@ -125,15 +125,12 @@ async function submit() {
 				</div>
 			{/if}
 
-			{#if cart?.formattedAmount?.tax?.value}
+			{#if cart?.formattedAmount?.tax}
 				<div class="mt-2 flex items-center justify-between font-medium">
 					<span>Tax</span>
 					<span>
-						{#if cart?.formattedAmount?.tax?.value}
-							{currency(
-								cart?.formattedAmount?.tax?.value,
-								cart?.formattedAmount?.subtotal?.currency
-							)}
+						{#if cart?.formattedAmount?.tax}
+							{cart?.formattedAmount?.tax}
 						{/if}
 					</span>
 				</div>
@@ -153,13 +150,13 @@ async function submit() {
 				<span>Shipping</span>
 
 				<span>
-					{#if cart?.formattedAmount?.shipping?.value < 1 || cart?.shipping?.charge < 1}
+					{#if cart?.formattedAmount?.shipping_fee < 1}
 						<span
 							class="border border-accent-500 text-accent-500 uppercase px-1.5 py-0.5 rounded text-xs">
 							Free
 						</span>
-          {:else if cart?.formattedAmount?.shipping}
-            {cart?.formattedAmount?.shipping}
+          {:else if cart?.formattedAmount?.shipping_fee}
+            {cart?.formattedAmount?.shipping_fee}
 					{:else}
 						{currency(
 							cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
@@ -168,6 +165,26 @@ async function submit() {
 					{/if}
 				</span>
 			</div>
+
+      <div class="mt-2 flex items-center justify-between font-medium">
+        <span>Handling</span>
+
+        <span>
+					{#if cart?.formattedAmount?.handling_fee < 1}
+						<span
+              class="border border-accent-500 text-accent-500 uppercase px-1.5 py-0.5 rounded text-xs">
+							Free
+						</span>
+          {:else if cart?.formattedAmount?.handling_fee}
+            {cart?.formattedAmount?.handling_fee}
+					{:else}
+						{currency(
+              cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
+              cart?.formattedAmount?.subtotal?.currency
+            )}
+					{/if}
+				</span>
+      </div>
 		</div>
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />

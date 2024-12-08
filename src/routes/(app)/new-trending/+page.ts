@@ -18,6 +18,7 @@ export async function load({ params, parent, url }) {
 	})
 
 	const home = await fetchHome()
+  console.log('home', home)
 
 	// const promises = [
 	//

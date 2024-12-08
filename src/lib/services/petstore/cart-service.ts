@@ -9,7 +9,7 @@ export const fetchCart = async (token: string) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await getAPI('cart/items', PUBLIC_PETSTORE_MONOLITH, {
+    res = await getAPI('cart/itemsJson', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 
@@ -27,7 +27,7 @@ export const addToCart = async (token: string, options, body: {}) => {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('cart/item?option=' + options, body, PUBLIC_PETSTORE_MONOLITH, {
+    res = await post('cart/itemJson?option=' + options, body, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

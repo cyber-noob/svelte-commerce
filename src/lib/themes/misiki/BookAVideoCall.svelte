@@ -58,35 +58,35 @@
 </script>
 
 <section class={showCompenent(show)}>
-  <div id="bookaslot" class="flex flex-col divide-y-2 p-4 divide-white items-center gap-8">
-    <header class="font-bold text-xl">
+  <div id="bookaslot" class="flex flex-col divide-y-2 sm:p-4 p-2 divide-white items-center gap-8">
+    <header class="font-bold sm:text-xl text-sm prose">
       What time works best for a quick video call for a virtual catchup with you soon to be pet?
     </header>
 
     <!-- Date Picker -->
-    <div class="flex flex-row items-center gap-4">
-      <button class="w-12 h-12 border-2 rounded-2xl text-purple-500">
+    <div class="flex flex-row items-center sm:gap-4 gap-2">
+      <button class="sm:w-12 w-4 sm:h-12 h-4 text-purple-500">
         {"<"}
       </button>
-      <div class="flex flex-row sm:h-52 h-40 border-2 w-fit rounded-2xl overflow-hidden" role="group">
+      <div class="flex flex-row sm:h-52 h-32 border-2 w-fit rounded-2xl overflow-hidden" role="group">
         {#each date as d}
           <MyDate d = "{d}" />
         {/each}
       </div>
-      <button class="w-12 h-12 border-2 rounded-2xl text-purple-500">
+      <button class="sm:w-12 w-4 sm:h-12 h-4 text-purple-500">
         {">"}
       </button>
     </div>
 
-    <header class="font-bold text-xl border-2 border-purple-500">
+    <header class="prose font-extrabold sm:text-xl border-2 border-purple-500">
       Select a time slot
     </header>
 
-    <div class="flex flex-row sm:gap-24 gap-8 justify-center items-center content-center p-4">
+    <div class="flex flex-row sm:gap-24 gap-4 justify-center items-center content-center p-4">
       <div class="font-bold text-base">
         Meeting with Mr.Raja
       </div>
-      <div class="flex flex-row gap-2 text-gray-400">
+      <div class="flex flex-row gap-1 text-gray-400">
         <Clock />
         <div class="font-bold">
           30 min meeting
@@ -97,7 +97,7 @@
     <!-- Time Picker -->
     <div class="flex flex-row items-center gap-4 flex-wrap" role="group">
       {#each time as t}
-        <button class="flex flex-row sm:w-44 sm:h-12 w-24 h-8 items-center content-center justify-center sm:m-4 m-3 text-red-500 bg-red-200 font-bold focus:z-10 focus:bg-red-500 focus:text-white border-2 rounded">
+        <button class="flex flex-row sm:w-44 sm:h-12 w-20 h-8 items-center content-center justify-center sm:m-4 m-3 text-red-500 bg-red-200 font-bold focus:z-10 focus:bg-red-500 focus:text-white border-2 rounded">
           {t}
         </button>
       {/each}

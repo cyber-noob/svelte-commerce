@@ -44,7 +44,7 @@ export { clazz as class }
 
 								<p
 									class="w-full truncate overflow-ellipsis text-center capitalize group-hover:font-semibold group-hover:text-primary-500">
-									{category.name}
+									{category.collection}
 								</p>
 							</a>
 						</div>

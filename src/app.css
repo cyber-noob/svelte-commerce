@@ -167,4 +167,18 @@
 			transform: translate3d(4px, 0, 0);
 		}
 	}
+
+  @font-face {
+    font-family: 'Romantis';
+    src: local('Romantis'), url('/fonts/Romantis.ttf');
+    font-weight: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Karla';
+    src: local('Karla'), url('/fonts/karla-v23-latin-regular.ttf');
+    font-weight: bold;
+    font-display: swap;
+  }
 }

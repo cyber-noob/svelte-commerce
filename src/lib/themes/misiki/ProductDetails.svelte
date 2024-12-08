@@ -93,6 +93,7 @@ import familyIcon from '$lib/icons/family.svg'
 import genderIcon from '$lib/icons/gender.svg'
 import vaccineIcon from '$lib/icons/vaccine.svg'
 import weightIcon from '$lib/icons/weight.svg'
+import certificateIcon from '$lib/icons/certificate.svg'
 import videoCallIcon from '$lib/icons/vc.svg'
 import { BookAVideoCall } from 'lib/themes/misiki/index'
 import doggoGif from '$lib/icons/thanks.svg'
@@ -127,12 +128,12 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
-let currentVariantPrice = data.product?.price || 0
+let currentVariantPrice = data.product?.general_info?.price || 0
 
-let photo_array = data.product?.photos
+let photo_array = data.product?.general_info?.photos
 let images = photo_array.map((photo) => photo.url)
 
 let seoProps = {
@@ -141,7 +142,7 @@ let seoProps = {
 	caption: `${$page.data.store?.websiteName}`,
 	category: data.product?.category?.name,
 	contentUrl: data.product?.img || $page.data.store?.logo,
-	createdAt: `${data.product?.createdAt || '_'}`,
+	createdAt: `${data.product.general_info?.created_on || '_'}`,
 	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
 	logo: $page.data.store?.logo,
@@ -417,13 +418,13 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 <svelte:window bind:scrollY="{y}" />
 
 <svelte:head>
-	<title>{data.product?.name}</title>
+	<title>{data.product?.general_info?.title}</title>
 </svelte:head>
 
 <ProductNav
 	cart="{$page?.data?.cart}"
 	me="{$page?.data?.me}"
-	productName="{data.product?.name}"
+	productName="{data.product?.general_info?.title}"
 	url="{$page?.url?.href}"
 	store="{$page.data.store}" />
 
@@ -434,13 +435,13 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 
 			<Breadcrumb
 				categoryPool="{data.product?.categoryPool}"
-				currentProductName="{data?.product?.name || data?.product?.title}" />
+				currentProductName="{data?.product?.name || data?.product?.general_info?.title}" />
 
 			<!-- Social share button -->
 
 			<SocialSharingButtons
-				productName="{data.product?.name}"
-				productImage="{data.product?.img}"
+				productName="{data.product?.general_info?.title}"
+				productImage="{data.product?.general_info?.photos[0]?.url}"
 				url="{$page?.url?.href}" />
 		</div>
 
@@ -469,7 +470,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									{#if product_image_dimension === '1x1'}
 										<LazyImg
 											src="{img}"
-											alt="{data.product?.title} catelog {index}"
+											alt="{data.product?.general_info?.title} catelog {index}"
 											height="512"
 											width="512"
 											aspect_ratio="1:1"
@@ -477,7 +478,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									{:else}
 										<LazyImg
 											src="{img}"
-											alt="{data.product?.title}"
+											alt="{data.product?.general_info?.title}"
 											height="512"
 											class="object-contain object-top w-full h-auto first-line:text-xs" />
 									{/if}
@@ -522,18 +523,18 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 
 						<div class="block lg:hidden ml-auto">
 							<SocialSharingButtons
-								productName="{data.product?.name}"
-								productImage="{data.product?.img}"
+								productName="{data.product?.general_info?.title}"
+								productImage="{data.product?.general_info?.photos[0]?.url}"
 								url="{$page?.url?.href}" />
 						</div>
 					</div>
 
 					<!-- Title & product category | Name veg/non veg icon -->
 
-					{#if data?.product?.name || data?.product?.title}
+					{#if data?.product?.name || data?.product?.general_info?.title}
 						<div class="flex justify-between gap-2">
-							<span class="flex-1 sm:text-lg text-zinc-900 font-bold">
-								{data.product?.title || data.product?.name}
+							<span class="flex-1 sm:text-2xl text-zinc-900 font-extrabold">
+								{data.product?.general_info?.title || data.product?.name}
 							</span>
 
 							{#if $page.data.store?.isFnb && data.product.foodType}
@@ -547,8 +548,8 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 							{/if}
 						</div>
             <div>
-              <span class="flex-1 sm:text-lg text-zinc-500">
-								{data.product?.collection}
+              <span class="sm:text-lg text-sm text-zinc-400 font-bold">
+								{data.product?.general_info?.collection}
 							</span>
             </div>
 					{/if}
@@ -581,13 +582,13 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2 text-sm">
 							<span class="text-xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, $page.data.store?.currencySymbol)}
+								{currency(currentVariantPrice, data.product?.general_info?.currency_symbol)}
 							</span>
 
-							{#if data.product?.mrp > currentVariantPrice}
+							{#if data.product?.general_info?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, $page.data.store?.currencySymbol)}
+										{currency(data.product?.general_info?.mrp, data.product?.general_info?.currency_symbol)}
 									</strike>
 								</span>
 
@@ -706,13 +707,13 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2">
 							<span class="text-2xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, data.product?.currencySymbol)}
+								{currency(currentVariantPrice, data.product?.general_info?.currency_symbol)}
 							</span>
 
-							{#if data.product?.mrp > currentVariantPrice}
+							{#if data.product?.general_info?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, data.product?.currencySymbol)}
+										{currency(data.product?.general_info?.mrp, data.product?.general_info?.currency_symbol)}
 									</strike>
 								</span>
 
@@ -1144,8 +1145,8 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 
 				{#if loading}
 					<Skeleton small />
-				{:else if data?.moreProductDetails || data?.product?.description}
-					{#if data?.moreProductDetails?.description || data?.product?.description}
+				{:else if data?.moreProductDetails || data?.product?.general_info?.description}
+					{#if data?.moreProductDetails?.description || data?.product?.general_info?.description}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Product Details</h5>
@@ -1166,7 +1167,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 							</div>
 
 							<div class="prose max-w-none text-sm text-zinc-500">
-								{@html data?.moreProductDetails?.description || data?.product?.description}
+								{@html data?.moreProductDetails?.description || data?.product?.general_info?.description}
 							</div>
 						</div>
 					{/if}
@@ -1273,7 +1274,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 
         {#if loading}
           <Skeleton extraSmall />
-        {:else if data?.moreProductDetails?.longDescription || data?.product?.longDescription}
+        {:else if data?.moreProductDetails?.longDescription || data?.product?.general_info}
           <div class="flex flex-col border-t border-b">
             <button
               type="button"
@@ -1301,31 +1302,35 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={familyIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.breed_type}
+                  {data.product.breed_type}
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={genderIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.gender}
+                  {data.product.sex}
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={ageIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.age} Weeks
+                  {data.product.age_in_days} Days
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={colorIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.color}
+                  {data.product.color}
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={weightIcon} class="w-8 ml-4 mr-12">
-                  {data.product.longDescription.weight} Kg
+                  {data.product.weight_in_kg} Kg
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={dewormingIcon} class="w-8 ml-4 mr-12">
-                  Dewormed
+                  {data.dewormed ? "Dewormed" : "Not Dewormed"}
                 </div>
                 <div class="flex flex-row items-center">
                   <img src={vaccineIcon} class="w-8 ml-4 mr-12">
-                  Vaccinated
+                  {data.vaccinated ? "Vaccinated" : "Not Vaccinated"}
+                </div>
+                <div class="flex flex-row items-center">
+                  <img src={certificateIcon} class="w-8 ml-4 mr-12">
+                  {data.vaccinated ? "Certified" : "Not Certified"}
                 </div>
               </div>
             {/if}
@@ -1359,7 +1364,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?.uuid || null}" />
+										value="{data?.product?.general_info?.uuid || null}" />
 
 									<WhiteButton
 										type="submit"
@@ -1435,7 +1440,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
 										Item Expired
 									</PrimaryButton>
-								{:else if data.product?.active && data.product?.hasStock}
+								{:else if data.product?.general_info?.active}
 									{#if cartButtonText === 'Go to Cart'}
 										<a
 											in:fade="{{ duration: 300 }}"
@@ -1517,7 +1522,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 													}
 												}
 											}}">
-											<input type="hidden" name="pid" value="{data?.product?.uuid || null}" />
+											<input type="hidden" name="pid" value="{data?.product?.general_info?.uuid || null}" />
 
 											<input
 												type="hidden"
@@ -1735,12 +1740,12 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value="{data?.product?._id || data?.product?.general_info?.uuid || null}" />
 
 									<input
 										type="hidden"
 										name="vid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value="{data?.product?._id || data?.product?.general_info?.uuid || null}" />
 
 									<WhiteButton
 										type="submit"
@@ -1984,12 +1989,12 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value="{data?.product?._id || data?.product?.general_info?.uuid || null}" />
 
 									<input
 										type="hidden"
 										name="vid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value="{data?.product?._id || data?.product?.general_info?.uuid || null}" />
 
 									<WhiteButton
 										type="submit"

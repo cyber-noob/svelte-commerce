@@ -52,10 +52,10 @@ export { clazz as class }
 				href="{navigateToProperPath(d.link || d.slug)}?sort=-updatedAt"
 				aria-label="Click to go inside this page"
 				class="block first-letter:uppercase hover:text-primary-500 hover:underline">
-				{d.name}
+				{d.slug}
 			</a>
 
-			{#if dx < categoryPool?.length - 2}
+			{#if dx < categoryPool?.length - 1}
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5 px-1 shrink-0"

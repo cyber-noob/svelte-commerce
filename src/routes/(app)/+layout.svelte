@@ -17,7 +17,7 @@ let openSidebar = false
 		<!-- {/key} -->
 	</PageTransitions>
 
-	<div class="hidden lg:block">
+	<div class="lg:block">
 		<Footer />
 	</div>
 </div>

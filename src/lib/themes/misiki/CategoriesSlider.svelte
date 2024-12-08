@@ -62,7 +62,7 @@ let categoryColors = [
 
 									<p
 										class="w-full overflow-ellipsis text-center group-hover:text-zinc-500 capitalize line-clamp-2">
-										{category.name}
+										{category.collection}
 									</p>
 								</a>
 							{:else}
@@ -82,7 +82,7 @@ let categoryColors = [
 
 									<p
 										class="w-full overflow-ellipsis text-center group-hover:text-zinc-500 capitalize line-clamp-2">
-										{category.name}
+										{category.collection}
 									</p>
 								</a>
 							{/if}

@@ -2,7 +2,7 @@
   export let d = {}
 </script>
 
-<div class="flex flex-col sm:w-32 w-12 justify-center content-center items-center">
+<div class="flex flex-col sm:w-32 w-11 justify-center content-center items-center">
   <div class="flex flex-row sm:h-16 h-20 w-full bg-gray-100 justify-center content-center items-center">
     {d.day}
   </div>

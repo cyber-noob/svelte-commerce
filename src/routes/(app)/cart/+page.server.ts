@@ -55,7 +55,7 @@ const add: Action = async ({ url, request, cookies, locals }) => {
   const line_id = data.line_id
   const variantsLength = +data.variantsLength
   const currentVariantId = data.currentVariantId
-  const qty = +data.qty
+  let qty = +data.qty
   const linkedItems = JSON.parse(data.linkedItems || '[]')
   const options = JSON.parse(data.options || '[]') //data.options //
   const customizedImg = data.customizedImg
@@ -74,6 +74,7 @@ const add: Action = async ({ url, request, cookies, locals }) => {
   if (qty < 0) {
     console.log('minus qty: ', qty)
     option = 'minus'
+    qty = -qty
   }
 
   console.log('pid: ', pid)

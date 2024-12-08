@@ -38,7 +38,8 @@ module.exports = {
 				dropdown: 'dropdown 0.3s linear',
 				slide: 'slide 0.3s ease-in-out',
 				"accordion-down": "accordion-down 0.2s ease-out",
-				"accordion-up": "accordion-up 0.2s ease-out"
+				"accordion-up": "accordion-up 0.2s ease-out",
+        typing: "typing 10s steps(25), blink .3s infinite"
 			},
 			keyframes: {
 				float: {
@@ -72,11 +73,29 @@ module.exports = {
 				"accordion-up": {
 					from: { height: "var(--radix-accordion-content-height)" },
 					to: { height: "0" },
-				}
+				},
+        typing: {
+          "0%": {
+            width: "0%",
+            visibility: "hidden"
+          },
+          "100%": {
+            width: "100%"
+          }
+        },
+        blink: {
+          "50%": {
+            borderColor: "transparent"
+          },
+          "80%": {
+            borderColor: "white"
+          }
+        }
 			},
 			fontFamily: {
-				sans: ['Karla', 'sans'] // 'sans' is a fallback font in case the custom font isn't available
-			}
+				sans: ['Karla', 'sans'],
+        romantis: ['Romantis', 'sans'],
+      }
 		}
 	},
 	plugins: [require('tailwind-scrollbar'), require('@tailwindcss/typography'), require("tailwindcss-animate")]

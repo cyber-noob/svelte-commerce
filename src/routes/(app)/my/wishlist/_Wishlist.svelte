@@ -25,6 +25,7 @@ import { updateCartStore } from '$lib/store/cart'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
+import doggoGif from '$lib/icons/thanks.svg'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -95,17 +96,17 @@ console.log('wishlisted products: ', wishlistedProducts)
 
 			<div class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
 				{#each wishlistedProducts.products as w, wx}
-						<div class="cols-span-1 relative flex flex-col justify-between border overflow-hidden">
+						<div class="cols-span-1 relative flex flex-col justify-between border-2 border-zinc-600 overflow-hidden">
 							<BlackButton
 								type="button"
-								class="absolute top-2 right-2 z-10"
+								class="absolute top-4 right-2 z-10"
 								on:click="{() => removeFromWishlist(w?.id, wx)}">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="h-6 w-6"
+									class="h-6 w-6 bg-zinc-800 rounded-xl"
 									fill="none"
 									viewBox="0 0 24 24"
-									stroke="currentColor">
+									stroke="white">
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -119,8 +120,8 @@ console.log('wishlisted products: ', wishlistedProducts)
 									class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-56 flex flex-col gap-4">
 									<div class="h-auto w-full">
 										<LazyImg
-											src="{w?.image}"
-											alt="{w.name}"
+											src="{w?.general_info?.photos[0].url}"
+											alt="{w?.general_info?.title}"
 											width="192"
 											class="h-60 w-full object-contain object-bottom text-xs" />
 									</div>
@@ -138,7 +139,7 @@ console.log('wishlisted products: ', wishlistedProducts)
 
 										<div class="flex items-start justify-center">
 											<p class="flex-1 line-clamp-2">
-												{w?.name}
+												{w?.general_info?.title}
 											</p>
 
 											{#if $page.data.store?.isFnb && w.product?.foodType}
@@ -155,18 +156,18 @@ console.log('wishlisted products: ', wishlistedProducts)
 										<div
 											class="flex flex-wrap items-baseline justify-center gap-1.5 text-xs leading-3">
 											<span class="text-base font-bold whitespace-nowrap leading-3">
-												{currency(w?.price, w?.currencySymbol)}
+												{currency(w?.general_info?.price, w?.general_info?.currency_symbol)}
 											</span>
 
-											{#if w?.mrp > w?.price}
+											{#if w?.general_info?.mrp > w?.general_info?.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(w?.mrp, w?.currencySymbol)}
+													{currency(w?.general_info?.mrp, w?.general_info?.currency_symbol)}
 												</span>
 
-												{#if Math.floor(((w?.mrp - w?.price) / w?.mrp) * 100) > 0}
+												{#if Math.floor(((w?.general_info?.mrp - w?.general_info?.price) / w?.general_info?.mrp) * 100) > 0}
 													<span class="whitespace-nowrap text-secondary-500">
 														({Math.floor(
-															((w?.mrp - w?.price) / w?.mrp) * 100
+															((w?.general_info?.mrp - w?.general_info?.price) / w?.general_info?.mrp) * 100
 														)}% off)
 													</span>
 												{/if}
@@ -188,13 +189,13 @@ console.log('wishlisted products: ', wishlistedProducts)
 											bounceItemFromTop = false
 										}, 3000)
 
-										await removeFromWishlist(w?.id, wx)
+										await removeFromWishlist(w?.general_info?.uuid, wx)
 										// await invalidateAll()
 										await applyAction(result)
 									}
 								}}">
-								<input type="hidden" name="pid" value="{w?.id || null}" />
-								<input type="hidden" name="vid" value="{w?.id || null}" />
+								<input type="hidden" name="pid" value="{w?.general_info?.uuid || null}" />
+								<input type="hidden" name="vid" value="{w?.general_info?.uuid || null}" />
 								<input type="hidden" name="qty" value="{1}" />
 								<input
 									type="hidden"
@@ -202,11 +203,13 @@ console.log('wishlisted products: ', wishlistedProducts)
 									value="{JSON.stringify(w.product?.options) || null}" />
 								<input type="hidden" name="customizedImg" value="{null}" />
 
-								<button
-									type="submit"
-									class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50">
-									Move To Bag
-								</button>
+                <div class="flex items-center justify-center content-center">
+                  <button
+                    type="submit"
+                    class="w-3/4 border-t p-2 font-semibold uppercase tracking-wide text-primary-500 border-zinc-300 transition duration-300 focus:outline-none hover:bg-primary-50">
+                    Move To Bag
+                  </button>
+                </div>
 							</form>
 
 							{#if loadingProduct[wx]}
@@ -235,7 +238,7 @@ console.log('wishlisted products: ', wishlistedProducts)
 						</div>
 
 						{#if bounceItemFromTop}
-							<AnimatedCartItem img="{w?.image}" />
+							<AnimatedCartItem img="{doggoGif}" />
 						{/if}
 				{/each}
 

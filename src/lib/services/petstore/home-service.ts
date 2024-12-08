@@ -9,7 +9,7 @@ export const fetchHome = async () => {
     let categories = {}
     let res: any = {}
 
-    res = await getAPI('pdp/home', PUBLIC_PETSTORE_MONOLITH)
+    res = await getAPI('pdp/homeJson', PUBLIC_PETSTORE_MONOLITH)
 
     if (res?.categories?.length) {
       categories = res?.categories

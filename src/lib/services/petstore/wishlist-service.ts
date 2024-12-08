@@ -7,7 +7,7 @@ const isServer = import.meta.env.SSR
 export const fetchWishlist = async (token: string) => {
   try {
 
-    const res =  getAPI('wishlist/items', PUBLIC_PETSTORE_MONOLITH, {
+    const res =  getAPI('wishlist/itemsJson', PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

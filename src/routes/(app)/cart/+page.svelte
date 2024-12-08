@@ -264,7 +264,7 @@ function updateCheckedCartItemsInGroup() {
 							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
 							<p>
-								{cart?.quality || ''}
+								{cart?.quantity || ''}
 
 								{#if cart?.quantity > 1}
 									Items
@@ -306,9 +306,9 @@ function updateCheckedCartItemsInGroup() {
 													href="/product/{item?.slug}"
 													aria-label="Click to visit product details"
 													class="block shrink-0 overflow-hidden">
-													{#if item.customizedImg || item.img}
+													{#if item?.general_info?.photos}
 														<LazyImg
-															src="{item.isCustomized ? item.customizedImg : item.img}"
+															src="{item?.general_info?.photos[0].url}"
 															alt=" "
 															width="384"
 															height="512"
@@ -342,7 +342,7 @@ function updateCheckedCartItemsInGroup() {
 															href="/product/{item?.slug}"
 															aria-label="Click to visit product details"
 															class="cart-item flex-1 cursor-pointer text-zinc-500 hover:underline">
-															{item?.name}
+															{item?.general_info?.title}
 														</a>
 
 														{#if $page.data.store?.isFnb && item.foodType}
@@ -450,10 +450,10 @@ function updateCheckedCartItemsInGroup() {
 													on:change="{updateCheckedCartItemsInGroup}" />
 											{/if}
 
-											{#if item.customizedImg || item.img}
+											{#if item?.general_info?.photos}
 												<a href="/product/{item?.slug}" aria-label="Click to visit product details">
 													<LazyImg
-														src="{item.isCustomized ? item.customizedImg : item.img}"
+														src="{item?.general_info.photos[0].url}"
 														alt=" "
 														width="590"
 														height="384"
@@ -490,7 +490,7 @@ function updateCheckedCartItemsInGroup() {
 													href="/product/{item?.slug}"
 													aria-label="Click to visit product details"
 													class="flex-1 cursor-pointer text-zinc-500 hover:underline">
-													{item?.title}
+													{item?.general_info?.title}
 												</a>
 
 												{#if $page.data.store?.isFnb && item.foodType}
@@ -531,14 +531,14 @@ function updateCheckedCartItemsInGroup() {
 													{item?.formattedPrice?.price}
 												</span>
 
-												{#if item?.mrp > item?.price}
+												{#if item?.general_info?.mrp > item?.general_info?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														{item?.formattedPrice?.mrp}
 													</span>
 
-													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+													{#if Math.floor(((item?.general_info.mrp - item?.general_info.price) / item?.general_info.mrp) * 100) > 0}
 														<span class="whitespace-nowrap text-secondary-500">
-															({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+															({Math.floor(((item?.general_info.mrp - item?.general_info.price) / item?.general_info.mrp) * 100)}% off)
 														</span>
 													{/if}
 												{/if}
@@ -597,7 +597,7 @@ function updateCheckedCartItemsInGroup() {
 
 																fireGTagEvent('remove_from_cart', item)
 																if (item.quantity === 1) {
-																	updateCheckedCartItems(item.uuid)
+																	updateCheckedCartItems(item?.general_info.uuid)
 																}
 																await updateCartStore({ data: result?.data })
 																// await invalidateAll()
@@ -605,7 +605,7 @@ function updateCheckedCartItemsInGroup() {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid || item.uuid || null}" />
+														<input type="hidden" name="pid" value="{item.pid || item?.general_info.uuid || null}" />
 														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
@@ -668,7 +668,7 @@ function updateCheckedCartItemsInGroup() {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid || item.uuid || null}" />
+														<input type="hidden" name="pid" value="{item.pid || item?.general_info.uuid || null}" />
 														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
@@ -722,7 +722,7 @@ function updateCheckedCartItemsInGroup() {
 														}
 													}}">
 													<input type="hidden" name="line_id" value="{item.id || null}" />
-													<input type="hidden" name="pid" value="{item.uuid || null}" />
+													<input type="hidden" name="pid" value="{item?.general_info.uuid || null}" />
 													<input type="hidden" name="vid" value="{item.vid || null}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
 													<input

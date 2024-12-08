@@ -112,10 +112,10 @@ onMount(async () => {
 			{/if}
 
 			{#if product_image_dimension == '1x1'}
-				{#if product.photos}
+				{#if product?.general_info.photos}
 					<LazyImg
-						src="{product.photos[0].url}"
-						alt="{product.title}"
+						src="{product?.general_info.photos[0].url}"
+						alt="{product?.general_info.title}"
 						height="210"
 						aspect_ratio="1:1"
 						class="object-contain object-bottom w-[210px] h-[210px] text-xs rounded" />
@@ -140,10 +140,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '3x4'}
-				{#if product.photos}
+				{#if product?.general_info.photos}
 					<LazyImg
-						src="{product.photos[0].url}"
-						alt="{product.title}"
+						src="{product?.general_info.photos[0].url}"
+						alt="{product?.general_info.title}"
 						height="280"
 						aspect_ratio="3:4"
 						class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
@@ -168,10 +168,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '4x3'}
-				{#if product.photos}
+				{#if product?.general_info?.photos}
 					<LazyImg
-						src="{product.photos[0].url}"
-						alt="{product.title}"
+						src="{product?.general_info.photos[0].url}"
+						alt="{product?.general_info?.title}"
 						height="157"
 						aspect_ratio="4:3"
 						class="object-contain object-bottom w-[210px] h-[157px] text-xs" />
@@ -196,10 +196,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '16x9'}
-				{#if product.photos}
+				{#if product?.general_info?.photos}
 					<LazyImg
-						src="{product.photos[0].url}"
-						alt="{product.title}"
+						src="{product?.general_info.photos[0].url}"
+						alt="{product?.general_info?.title}"
 						height="236"
 						aspect_ratio="16:9"
 						class="object-contain object-bottom w-[420px] h-[236px] text-xs" />
@@ -224,10 +224,10 @@ onMount(async () => {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '9x16'}
-				{#if product.photos}
+				{#if product?.photos || product?.general_info?.photos}
 					<LazyImg
-						src="{product.photos[0].url}"
-						alt="{product.title}"
+						src="{product?.photos[0]?.url || product?.general_info?.photos[0]?.url}"
+						alt="{product?.title || product?.general_info?.title}"
 						height="373"
 						aspect_ratio="9:16"
 						class="object-contain object-bottom w-[210px] h-[373px] text-xs" />
@@ -457,7 +457,7 @@ onMount(async () => {
 					<div class="flex gap-2 justify-between">
 						<h4
 							class="flex-1 text-xs sm:text-sm font-semibold line-clamp-2 w-full group-hover:underline">
-							{product.title || '_'}
+							{product?.general_info.title || '_'}
 						</h4>
 
 						{#if $page.data.store?.isFnb && product.foodType}
@@ -486,36 +486,36 @@ onMount(async () => {
 			</div>
 			<!-- {/if} -->
 
-      {#if product?.collection}
+      {#if product?.collection || product?.general_info?.collection}
         <h3 class="text-xs sm:text-sm text-zinc-500 truncate">
-          {product.collection}
+          {product?.collection || product?.general_info?.collection}
         </h3>
       {/if}
 
-			{#if product.price}
+			{#if product?.general_info?.price}
 				<a
 					href="/product/{product.slug}"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
 					<!-- Price, MRP and Discount -->
 
-					{#if product.price}
+					{#if product?.general_info?.price}
 						<div
 							class="{$page.data.store?.isSecureCatalogue && !$page.data?.me
 								? 'hidden'
 								: 'flex'} mt-1 flex-wrap items-baseline justify-start gap-1.5 text-xs leading-3">
 							<span class="text-base font-bold whitespace-nowrap leading-3">
-								{currency(product.price, product?.currencySymbol)}
+								{currency(product?.general_info.price, product?.general_info?.currency_symbol)}
 							</span>
 
-							{#if product.mrp > product.price}
+							{#if product?.general_info?.mrp > product?.general_info?.price}
 								<span class="text-zinc-500 line-through whitespace-nowrap">
-									{currency(product.mrp, product?.currencySymbol)}
+									{currency(product?.general_info.mrp, product?.general_info?.currency_symbol)}
 								</span>
 
-								{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
+								{#if Math.floor(((product?.mrp - product?.price) / product?.mrp) * 100) > 0 }
 									<span class="text-secondary-500 whitespace-nowrap">
-										({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
+										({Math.floor(((product?.general_info?.mrp - product?.general_info?.price) / product?.general_info?.mrp) * 100)}% off)
 									</span>
 								{/if}
 							{/if}
