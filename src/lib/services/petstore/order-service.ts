@@ -40,6 +40,30 @@ export const createOrder = async (token: string) => {
   }
 }
 
+export const createSlotOrder = async (token: string, params: {}) => {
+  try {
+    let res: any = {}
+
+    console.log('token: ', token)
+
+    let p = ''
+    Object.keys(params).forEach(key => {
+      p += key + '=' + params[key] + '&'
+    })
+    console.log('params: ', p.slice(0, p.length - 1))
+    res = await post('order/slot?' + p.slice(0, p.length - 1), {}, PUBLIC_PETSTORE_MONOLITH, {
+      "Authorization": `Bearer ${token}`
+    })
+
+    console.log('order-service create order: ', res)
+
+    return res
+  } catch (e) {
+    console.log('error: ', e)
+    error(e.status, e.data?.message || e.message || e)
+  }
+}
+
 export const validatePayment = async (token: string, body: {}) => {
   try {
     let res: any = {}

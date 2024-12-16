@@ -2043,7 +2043,7 @@ console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlist
 			</div>
 		</div>
 
-    <BookAVideoCall show={display}/>
+    <BookAVideoCall show={display} seller={data?.product?.general_info?.seller_id} product={data?.product?.general_info?.uuid} data={data}/>
 
 		<div class="px-3 sm:px-10 lg:px-0 flex flex-col gap-5 sm:gap-10">
 			<!-- Frequently bought together -->

@@ -20,27 +20,24 @@ import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
 import { PrimaryButton, BlackButton, WhiteButton } from '$lib/ui'
-import { WishlistService } from '$lib/services'
+import { WishlistService, PetStoreWishlistService } from '$lib/services'
 import { updateCartStore } from '$lib/store/cart'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
 import doggoGif from '$lib/icons/thanks.svg'
+import Cookie from 'cookie-universal'
 
 export let wishlistedProducts,
 	loadingProduct = []
 
 let bounceItemFromTop = false
+let cookies = Cookie()
 
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await WishlistService.toggleWishlistService({
-			pid: id,
-			vid: id,
-			storeId: $page.data.storeId,
-			origin: $page.data.origin
-		})
+		await PetStoreWishlistService.deleteItemFromWishlist(cookies.get('me').token, id)
 
 		await invalidateAll()
 	} catch (e) {
@@ -100,7 +97,7 @@ console.log('wishlisted products: ', wishlistedProducts)
 							<BlackButton
 								type="button"
 								class="absolute top-4 right-2 z-10"
-								on:click="{() => removeFromWishlist(w?.id, wx)}">
+								on:click="{() => removeFromWishlist(w?.general_info?.uuid, wx)}">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									class="h-6 w-6 bg-zinc-800 rounded-xl"
