@@ -64,12 +64,19 @@ export const createSlotOrder = async (token: string, params: {}) => {
   }
 }
 
-export const validatePayment = async (token: string, body: {}) => {
+export enum OrderTypes {
+
+  product = 'product',
+
+  videoCall = 'videoCall',
+}
+
+export const validatePayment = async (token: string, body: {}, orderType: OrderTypes) => {
   try {
     let res: any = {}
 
     console.log('token: ', token)
-    res = await post('order/payment', body, PUBLIC_PETSTORE_MONOLITH, {
+    res = await post('order/payment?orderType=' + orderType, body, PUBLIC_PETSTORE_MONOLITH, {
       "Authorization": `Bearer ${token}`
     })
 

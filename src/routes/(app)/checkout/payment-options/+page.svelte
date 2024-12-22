@@ -1,18 +1,17 @@
 <script lang="ts">
-import { fireGTagEvent } from '$lib/utils/gTagB'
-import { goto } from '$app/navigation'
-import { onMount } from 'svelte'
-import { page } from '$app/stores'
-import { PaymentLoading } from '$lib/ui'
-import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
-import { slide } from 'svelte/transition'
-import { toast } from '$lib/utils'
-import SEO from '$lib/components/SEO/index.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { OrdersService, PetStoreOrderService } from '$lib/services'
-import Cookie from 'cookie-universal'
+  import { fireGTagEvent } from '$lib/utils/gTagB'
+  import { goto } from '$app/navigation'
+  import { onMount } from 'svelte'
+  import { page } from '$app/stores'
+  import { PaymentLoading } from '$lib/ui'
+  import { CheckoutHeader, Error, LazyImg, Pricesummary, TrustBaggeContainer } from '$lib/components'
+  import { toast } from '$lib/utils'
+  import SEO from '$lib/components/SEO/index.svelte'
+  import { PetStoreOrderService } from '$lib/services'
+  import Cookie from 'cookie-universal'
+  import { OrderTypes } from 'lib/services/petstore/order-service'
 
-const seoProps = {
+  const seoProps = {
 	title: 'Select Payment Option',
 	metaDescription: 'Choose your payment method'
 }
@@ -103,7 +102,7 @@ async function submit() {
             order_id: response.razorpay_order_id,
             payment_id: response.razorpay_payment_id,
             signature: response.razorpay_signature
-          })
+          }, OrderTypes.product)
 
           toast('Payment success', 'success')
           goto(

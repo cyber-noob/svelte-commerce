@@ -14,6 +14,7 @@
   import { PetStoreOrderService } from 'lib/services'
   import { toast } from 'lib/utils'
   import { onMount } from 'svelte'
+  import { OrderTypes } from 'lib/services/petstore/order-service'
 
   export let show: boolean = false
   export let seller: string
@@ -78,8 +79,9 @@
               order_id: response.razorpay_order_id,
               payment_id: response.razorpay_payment_id,
               signature: response.razorpay_signature
-            })
+            }, OrderTypes.videoCall)
 
+            console.log('capture: ', capture)
             toast('Payment success', 'success')
             goto(
               `/payment/process?pg=razorpay&order_no=${orderNo}`
