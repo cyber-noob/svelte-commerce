@@ -74,17 +74,17 @@ onMount(async () => {
 
 function getFacetsWithProducts() {
   if (facets) {
-    allColors = facets?.filter((t) => t.field_name === 'longDescription.color')
+    allColors = facets?.filter((t) => t.field_name === 'product.color')
     allColors = [{key: '#FFFF00', doc_count: 3}]
     // allColors[0].counts.map((item) => allColors.push({key: "Gold", doc_count: item.count}))
 
-    allGenders = facets?.filter((t) => t.field_name === 'longDescription.gender')
+    allGenders = facets?.filter((t) => t.field_name === 'product.sex')
     allGenders[0].counts.map((item) => allGenders.push({key: item.value, doc_count: item.count}))
 
-    allAges = facets?.filter((t) => t.field_name === 'longDescription.age')
+    allAges = facets?.filter((t) => t.field_name === 'product.age_in_days')
     allAges[0].counts.map((item) => allAges.push({key: item.value, doc_count: item.count}))
 
-    allBreeds = facets?.filter((t) => t.field_name === 'longDescription.breed_type')
+    allBreeds = facets?.filter((t) => t.field_name === 'product.breed')
     allBreeds[0].counts.map((item) => allBreeds.push({key: item.value, doc_count: item.count}))
 
     console.log('allColors: ', allColors)

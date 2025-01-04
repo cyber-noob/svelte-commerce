@@ -2,9 +2,10 @@
 import { authenticateUser } from '$lib/server'
 import { dev } from '$app/environment'
 import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
-import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
+import { error, type Handle, type HandleServerError, redirect } from '@sveltejs/kit'
 import { InitService } from '$lib/services'
 import { nanoid } from 'nanoid'
+import { err } from 'lib/components/Error.svelte'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -28,6 +29,7 @@ export const handleError: HandleServerError = ({ error, event }) => {
 	// 	contexts: { sveltekit: { event, errorId } }
 	// })
 
+  console.log('hook error: ', error)
 	return {
 		message: "An unexpected error occurred. We're working on it.",
 		errorId
@@ -84,6 +86,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// event.locals.sid = derivedSid
 		// event.request.headers.delete('connection')
 		const response = await resolve(event)
+    console.log('hook: ', response)
+    if (response.status === 401){
+      console.log('hook 401')
+      throw redirect(303, `/auth/login?ref=${url?.pathname}`)
+    }
 
 		// const end = performance.now()
 		// const responseTime = end - start

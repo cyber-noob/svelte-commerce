@@ -38,7 +38,7 @@ function submit() {
 
 function onselect(v: any) {
 	showSuggestionOptions = false
-  goto(`/search?q=${encodeURIComponent(v.title)}`)
+  goto(`/search?q=${encodeURIComponent(v.document.product.general_info.title)}`)
 }
 
 async function getData(e: any) {
@@ -125,17 +125,17 @@ onMount(async () => {
 						class="p-3 flex w-full items-center justify-between text-left text-zinc-500 hover:bg-zinc-100"
 						on:click="{() => onselect(v)}">
 						<div class="flex-1 flex items-center gap-2 justify-start">
-							{#if v.document.photos[0].url}
+							{#if v.document.product.general_info.photos[0].url}
 								<LazyImg
-									src="{v.document.photos[0].url}"
+									src="{v.document.product.general_info.photos[0].url}"
 									alt=""
 									height="40"
 									class="h-10 object-contain w-auto object-center" />
 							{/if}
 
               <div class="flex flex-col gap-0.5">
-                <span class="w-full truncate text-lg font-bold text-zinc-950 capitalize">{v.document.title}</span>
-                <span class="w-full truncate text-sm font-bold text-zinc-500 capitalize">{v.document.collection}</span>
+                <span class="w-full truncate text-base font-extrabold text-zinc-700 capitalize">{v.document.product.general_info.title}</span>
+                <span class="w-full truncate text-xs font-bold text-zinc-400 capitalize">{v.document.product.general_info.collection.split('_').join(' ')}</span>
               </div>
 						</div>
 

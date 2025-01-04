@@ -15,6 +15,7 @@ export async function load({ url, parent }) {
   let genders = url.searchParams?.get('genders') || ''
   let breed = url.searchParams?.get('breed') || ''
   let age = url.searchParams?.get('age') || ''
+  let collection = url.searchParams?.get('collections') || ''
 
   switch (sort) {
     case '-updatedAt':
@@ -46,7 +47,7 @@ export async function load({ url, parent }) {
 
   if (price && price.length > 0) {
     const priceArr = price.split(',')
-    filter += `price:[${priceArr[0]}..${priceArr[1]}] && `
+    filter += `product.general_info.price:[${priceArr[0]}..${priceArr[1]}] && `
     console.log('filter: ', filter)
   }
 
@@ -54,26 +55,34 @@ export async function load({ url, parent }) {
     let colorsArr = colors.split(',')
     colorsArr = colorsArr.map(color => GetColorName(color))
     console.log('colors: ', colorsArr)
-    filter += `longDescription.color:[${colorsArr}] && `
+    filter += `product.color:[${colorsArr}] && `
   }
 
   if (genders && genders.length > 0) {
     const gendersArr = genders.split(',')
-    filter += `longDescription.gender:[${gendersArr}] && `
+    filter += `product.sex:[${gendersArr}] && `
   }
 
   if (breed && breed.length > 0) {
     const breedArr = breed.split(',')
-    filter += `longDescription.breed_type:[${breedArr}] && `
+    filter += `product.breed:[${breedArr}] && `
   }
 
   if (age && age.length > 0) {
-    const ageArr = age.split(',')
-    filter += `longDescription.age:[${ageArr}] && `
+    let ageArr = age.split(',')
+    ageArr = ageArr.map(age => age.split(' ')[0])
+    console.log('ageArr: ', ageArr)
+    filter += `product.age_in_days:[${ageArr}] && `
+  }
+
+  if (collection && collection.length > 0) {
+    const collectionArr = collection.split(',')
+    filter += `product.general_info.collection:[${collectionArr}] && `
   }
 
   //Remove last extra <space>&&<space>
   filter = filter.slice(0, filter.length - 4)
+  console.log('filter: ', filter)
 
 	for (const [key, value] of query.entries()) {
 		fl[key] = value
@@ -85,7 +94,7 @@ export async function load({ url, parent }) {
 		products = await PetStoreSearchService.search({
       query: url.searchParams.get('q'),
       sort: sort,
-      group: 'price,categoryPool.name,longDescription.age,longDescription.gender,longDescription.breed_type,longDescription.color',
+      group: 'product.general_info.price,product.categoryPool.name,product.age_in_days,product.sex,product.breed,product.color,product.general_info.collection',
       filter: encodeURIComponent(filter)
     })
 	} catch (e) {

@@ -17,9 +17,9 @@
       <img
         alt="logo"
         src={brand.image}
-        class="object-fill rounded-full overflow-hidden sm:h-44 h-20 sm:w-44 w-20"
+        class="object-fill rounded-full border-4 border-zinc-200 overflow-hidden sm:h-36 h-20 sm:w-36 w-20"
       />
-    <span class="font-bold font-mono text-zinc-500 sm:w-44 w-24">
+    <span class="font-bold font-mono text-zinc-950 sm:w-44 w-24">
       {brand.title}
     </span>
   </button>

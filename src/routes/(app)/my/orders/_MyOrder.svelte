@@ -26,6 +26,7 @@ export let orders
 let clazz = ''
 export { clazz as class }
 
+console.log('orders:\n', orders)
 // let store = {}
 $: store = $page.data.store
 
@@ -72,7 +73,7 @@ $: store = $page.data.store
 
 			<ul>
 				{#each orders.orders as order}
-          {#if order?.order_type === 'products'}
+          {#if order?.order_type === 'product'}
             <CartProductComponent order={order} />
             {:else if order?.order_type === 'videoCall'}
             <CartVCComponent order={order} />

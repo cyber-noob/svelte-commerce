@@ -38,12 +38,14 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
       cookies.set('cartId', locals.cartId, { path: '/', maxAge: 31536000 })
       console.log('cart: ', cart)
     }
-	} catch (e) {
-		if (e?.status === 401) {
-			redirect(307, `/auth/login?ref=${url?.pathname}`)
-		}
-		error(400, e?.body?.message || e)
-	} finally {
+	}
+  catch (e) {
+    if (e?.status === 401) {
+      throw redirect(307, `/auth/login?ref=${url?.pathname}`)
+    }
+    error(400, e?.body?.message || e)
+  }
+  finally {
 		loading = false
 	}
 	return { loadingCart: loading, cart }
@@ -130,11 +132,7 @@ const add: Action = async ({ url, request, cookies, locals }) => {
       return {}
     }
   } catch (e) {
-    console.log('aj -> ', e)
-    if (e?.status === 401)
-      throw redirect(307, `/auth/login?ref=${url?.pathname}`)
-
-    error(400, e?.body?.message || e)
+    throw redirect(307, `/auth/login?ref=${url?.pathname}`)
   }
 }
 

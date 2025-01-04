@@ -2,6 +2,7 @@
 import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { GetColorName } from 'hex-color-to-color-name'
+import { get } from 'colornames'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs } from '$lib/ui'
@@ -42,6 +43,7 @@ let allDiscount = []
 let allFeatures = []
 let allGenders = []
 let allBreeds = []
+let allCollections = []
 let allPromotions = []
 let allSizes = []
 let allTags = []
@@ -96,24 +98,37 @@ onMount(async () => {
 })
 
 function getFacetsWithProducts() {
+  console.log('getFacetsWithProducts()')
 	if (facets) {
-		allColors = facets?.filter((t) => t.field_name === 'longDescription.color')
-    allColors = [{key: '#FFFF00', doc_count: 3}]
+		allColors = facets?.filter((t) => t.field_name === 'product.color')
+    // allColors = [{key: '#FFFF00', doc_count: 3}]
+    allColors[0].counts.map(item => {
+      let color = get(item.value)
+      console.log('color: ', color)
+      allColors.push({
+        key: color.value,
+        doc_count: item.count
+      })
+    })
     // allColors[0].counts.map((item) => allColors.push({key: "Gold", doc_count: item.count}))
 
-    allGenders = facets?.filter((t) => t.field_name === 'longDescription.gender')
+    allGenders = facets?.filter((t) => t.field_name === 'product.sex')
     allGenders[0].counts.map((item) => allGenders.push({key: item.value, doc_count: item.count}))
 
-    allAges = facets?.filter((t) => t.field_name === 'longDescription.age')
-    allAges[0].counts.map((item) => allAges.push({key: item.value, doc_count: item.count}))
+    allAges = facets?.filter((t) => t.field_name === 'product.age_in_days')
+    allAges[0].counts.map((item) => allAges.push({key: item.value + ' Days', doc_count: item.count}))
 
-    allBreeds = facets?.filter((t) => t.field_name === 'longDescription.breed_type')
+    allBreeds = facets?.filter((t) => t.field_name === 'product.breed')
     allBreeds[0].counts.map((item) => allBreeds.push({key: item.value, doc_count: item.count}))
+
+    allCollections = facets?.filter((t) => t.field_name === 'product.general_info.collection')
+    allCollections[0].counts.map((item) => allCollections.push({key: item.value, doc_count: item.count}))
 
     console.log('allColors: ', allColors)
     console.log('allGenders: ', allGenders)
     console.log('allAges: ', allAges)
     console.log('allBreeds: ', allBreeds)
+    console.log('allCollections: ', allCollections)
     console.log('priceRange: ', priceRange)
 	}
 }
@@ -474,6 +489,18 @@ function handleToggleSubCategory2(c, cx) {
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}
+
+  {#if allCollections?.length > 0}
+    <div transition:slide="{{ duration: 300 }}" class="my-3">
+      <hr class="mb-3 w-full" />
+      <CheckboxEs
+        items="{allCollections}"
+        title="Collections"
+        model="collections"
+        selectedItems="{fl.collections || []}"
+        on:go="{goCheckbox}" />
+    </div>
+  {/if}
 
 	{#if allColors?.length > 0}
 		<div transition:slide="{{ duration: 300 }}" class="my-3">

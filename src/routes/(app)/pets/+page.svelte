@@ -48,7 +48,7 @@
 
 <section class="sm:m-8">
   <a href="/new-trending">
-    <div class="flex content-center items-center sm:h-72 h-44 bg-zinc-950 gap-4">
+    <div class="flex content-center items-center bg-zinc-950 border-b-2">
       <img
         alt="logo"
         src={TrendingPets}
@@ -60,9 +60,12 @@
     </div>
   </a>
 
-  <div class="flex flex-row flex-wrap items-center content-end sm:gap-12 gap-4 sm:m-4">
-    {#each items as item}
-      <BrandCards brand={item} />
-    {/each}
+  <div class="flex flex-col p-4">
+    <div class="text-3xl font-extrabold capitalize tracking-wider gap-4 text-red-600">TOP PUPPIES</div>
+    <div class="flex flex-row flex-wrap items-center content-end sm:gap-12 gap-4 sm:m-4 w-full">
+      {#each items as item}
+        <BrandCards brand={item} />
+      {/each}
+    </div>
   </div>
 </section>

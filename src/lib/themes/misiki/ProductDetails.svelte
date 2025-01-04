@@ -99,6 +99,7 @@
   import doggoGif from '$lib/icons/thanks.svg'
   import ChewToy from '../../../dynamic-products/more-info/ChewToy.svelte'
   import Puppy from '../../../dynamic-products/pet/Puppy.svelte'
+  import { redirect } from '@sveltejs/kit'
 
   async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -1491,8 +1492,6 @@
 
 														// await invalidateAll()
 														await applyAction(result)
-													} else {
-                            console.log('Unhandled Error....', result)
 													}
 												}
 											}}">
@@ -1555,16 +1554,18 @@
             </div>
           {/if}
 
-          <!-- Video Call Button -->
-          <button
-            type="submit"
-            on:click|preventDefault={scrollToElement}
-            moveto="#bookaslot"
-            loadingringsize="sm"
-            class="flex w-full text-sm bg-red-500 text-white font-bold p-2 content-center items-center justify-center">
-            <img src={videoCallIcon} alt="video call icon" class="w-8 ml-4 mr-12" />
-            See your to be Companion?
-          </button>
+          {#if data.product.categoryPool[0].name === 'Pet_Collection'}
+            <!-- Video Call Button -->
+            <button
+              type="submit"
+              on:click|preventDefault={scrollToElement}
+              moveto="#bookaslot"
+              loadingringsize="sm"
+              class="flex w-full text-sm bg-red-500 text-white font-bold p-2 content-center items-center justify-center">
+              <img src={videoCallIcon} alt="video call icon" class="w-8 ml-4 mr-12" />
+              See your to be Companion?
+            </button>
+          {/if}
         </div>
 
 
