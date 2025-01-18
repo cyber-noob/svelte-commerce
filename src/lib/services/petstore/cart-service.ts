@@ -1,7 +1,7 @@
 import { getAPI, post } from 'lib/utils'
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 
-const isServer = import.meta.env.SSR
+// const isServer = import.meta.env.SSR
 import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
 
 export const fetchCart = async (token: string) => {

@@ -23,23 +23,6 @@ export let shipping_address = {}
 
 let cookie = Cookie()
 
-if (!shipping_address?.firstName) {
-	shipping_address = IS_DEV
-		? {
-				address: 'Test address',
-				city: 'Test city',
-				country: 'IN',
-				email: 'test@email.com',
-				firstName: 'Test first name',
-				id: 'new',
-				lastName: 'Test last name',
-				phone: '1111111111',
-				state: 'GOA',
-				zip: '111111'
-			}
-		: { id: 'new' }
-}
-
 shipping_address.zip = shipping_address.zip || shipping_address.pincode || ''
 shipping_address.phone = shipping_address.phone || $page?.data?.me?.phone || ''
 
@@ -332,10 +315,10 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result', result)
+				console.log('add address form result: ', result)
 
 				if (result?.status === 200 && result?.data) {
-					const newAddressId = result.data?._id || result.data?.id
+					const newAddressId = result.data?.idAddress
 					toast('Address saved successfully', 'success')
 
 					selectedBillingAddress = newAddressId
@@ -515,64 +498,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				</div>
 			</div>
 
-			<!-- City -->
-
-			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-60 sm:shrink-0">
-					City
-
-					<span class="text-accent-500">*</span>
-				</h6>
-
-				<div class="w-full">
-          <select
-            class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
-            bind:value="{shipping_address.city}"
-            disabled="{!shipping_address.state || loadingForShippingAddressCities}"
-            on:change={() => onBillingAddressCityChange()}
-            required>
-            <option value="{null}" disabled selected>-- Select a City --</option>
-            {#each shippingAddressCities as s}
-              {#if s}
-                <option value="{s.name.toUpperCase()}">
-                  {s.name}
-                </option>
-              {/if}
-            {/each}
-          </select>
-				</div>
-			</div>
-
-			<!-- State -->
-
-			{#if shippingAddressStates?.length}
-				<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-					<h6 class="sm:w-60 sm:shrink-0">
-						State/Province
-
-						<span class="text-accent-500">*</span>
-					</h6>
-
-					<div class="w-full">
-						<select
-							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
-							bind:value="{shipping_address.state}"
-							disabled="{!shipping_address.country || loadingForShippingAddressStates}"
-              on:change="{() => onShippingAddressStateChange(shipping_address.state)}"
-							required>
-							<option value="{null}" disabled selected>-- Select a State --</option>
-							{#each shippingAddressStates as s}
-								{#if s}
-									<option value="{s.name.toUpperCase()}">
-										{s.name}
-									</option>
-								{/if}
-							{/each}
-						</select>
-					</div>
-				</div>
-			{/if}
-
 			<!-- Country -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
@@ -604,6 +529,63 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				</div>
 			</div>
 		</div>
+
+    <!-- State -->
+
+      <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+        <h6 class="sm:w-60 sm:shrink-0">
+          State/Province
+
+          <span class="text-accent-500">*</span>
+        </h6>
+
+        <div class="w-full">
+          <select
+            class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+            bind:value="{shipping_address.state}"
+            disabled="{!shipping_address.country || loadingForShippingAddressStates}"
+            on:change="{() => onShippingAddressStateChange(shipping_address.state)}"
+            required>
+            <option value="{null}" disabled selected>-- Select a State --</option>
+            {#each shippingAddressStates as s}
+              {#if s}
+                <option value="{s.name.toUpperCase()}">
+                  {s.name}
+                </option>
+              {/if}
+            {/each}
+          </select>
+        </div>
+      </div>
+
+    <br />
+    <!-- City -->
+
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+      <h6 class="sm:w-60 sm:shrink-0">
+        City
+
+        <span class="text-accent-500">*</span>
+      </h6>
+
+      <div class="w-full">
+        <select
+          class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+          bind:value="{shipping_address.city}"
+          disabled="{!shipping_address.state || loadingForShippingAddressCities}"
+          on:change={() => onBillingAddressCityChange()}
+          required>
+          <option value="{null}" disabled selected>-- Select a City --</option>
+          {#each shippingAddressCities as s}
+            {#if s}
+              <option value="{s.name.toUpperCase()}">
+                {s.name}
+              </option>
+            {/if}
+          {/each}
+        </select>
+      </div>
+    </div>
 
 		<!-- Billing address for guest checkout -->
 

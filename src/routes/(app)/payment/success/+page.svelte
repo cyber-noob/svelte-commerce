@@ -317,11 +317,11 @@ console.log('success page.svelte: ', data.order)
 							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Delivery Information</h4>
 
 							<div class="flex flex-col gap-1">
-								{#if data.order?.shipping_address.firstName}
+								{#if data.order?.shipping_address.first_name}
 									<p>
-										{data.order?.shipping_address.firstName}
+										{data.order?.shipping_address.first_name}
 
-										{data.order?.shipping_address.lastName}
+										{data.order?.shipping_address.last_name}
 									</p>
 								{/if}
 
@@ -338,8 +338,8 @@ console.log('success page.svelte: ', data.order)
 										, {data.order?.shipping_address.country}
 									{/if}
 
-									{#if data.order?.shipping_address.zip}
-										- {data.order?.shipping_address.zip}
+									{#if data.order?.shipping_address.pincode}
+										- {data.order?.shipping_address.pincode}
 									{/if}
 								</p>
 
@@ -417,11 +417,11 @@ console.log('success page.svelte: ', data.order)
 								{#each data.order?.items as item}
 									<div class="flex gap-2 py-5 lg:gap-5">
 										<a
-											href="{`/product/${item.slug}`}"
+											href="{`/product/${item?.product?.slug}`}"
 											aria-label="Click to view the product details"
 											class="shrink-0">
 											<LazyImg
-												src="{item.isCustomized ? item.customizedImg : item.img}"
+												src="{item?.product?.general_info.photos[0].url}"
 												alt=""
 												width="56"
 												class="h-auto w-14 object-contain object-top" />
@@ -430,11 +430,11 @@ console.log('success page.svelte: ', data.order)
 										<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
 											<div class="flex justify-between gap-2 sm:gap-4">
 												<a
-													href="{`/product/${item.slug}`}"
+													href="{`/product/${item?.product?.slug}`}"
 													aria-label="Click to view the product details"
 													class="flex-1 hover:underline">
 													<p>
-														{item.name}
+														{item?.product?.general_info?.title}
 													</p>
 												</a>
 											</div>
@@ -490,19 +490,19 @@ console.log('success page.svelte: ', data.order)
 												Item price :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.price, data.order?.amount?.currencySymbol)}
+													{currency(item?.product?.general_info?.price, item?.product?.general_info?.currency_symbol)}
 												</span>
 
-												{#if item?.mrp > item?.price}
+												{#if item?.product?.general_info?.mrp > item?.product?.general_info?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.mrp, data.order?.amount?.currencySymbol)}
+															{currency(item?.product?.general_info?.mrp, item?.product?.general_info?.currency_symbol)}
 														</strike>
 													</span>
 
-													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+													{#if Math.floor(((item?.product?.general_info?.mrp - item?.product?.general_info?.price) / item?.product?.general_info?.mrp) * 100) > 0}
 														<span class="whitespace-nowrap text-secondary-500">
-															({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+															({Math.floor(((item?.product?.general_info?.mrp - item?.product?.general_info?.price) / item?.product?.general_info?.mrp) * 100)}% off)
 														</span>
 													{/if}
 												{/if}
@@ -512,19 +512,19 @@ console.log('success page.svelte: ', data.order)
 												Sub Total :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.subtotal, data.order?.amount?.currencySymbol)}
+													{currency(item?.pricing?.subtotal, item?.product?.general_info?.currency_symbol)}
 												</span>
 
-												{#if item?.total > item?.subtotal}
+												{#if item?.pricing?.total > item?.pricing?.subtotal}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.total, data.order?.amount?.currencySymbol)}
+															{currency(item?.pricing?.total, item?.product?.general_info?.currency_symbol)}
 														</strike>
 													</span>
 
-													{#if Math.floor(((item.total - item.subtotal) / item.total) * 100) > 0}
+													{#if Math.floor(((item?.pricing?.total - item?.pricing?.subtotal) / item?.pricing?.total) * 100) > 0}
 														<span class="whitespace-nowrap text-secondary-500">
-															({Math.floor(((item.total - item.subtotal) / item.total) * 100)}% off)
+															({Math.floor(((item?.pricing?.total - item?.pricing?.subtotal) / item?.pricing?.total) * 100)}% off)
 														</span>
 													{/if}
 												{/if}

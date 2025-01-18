@@ -91,7 +91,7 @@ async function searchData(search) {
 <section>
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
 		<h1>
-			Addresses {#if data?.addresses?.count}({data?.addresses?.count}){/if}
+			Addresses {#if data?.addresses.data?.count}({data?.addresses.data?.count}){/if}
 		</h1>
 
 		<!--  Back button -->
@@ -135,9 +135,9 @@ async function searchData(search) {
 		Loading....
 	{:else if data.addresses?.errors}
 		{data.addresses?.errors}
-	{:else if data.addresses.data.length > 0}
+	{:else if data.addresses.data.data.length > 0}
 		<ul class="mb-5 flex w-full max-w-xl flex-col gap-4">
-			{#each data.addresses.data as add, index}
+			{#each data.addresses.data.data as add, index}
 				{#if add}
 					<li
 						class="overflow-hidden rounded border bg-white shadow-md transition duration-300 hover:shadow-md">

@@ -29,7 +29,7 @@ export async function load({ url, parent }) {
 
     console.log('aj debugger ....')
     let myAddresses = await PetStoreAddressService.fetchAddresses(me.token)
-    let preSelectedAddress = myAddresses.filter(address => address.is_default == 1)[0]
+    let preSelectedAddress = myAddresses?.data.filter(address => address.is_default == 1)[0]
 
     console.log('checkout +page.ts: \n', myAddresses, '\npreSelectedAddress', preSelectedAddress)
     return {
@@ -37,7 +37,7 @@ export async function load({ url, parent }) {
       countries,
       currentPage,
       err,
-      myAddresses,
+      myAddresses: myAddresses.data,
       q,
       preSelectedAddress,
       url: url.href

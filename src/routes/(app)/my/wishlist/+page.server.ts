@@ -26,7 +26,7 @@ export async function load({ cookies, locals, url }) {
 	}
 }
 
-const toggleWishlist = async ({ request, cookies, locals }) => {
+const toggleWishlist = async ({ url, request, cookies, locals }) => {
 	const data = await request.formData()
 
 	const pid = data.get('pid')
@@ -44,7 +44,7 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 		return res
 	} catch (e) {
 		if (e.status === 401 || e.status === 403) {
-			redirect(307, '/auth/login')
+			redirect(307, `/auth/login?ref=${url?.pathname}`)
 		}
 
 		error(e.status, e.message)

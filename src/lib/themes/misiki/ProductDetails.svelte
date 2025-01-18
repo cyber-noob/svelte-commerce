@@ -1455,7 +1455,10 @@
                     enctype="multipart/form-data"
                     use:enhance="{() => {
 												return async ({ result }) => {
-													if (result?.error) {
+                          if (result?.type === 'redirect') {
+                            goto(result?.location)
+                          }
+													else if (result?.error) {
 														toast(result?.error, 'error')
 														loading = false
 														return
@@ -1467,7 +1470,6 @@
 															wiggleVariants = false
 														}, 820)
 														loading = false
-														return
 													} else if (result?.status === 200) {
 														updateCartStore({ data: result.data })
 

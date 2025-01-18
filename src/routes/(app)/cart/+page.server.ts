@@ -4,8 +4,6 @@ import type { Action, Actions, PageServerLoad } from './$types'
 import { PetStoreCartService } from '$lib/services'
 import Cookie from 'cookie-universal'
 
-let cookie = Cookie()
-
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
 	const { store, storeId, origin } = locals
 	depends('cart:my')
@@ -132,7 +130,7 @@ const add: Action = async ({ url, request, cookies, locals }) => {
       return {}
     }
   } catch (e) {
-    throw redirect(307, `/auth/login?ref=${url?.pathname}`)
+    redirect(307, `/auth/login?ref=${url?.pathname}`)
   }
 }
 

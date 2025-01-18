@@ -11,12 +11,6 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	async default({ cookies, locals }) {
 		try {
-			await UserService.logoutService({
-				storeId: locals.storeId,
-				origin: locals.origin,
-				sid: cookies.get('connect.sid')
-			})
-
 			// eat the cookie
 
 			// cookies.set('storeId', null, {
@@ -44,6 +38,7 @@ export const actions: Actions = {
 				expires: new Date(0)
 			})
 
+      console.log('removing me token')
 			cookies.set('me', null, {
 				path: '/',
 				expires: new Date(0)
@@ -56,6 +51,7 @@ export const actions: Actions = {
 			redirect(307, '/auth/login')
 		} catch (e) {
 			//redirect the user
+      console.error('logout error: ', e)
 		}
 	}
 }

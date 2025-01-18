@@ -79,6 +79,8 @@ async function updateCart() {
 async function refreshAddress() {
 	invalidateAll()
 }
+
+console.log('countries: ', data.countries)
 </script>
 
 <SEO {...seoProps} />
@@ -105,7 +107,7 @@ async function refreshAddress() {
 									<SelectAddress
 										address="{ads}"
 										{loading}
-										countries="{data.countries?.data}"
+										countries="{data.countries}"
 										{selectedAddress}
 										on:deleteAddress="{refreshAddress}"
 										on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
@@ -155,7 +157,7 @@ async function refreshAddress() {
 											<SelectBillingAddress
 												address="{ads}"
 												{loading}
-												countries="{data.countries?.data}"
+												countries="{data.countries}"
 												{selectedBillingAddress}
 												on:deleteAddress="{refreshAddress}"
 												on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
@@ -210,7 +212,7 @@ async function refreshAddress() {
 							bind:selectedAddress
 							bind:selectedBillingAddress
 							shipping_address="{newAddress}"
-							countries="{data.countries?.data}" />
+							countries="{data.countries}" />
 					</Modal>
 				</div>
 			{:else}
@@ -222,7 +224,7 @@ async function refreshAddress() {
 					Login to view your saved address
 				</a>
 
-				<SaveAddress {billing_address} {shipping_address} countries="{data.countries?.data}" />
+				<SaveAddress {billing_address} {shipping_address} countries="{data.countries}" />
 			{/if}
 		</div>
 

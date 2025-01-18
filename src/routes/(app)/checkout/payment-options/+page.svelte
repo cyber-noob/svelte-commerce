@@ -164,8 +164,8 @@ function checkIfStripeCardValid({ detail }) {
 					<h5 class="mb-2">Delivery Address</h5>
 
 					<p>
-						{data.cart?.shipping_address?.firstName || '_'}
-						{data.cart?.shipping_address?.lastName || '_'}
+						{data.cart?.shipping_address?.first_name || '_'}
+						{data.cart?.shipping_address?.last_name || '_'}
 
 						<br />
 

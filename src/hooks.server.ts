@@ -86,11 +86,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// event.locals.sid = derivedSid
 		// event.request.headers.delete('connection')
 		const response = await resolve(event)
-    console.log('hook: ', response)
-    if (response.status === 401){
-      console.log('hook 401')
-      throw redirect(303, `/auth/login?ref=${url?.pathname}`)
-    }
+    // console.log('hook: ', response)
 
 		// const end = performance.now()
 		// const responseTime = end - start
