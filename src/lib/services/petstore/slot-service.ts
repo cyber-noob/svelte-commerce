@@ -1,6 +1,7 @@
 import { del, getAPI, post } from 'lib/utils'
 import { error } from '@sveltejs/kit'
 import { PUBLIC_PETSTORE_MONOLITH } from '$env/static/public'
+import { goto } from '$app/navigation'
 
 const isServer = import.meta.env.SSR
 
@@ -16,6 +17,7 @@ export const fetchSlots = async (token: string, seller_id: string, date: string)
 
   } catch (e) {
     console.log('error: ', e)
+    goto(`/auth/login?ref=${window.location?.pathname}`)
     error(e.status, e.data?.message || e.message || e)
   }
 }
