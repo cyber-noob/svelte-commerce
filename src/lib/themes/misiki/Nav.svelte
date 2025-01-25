@@ -29,6 +29,7 @@ const cookies = Cookie()
 export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
 me = cookies.get('me')
+console.log ('Nav.svelte: ', me)
 let clazz = ''
 export { clazz as class }
 
@@ -330,6 +331,18 @@ async function onSearchSubmit({ detail }) {
 								</a>
 							</li>
 
+              {#if me.role === 'Admin' || me.role === 'Seller'}
+                <a
+                  href="/admin/product/add"
+                  aria-label="Click to visit Admin Portal"
+                  data-sveltekit-preload-data>
+                  <h6
+                    class="w-full px-4 py-2 text-left transition duration-300 rounded cursor-pointer focus:outline-none hover:bg-zinc-100">
+                    Admin
+                  </h6>
+                </a>
+              {/if}
+
 							{#if !$page.url?.pathname.includes('/my')}
 								{#each menu as m}
 									<li class="h-auto w-full flex-1">
@@ -533,6 +546,17 @@ async function onSearchSubmit({ detail }) {
 					<hr class="w-full" />
 
 					<!-- Menu -->
+          {#if me.role === 'Admin' || me.role === 'Seller'}
+            <a
+              href="/admin/product/add"
+              aria-label="Click to visit Admin Portal"
+              data-sveltekit-preload-data>
+              <h6
+                class="w-full px-4 py-2 text-left transition duration-300 rounded cursor-pointer focus:outline-none hover:bg-zinc-100">
+                Admin
+              </h6>
+            </a>
+          {/if}
 
 					{#each menu as m}
 						<li>

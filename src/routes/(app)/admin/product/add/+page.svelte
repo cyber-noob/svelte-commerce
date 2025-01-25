@@ -3,6 +3,7 @@
   import { onMount } from 'svelte'
   import { PetStoreAdminService } from '$lib/services'
   import { PrimaryButton, Textbox } from 'lib/ui'
+  import { CustomDropDown } from 'lib/components'
 
   export let data
 
@@ -11,6 +12,8 @@
   $: registry = []
   $: contract = {}
   let productPayload = {}
+
+  console.log('contract: ', contract)
 
   let selectedCollection:string
   let selectedFamily:string
@@ -23,6 +26,8 @@
     delete contract['general_info.uuid']
     delete contract['general_info.created_on']
     delete contract['general_info.seller_id']
+    delete contract['general_info.active']
+    delete contract['general_info.currency_symbol']
   }
 
   const flatten = (obj, roots = [], sep = '.') => Object
@@ -51,9 +56,15 @@
     }
     return result
   }
+
+  onMount(() => {
+    selectedCollection = null
+    selectedFamily = null
+  })
 </script>
 
 <template>
+  <div class="text-xl font-extrabold leading-tight tracking-wider">ADD PRODUCT</div>
   <form
     action="/admin/product/add?/upload"
     method="POST"
@@ -123,31 +134,33 @@
         </div>
       </div>
 
-      <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-        <h6 class="sm:w-60 sm:shrink-0">
-          Product Registry
-        </h6>
+      {#if selectedCollection !== null && selectedCollection !== 'Pet_Collection'}
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+          <h6 class="sm:w-60 sm:shrink-0">
+            Product Registry
+          </h6>
 
-        <div class="w-full">
-          <select
-            class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
-            bind:value="{selectedRegistry}"
-            on:change="{() => {
-            console.log('collection: ', selectedRegistry)
-            fetchContract(selectedCollection, selectedFamily, selectedRegistry)
-          }}"
-          >
-            <option value="{null}" disabled selected>-- Select Product Registry --</option>
-            {#each registry as s}
-              {#if s}
-                <option value="{s}">
-                  {s.toUpperCase()}
-                </option>
-              {/if}
-            {/each}
-          </select>
+          <div class="w-full">
+            <select
+              class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+              bind:value="{selectedRegistry}"
+              on:change="{() => {
+              console.log('collection: ', selectedRegistry)
+              fetchContract(selectedCollection, selectedFamily, selectedRegistry)
+            }}"
+            >
+              <option value="{null}" disabled selected>-- Select Product Registry --</option>
+              {#each registry as s}
+                {#if s}
+                  <option value="{s}">
+                    {s.toUpperCase()}
+                  </option>
+                {/if}
+              {/each}
+            </select>
+          </div>
         </div>
-      </div>
+      {/if}
 
       {#if Object.keys(contract).length > 0}
         {#each Object.keys(contract) as key}
@@ -155,16 +168,16 @@
             <div class="w-full">
               <Textbox
                 type="text"
-                placeholder="{key}"
+                placeholder="{key.split('.').at(-1)}"
                 bind:value="{productPayload[key]}"
                 autoFocus
                 required
                  />
             </div>
-          {:else if Array.isArray(contract[key])}
+          {:else if Array.isArray(contract[key]) && key !== 'color'}
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
               <h6 class="sm:w-60 sm:shrink-0">
-                {key}
+                {key.split('.').at(-1)}
                 <span class="text-accent-500">*</span>
               </h6>
 
@@ -174,16 +187,24 @@
                   bind:value="{productPayload[key]}"
                   on:change="{() => {
             console.log('payload: ', unflatten(productPayload))
-            // fetchContract(selectedCollection, selectedFamily, selectedRegistry)
           }}" required>
-                  <option value="{null}" disabled selected>-- Select {key} --</option>
+                  <option value="{null}" disabled selected>-- Select {key.split('.').at(-1)} --</option>
                   {#each contract[key] as s}
-                    <option value="{s}">
-                      {s}
-                    </option>
+                      <option value="{s}">
+                        {s}
+                      </option>
                   {/each}
                 </select>
               </div>
+            </div>
+          {:else if key === 'color'}
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+              <h6 class="sm:w-60 sm:shrink-0">
+                {key}
+                <span class="text-accent-500">*</span>
+              </h6>
+
+              <CustomDropDown colors={contract[key]} payload={productPayload}/>
             </div>
           {/if}
         {/each}

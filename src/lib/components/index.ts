@@ -39,6 +39,7 @@ import StoreInformationFooter from './StoreInformationFooter.svelte'
 import Stripe from './Stripe.svelte'
 import TrustBaggeContainer from './TrustBaggeContainer.svelte'
 import UserForm from './Product/UserForm.svelte'
+import CustomDropDown from 'lib/components/CustomDropDown.svelte'
 
 // Core components of svelte commerce
 import AnimatedCartItem from './AnimatedCartItem.svelte'
@@ -113,5 +114,6 @@ export {
 	StoreInformationFooter,
 	Stripe,
 	TrustBaggeContainer,
-	UserForm
+	UserForm,
+  CustomDropDown
 }

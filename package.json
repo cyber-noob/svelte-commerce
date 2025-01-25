@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "node src/lib/services/copy && vite dev --host --port 3000",
-		"build": "vite build",
+		"build": "NODE_OPTIONS=--max-old-space-size=4096 vite build",
 		"start-node": "node build/index.js",
 		"start": "NODE_ENV=production && vite preview --host --port 3000",
 		"update": "npm exec -- npx ncu -u -p npm i",
@@ -31,6 +31,9 @@
 		"class-variance-authority": "0.7.0",
 		"clsx": "2.1.1",
 		"colornames": "1.1.1",
+		"flowbite": "2.5.2",
+		"flowbite-svelte": "0.47.4",
+		"flowbite-svelte-icons": "1.6.2",
 		"lucide-react": "0.400.0",
 		"lucide-svelte": "0.399.0",
 		"tailwind-merge": "2.3.0",

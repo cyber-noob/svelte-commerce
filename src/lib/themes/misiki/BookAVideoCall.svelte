@@ -15,6 +15,9 @@
   import { toast } from 'lib/utils'
   import { onMount } from 'svelte'
   import { OrderTypes } from 'lib/services/petstore/order-service'
+  import { Toast } from 'flowbite-svelte'
+  import { fade } from 'svelte/transition'
+  import { readable } from 'svelte/store'
 
   export let show: boolean = false
   export let seller: string
@@ -49,7 +52,7 @@
     })
   }
 
-  let loading = false
+  $: loading = false
 
   async function submit(date: string, slot: string) {
     try {
@@ -112,6 +115,18 @@
 
   let razorpayReady = false
 
+  function onDateSelected(date) {
+    console.log('Fetching slots for date - ', date)
+    slots = fetchSlots(cookies.get('me').token, seller, date.dateString)
+    selectedDate = date
+  }
+
+  let text = readable(['Contacting Seller...', 'Working on slots...', 'Making sure the slot is yours....', 'Please wait a little longer...'])
+  let currentIndex = 0;
+
+  let displayedText;
+  $: displayedText = $text[currentIndex % $text.length]
+
   onMount(async () => {
     // const StripeModule = await import('$lib/components/Stripe.svelte')
     // Stripe = StripeModule.default
@@ -131,13 +146,10 @@
 
     <!-- Date Picker -->
     <div class="flex flex-row items-center sm:gap-4 gap-2">
-      <button class="sm:w-12 w-4 sm:h-12 h-4 text-purple-500">
-        {"<"}
-      </button>
-      <div class="flex flex-row sm:h-52 h-32 border-2 w-fit rounded-2xl overflow-hidden" role="group">
+      <div class="flex flex-row flex-1 sm:h-52 h-28 w-full border-2 justify-evenly overflow-hidden" role="group">
         {#each date as d}
-          <div class="flex flex-col sm:w-32 w-11 justify-center content-center items-center">
-            <div class="flex flex-row sm:h-16 h-20 w-full bg-gray-100 justify-center content-center items-center">
+          <div class="flex flex-col sm:w-32 w-14 justify-center content-center items-center">
+            <div class="flex flex-row sm:h-16 h-20 w-full justify-center content-center items-center">
               {d.day}
             </div>
 
@@ -154,9 +166,7 @@
             {:else}
               <button
                 on:click="{async () => {
-                console.log('Fetching slots for date - ', date)
-                slots = await fetchSlots(cookies.get('me').token, seller, d.dateString)
-                selectedDate = d
+                onDateSelected(d)
               }}"
                 class="flex flex-col h-full w-full font-bold justify-center content-center items-center text-red-500 focus:z-10 focus:bg-red-500 focus:text-white">
                 <div class="text-2xl">
@@ -170,11 +180,16 @@
           </div>
         {/each}
       </div>
-      <button class="sm:w-12 w-4 sm:h-12 h-4 text-purple-500">
-        {">"}
-      </button>
     </div>
 
+    {#await slots}
+      {#key displayedText}
+        <div class="text-xs font-bold" in:fade>{displayedText}</div>
+        {setTimeout(function () {
+          currentIndex++
+        }, 5000)}
+      {/key}
+    {:then slots}
     {#if Object.keys(slots).length !== 0}
       <header class="prose font-extrabold sm:text-xl border-2 border-purple-500">
         Select a time slot
@@ -194,24 +209,23 @@
 
       <!-- Time Picker -->
       {#if slots?.slots.length > 0}
-        <div class="flex flex-row items-center gap-4 flex-wrap" role="group">
+        <div class="flex flex-row items-center gap-2 flex-wrap" role="group">
           {#each slots?.slots as t}
-            {#if t.is_available}
-              <button
-                on:click="{async () => {
+              {#if t.is_available}
+                <button
+                  on:click="{async () => {
                   slots = await reserveSlot(cookies.get('me').token, seller, selectedDate.dateString, t.slot)
                   selectedSlot = t.slot
                 }}"
-                class="flex flex-row sm:w-44 sm:h-12 w-20 h-8 items-center content-center justify-center sm:m-4 m-3 text-red-500 bg-red-200 font-bold focus:z-10 focus:bg-red-500 focus:text-white border-2 rounded">
-                {t.slot}
-              </button>
-            {:else}
-              <div
-                id="stripes"
-                class="flex flex-row sm:w-44 sm:h-12 w-20 h-8 items-center content-center justify-center sm:m-4 m-3 text-red-500 bg-gray-100 font-extrabold focus:z-10 disabled: focus:text-white border-2 rounded">
-                {t.slot}
-              </div>
-            {/if}
+                  class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white focus:bg-zinc-900 focus:text-white focus:z-10 border-2 border-zinc-100 shadow-xl font-semibold p-4 w-full sm:w-52 m-2 sm:m-4 rounded-xl">
+                  {t.slot}
+                </button>
+              {:else}
+                <button disabled
+                        class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white disabled:border-gray-200 focus:bg-zinc-900 focus:text-white focus:z-10 border-4 border-zinc-900 shadow-xl font-semibold p-4 m-4">
+                  {t.slot}
+                </button>
+              {/if}
           {/each}
         </div>
       {:else}
@@ -221,11 +235,20 @@
       <div
         class="flex sm:items-end sm:justify-end sm:content-end sm:mr-8 sm:mt-8 justify-center content-center items-center m-8">
         <button
-          on:click={async () => await submit(selectedDate.dateString, selectedSlot)}
-          class="flex bg-black text-white font-bold rounded-lg p-3 justify-center content-center items-center">
+          on:click={async () => {
+            loading = true
+            await submit(selectedDate.dateString, selectedSlot)
+            loading = false
+          }}
+          class="flex bg-black text-white font-bold rounded-lg p-3 justify-center content-center items-center disabled:bg-gray-200"
+          disabled={loading}
+        >
           Pay Now
         </button>
       </div>
     {/if}
+      {:catch e}
+        <Toast>Something went wrong. Please try again later</Toast>
+      {/await}
   </div>
 </section>
