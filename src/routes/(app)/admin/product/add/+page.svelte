@@ -4,20 +4,24 @@
   import { PetStoreAdminService } from '$lib/services'
   import { PrimaryButton, Textbox } from 'lib/ui'
   import { CustomDropDown } from 'lib/components'
+  import { toast } from 'lib/utils'
+  import { goto, invalidateAll } from '$app/navigation'
 
   export let data
 
-  let collection:string[] = data.collections.data
-  let family:string[] = data.families.data
+  $: collection = data.collections.data
+  $: family = data.families.data
   $: registry = []
   $: contract = {}
-  let productPayload = {}
+  $: productPayload = {}
 
   console.log('contract: ', contract)
 
-  let selectedCollection:string
-  let selectedFamily:string
-  let selectedRegistry:string
+  $: selectedCollection = null
+  $: selectedFamily = null
+  $: selectedRegistry = null
+
+  let loading: boolean = false
 
   async function fetchContract(collection: string, family: string, registry: string) {
     contract = await PetStoreAdminService.fetchProductContract(collection, family, registry)
@@ -28,6 +32,8 @@
     delete contract['general_info.seller_id']
     delete contract['general_info.active']
     delete contract['general_info.currency_symbol']
+    delete contract['general_info.family']
+    delete contract['general_info.collection']
   }
 
   const flatten = (obj, roots = [], sep = '.') => Object
@@ -56,11 +62,6 @@
     }
     return result
   }
-
-  onMount(() => {
-    selectedCollection = null
-    selectedFamily = null
-  })
 </script>
 
 <template>
@@ -69,12 +70,16 @@
     action="/admin/product/add?/upload"
     method="POST"
     enctype="multipart/form-data"
-    use:enhance="{() => {
-			return async ({ result }) => {
-          console.log(result)
+    use:enhance={ () => {
+      loading = true
+			return async ({ result, update }) => {
+					loading = false
+					toast('Product Added Successfully!', 'success')
+					console.log('path: ', window.location.pathname)
+					await invalidateAll()
 			  }
 			}
-    }"
+    }
   >
     <div class="flex flex-col h-full m-8 p-8 gap-8">
       <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
@@ -92,6 +97,7 @@
             registry = await PetStoreAdminService.fetchProductRegistries(selectedCollection)
             registry = registry.data
             console.log('reg: ', registry)
+            productPayload['general_info.collection'] = selectedCollection
           }}"
             required>
             <option value="{null}" disabled selected>-- Select Product Category --</option>
@@ -119,6 +125,7 @@
             bind:value="{selectedFamily}"
             on:change="{() => {
             console.log('collection: ', selectedFamily)
+            productPayload['general_info.family'] = selectedFamily
             fetchContract(selectedCollection, selectedFamily, selectedRegistry)
             }}"
             required>
@@ -176,27 +183,27 @@
             </div>
           {:else if Array.isArray(contract[key]) && key !== 'color'}
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-              <h6 class="sm:w-60 sm:shrink-0">
-                {key.split('.').at(-1)}
-                <span class="text-accent-500">*</span>
-              </h6>
+                <h6 class="sm:w-60 sm:shrink-0">
+                  {key.split('.').at(-1)}
+                  <span class="text-accent-500">*</span>
+                </h6>
 
-              <div class="w-full">
-                <select
-                  class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
-                  bind:value="{productPayload[key]}"
-                  on:change="{() => {
+                <div class="w-full">
+                  <select
+                    class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+                    bind:value={productPayload[key]}
+                    on:change="{() => {
             console.log('payload: ', unflatten(productPayload))
           }}" required>
-                  <option value="{null}" disabled selected>-- Select {key.split('.').at(-1)} --</option>
-                  {#each contract[key] as s}
+                    <option value="{null}" disabled selected>-- Select {key.split('.').at(-1)} --</option>
+                    {#each contract[key] as s}
                       <option value="{s}">
                         {s}
                       </option>
-                  {/each}
-                </select>
+                    {/each}
+                  </select>
+                </div>
               </div>
-            </div>
           {:else if key === 'color'}
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
               <h6 class="sm:w-60 sm:shrink-0">
@@ -227,8 +234,10 @@
 
       <PrimaryButton
         type="submit"
-        class="w-80">
-        Sumbit
+        class="w-80
+        {loading ? 'cursor-not-allowed opacity-80' : 'cursor-pointer hover:opacity-80 active:scale-95'}"
+      >
+        {loading ? 'Adding Product Please Wait...' : 'Sumbit'}
       </PrimaryButton>
     </div>
   </form>

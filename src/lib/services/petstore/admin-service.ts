@@ -59,12 +59,14 @@ export const fetchProductContract = async (collection:string, family:string, reg
   }
 }
 
-export const addProduct = async (body: {}) => {
+export const addProduct = async (token:string, body: {}) => {
   try {
     let res: any = {}
 
     console.log('body: ', body)
-    res = await post('admin/addProduct', body, PUBLIC_PETSTORE_MONOLITH)
+    res = await post('admin/addProduct', body, PUBLIC_PETSTORE_MONOLITH, {
+      'Authorization': 'Bearer ' + token
+    })
 
     console.log('admin-service add to product: \n', res)
 
@@ -75,7 +77,7 @@ export const addProduct = async (body: {}) => {
   }
 }
 
-export const addPhotos = async (file: FormData) => {
+export const addPhotos = async (token:string, file: FormData) => {
   try {
     let res: {} = {}
 
@@ -90,7 +92,10 @@ export const addPhotos = async (file: FormData) => {
       method: "post",
       url: PUBLIC_PETSTORE_MONOLITH + '/api/admin/tigris',
       data: file,
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        "Content-Type": "multipart/form-data"
+      },
     })
       .then(response => {
         res = response.data

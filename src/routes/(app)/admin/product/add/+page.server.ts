@@ -16,15 +16,16 @@ export async function load({ locals, url }) {
 const upload = async ({ url, request, cookies, locals }) => {
   try {
     const data: FormData = await request.formData()
+    const me:{} = JSON.parse(cookies.get('me'))
     console.log('form data: ', data)
 
     const tigrisBaseUri = 'https://fly.storage.tigris.dev/pethouse-puppy/'
     let photos= []
 
-    let photosResponse = await PetStoreAdminService.addPhotos(data)
+    let photosResponse = await PetStoreAdminService.addPhotos(me.token, data)
     photosResponse.files.forEach((file) => {
       photos.push({
-        url: tigrisBaseUri + file
+        url: tigrisBaseUri + me.id + "/" + file
       })
     })
 
@@ -47,7 +48,7 @@ const upload = async ({ url, request, cookies, locals }) => {
       }
     ]
     console.log('final dumb json: ', finalPayload)
-    await PetStoreAdminService.addProduct(finalPayload)
+    await PetStoreAdminService.addProduct(me.token, finalPayload)
   } catch (e) {
     error(e.status, e.message)
   }

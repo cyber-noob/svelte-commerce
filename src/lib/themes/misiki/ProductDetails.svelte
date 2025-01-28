@@ -97,8 +97,6 @@
   import videoCallIcon from '$lib/icons/vc.svg'
   import { BookAVideoCall } from 'lib/themes/misiki/index'
   import doggoGif from '$lib/icons/thanks.svg'
-  import ChewToy from '../../../dynamic-products/more-info/ChewToy.svelte'
-  import Puppy from '../../../dynamic-products/pet/Puppy.svelte'
   import { redirect } from '@sveltejs/kit'
   import Pet from '../../../dynamic-products/pet/Pet.svelte'
   import PetAccessories from '../../../dynamic-products/others/PetAccessories.svelte'
@@ -143,7 +141,7 @@
 
   let seoProps = {
     brand: `${$page.data.store?.websiteName}`,
-    breadcrumbs: data.product?.categoryPool,
+    breadcrumbs: data.product?.general_info?.categoryPool,
     caption: `${$page.data.store?.websiteName}`,
     category: data.product?.category?.name,
     contentUrl: data.product?.img || $page.data.store?.logo,
@@ -153,16 +151,16 @@
     logo: $page.data.store?.logo,
     openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
     popularity: data.product?.popularity,
-    price: currentVariantPrice,
-    priceRange: `${currentVariantPrice}-${data.product?.mrp}`,
+    price: data.product?.general_info?.price,
+    priceRange: `${data.product?.general_info?.price}-${data.product?.general_info?.mrp}`,
     ratingCount: 1,
     ratingValue: +data.product?.ratings + 1,
-    sku: data.product?.sku,
+    sku: data.product?.general_info?.uuid,
     timeToRead: 0,
-    updatedAt: `${data.product?.updatedAt || '_'}`,
-    metaDescription: data.product?.metaDescription,
-    datePublished: `${data.product?.publishedAt || '_'}`,
-    description: ` ${data.product?.description}`,
+    updatedAt: `${data.product?.general_info?.created_on || '_'}`,
+    metaDescription: data.product?.general_info?.description,
+    datePublished: `${data.product?.general_info?.created_on || '_'}`,
+    description: ` ${data.product?.general_info?.description}`,
     dnsPrefetch: `//cdn.jsdelivr.net`,
     featuredImage: {
       url: `${data.product?.img}`,
@@ -171,21 +169,21 @@
       caption: data.product?.name
     },
     keywords: data.product?.keywords,
-    lastUpdated: `${data.product?.updatedAt || '_'}`,
-    msapplicationTileImage: `${data.product?.img}`,
-    image: `${data.product?.img}`,
-    'og:image': `${data.product?.img}`,
-    ogImage: { url: data.product?.img, width: 128, height: 56 },
-    ogImageSecureUrl: data.product?.img,
+    lastUpdated: `${data.product?.general_info?.created_on || '_'}`,
+    msapplicationTileImage: `${data.product?.general_info?.photos?.url}`,
+    image: `${data.product?.general_info?.photos?.url}`,
+    'og:image': `${data.product?.general_info?.photos?.url}`,
+    ogImage: { url: data.product?.general_info?.photos?.url, width: 128, height: 56 },
+    ogImageSecureUrl: data.product?.general_info?.photos?.url,
     ogImageType: 'image/jpeg',
     ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
-    productAvailability: `${data.product?.stock}`,
-    productBrand: `${data.product?.brandName || `${$page.data.store?.websiteName}`}`,
-    productName: `${data.product?.name}`,
-    productPriceAmount: `${currentVariantPrice}`,
-    productPriceCurrency: `${$page.data.store?.currencyCode}`,
+    productAvailability: `${data.product?.general_info?.active}`,
+    productBrand: `${data.product?.general_info?.collection}`,
+    productName: `${data.product?.title}`,
+    productPriceAmount: `${$page.data.product?.general_info?.price}`,
+    productPriceCurrency: `${$page.data.product?.general_info?.currency_symbol}`,
     slug: `${data.product?.slug}`,
-    title: `${data.product?.name}`,
+    title: `${data.product?.general_info?.title}`,
     twitterImage: { url: `${data.product?.img}` }
   }
 
