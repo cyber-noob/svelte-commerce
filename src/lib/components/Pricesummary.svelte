@@ -32,9 +32,9 @@ function modulo(n, m) {
 	return ((n % m) + m) % m
 }
 
+console.log('checked cart: ', checkedCartItems)
 async function submit() {
 	if (text === 'Select Address') {
-		if (checkedCartItems?.length) {
 			try {
 				// const res = await CartService.updateCart2({
 				// 	cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
@@ -53,9 +53,6 @@ async function submit() {
 			} catch (e) {
 				console.error(e)
 			}
-		} else {
-			toast('Select at least one item in bag to place order', 'info')
-		}
 	} else {
 		if (nextpage) {
 			goto(nextpage)

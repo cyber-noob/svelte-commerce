@@ -20,7 +20,7 @@ let product
 let q = ''
 let query = ''
 let searchInput: any
-let showSuggestionOptions = false
+let showSuggestionOptions = true
 let typingTimer: any
 
 onMount(() => {
@@ -88,14 +88,14 @@ onMount(async () => {
 	<button
 		type="button"
 		class="relative w-full focus:outline-none"
-		on:click="{() => (showSuggestionOptions = true)}">
+		>
 		<input
 			id="data-input"
 			type="search"
 			{placeholder}
 			bind:this="{searchInput}"
-			on:input="{getData}"
-			class="w-full rounded border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none" />
+			on:input={(e) => { e.target.value.length > 3 ? getData(e) : null }}
+			class="w-full rounded-2xl border-2 bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none" />
 
 		<button
 			type="submit"
@@ -114,7 +114,7 @@ onMount(async () => {
 		</button>
 	</button>
 
-	{#if autocomplete?.found && showSuggestionOptions}
+	{#if autocomplete?.found > 0 && showSuggestionOptions}
 		<ul
 			transition:slide="{{ duration: 300 }}"
 			class="absolute top-10 z-50 m-0 p-0 list-none w-full border bg-white divide-y rounded shadow-xl overflow-hidden">

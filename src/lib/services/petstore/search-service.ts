@@ -25,3 +25,31 @@ export const search = async (params: {}) => {
     error(e.status, e.data?.message || e.message || e)
   }
 }
+
+export const popularSearch = async () => {
+  try {
+
+    const res = await getAPI('search/popular', PUBLIC_PETSTORE_MONOLITH)
+    console.log('search results:\n', res)
+
+    return res
+
+  } catch (e) {
+    console.log('error: ', e)
+    error(e.status, e.data?.message || e.message || e)
+  }
+}
+
+export const fetchAllPetBreeds = async () => {
+  try {
+
+    const res = await getAPI('search/petBreeds', PUBLIC_PETSTORE_MONOLITH)
+    console.log('search results:\n', res)
+
+    return res
+
+  } catch (e) {
+    console.log('error: ', e)
+    error(e.status, e.data?.message || e.message || e)
+  }
+}

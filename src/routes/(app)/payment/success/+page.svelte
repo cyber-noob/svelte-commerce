@@ -93,7 +93,7 @@ onMount(async () => {
 	}
 })
 
-console.log('success page.svelte: ', data.order)
+console.log('success +page.svelte: ', data.order)
 </script>
 
 <SEO {...seoProps} />

@@ -30,7 +30,9 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import type { Category } from '$lib/types'
 import { browser } from '$app/environment'
+import { websiteName } from 'lib/config'
 // import { storeStore } from '$lib/store/store'
+import { PetStoreSearchService } from '$lib/services'
 
 export let content = ``
 // export let me
@@ -52,23 +54,8 @@ onMount(async () => {
 		// if (browser) {
 		// 	storeStore.subscribe((value) => (store = value))
 		// }
-		popularSearches = await getPopularSearchFromStore({
-			limit: 20,
-			sid: null,
-			origin: $page.data.origin,
-			storeId: $page.data.storeId
-		})
 	}
-	// const res2 = await fetch('/server/store')
-	// const storeFromServer = await res2.json()
-	// store = storeFromServer.store
-	// megamenu = storeFromServer.megamenu
-	// menu = storeFromServer.menu
-	// popularSearches = storeFromServer.popularSearches
-
-	// if (browser) {
-	// 	localStorage.setItem('megamenu', JSON.stringify(megamenu))
-	// }
+	popularSearches = (await PetStoreSearchService.popularSearch()).popular
 })
 
 // async function getStoreData() {
@@ -85,16 +72,33 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 		return 0
 	}
 }
+
+menu = [
+  {
+    menu_id: 'footer',
+    items: [
+      {
+        name: 'Buy Pet',
+        link: 'pets'
+      },
+      {
+        name: 'Explore Pet Blog',
+        link: '/'
+      }
+    ]
+  }
+]
+console.log('menu: ', JSON.parse(JSON.stringify(popularSearches)))
 </script>
 
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
-			{#if $page?.data?.menu?.length}
-				{#each $page?.data?.menu as menu}
-					{#if menu.menu_id === 'footer'}
-						{#each menu.items as item, mx}
+			{#if menu?.length > 0}
+				{#each menu as m}
+					{#if m.menu_id === 'footer'}
+						{#each JSON.parse(JSON.stringify(m.items)) as item}
 							<div class="max-w-xs">
 								{#if item.link}
 									<a
@@ -107,54 +111,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								{:else}
 									<h6 class="mb-4 whitespace-nowrap uppercase">{item.name}</h6>
 								{/if}
-
-								<ul class="flex flex-col gap-1 text-zinc-500">
-									{#each item.items as item2}
-										<li class="flex max-w-max items-center">
-											{#if item2.link}
-												<a
-													href="{item2.link || '#'} "
-													target="_blank"
-													aria-label="Click to visit this page"
-													class="link-underline link-underline-gray whitespace-pre-wrap">
-													{item2.name}
-												</a>
-											{:else}
-												<p>
-													{item2.name}
-												</p>
-											{/if}
-										</li>
-									{/each}
-
-									{#if mx === positionToDisplayIsMultiVendor(menu.items?.length) && $page.data.store?.isMultiVendor}
-										<li class="flex max-w-max items-center">
-											<a
-												href="{$page.data.store?.adminUrl || '#'} "
-												target="_blank"
-												aria-label="Click to visit this page"
-												class="link-underline link-underline-gray whitespace-pre-wrap">
-												Vendor Login
-											</a>
-										</li>
-
-										<li class="flex max-w-max items-center">
-											<a
-												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
-												target="_blank"
-												aria-label="Click to visit this page"
-												class="link-underline link-underline-gray whitespace-pre-wrap">
-												Join as Vendor
-											</a>
-
-											<div
-												class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
-												NEW
-											</div>
-										</li>
-									{/if}
-								</ul>
-							</div>
+              </div>
 						{/each}
 					{/if}
 				{/each}
@@ -191,29 +148,31 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 				<ul class="flex flex-col gap-2 text-zinc-500">
 					{#if store?.email || store?.websiteEmail}
-						<li class="max-w-max">
-							<a href="mailto:{store?.email || store?.websiteEmail}" class="block">
-								<h6 class="mb-0.5 flex items-center gap-1">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										class="h-5 w-5 shrink-0">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-										></path>
-									</svg>
+            {#each store.email as e}
+              <li class="max-w-max">
+                <a href="mailto:{e?.mail}" class="block">
+                  <h6 class="mb-0.5 flex items-center gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="h-5 w-5 shrink-0">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                      ></path>
+                    </svg>
 
-									<span>Email</span>
-								</h6>
+                    <span>Email {e?.name}</span>
+                  </h6>
 
-								<p>{store?.email || store?.websiteEmail}</p>
-							</a>
-						</li>
+                  <p>{e?.name}</p>
+                </a>
+              </li>
+            {/each}
 					{/if}
 
 					{#if store?.phone}
@@ -312,17 +271,17 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 				</div>
 			</div> -->
 
-			{#if (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.facebook?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.instagram?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.telegram?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.twitter?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.reddit?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.linkedin?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.pinterest?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.youtube?.val)}
+			{#if (store?.socialSharingButtons?.active && store?.socialSharingButtons?.facebook) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.instagram) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.telegram) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.twitter) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.reddit) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.linkedin) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.pinterest) || (store?.socialSharingButtons?.active && store?.socialSharingButtons?.youtube)}
 				<div>
 					<h6 class="mb-4 whitespace-nowrap uppercase">Keep in touch</h6>
 
 					<ul class="flex flex-wrap gap-4 text-zinc-500">
 						<!-- Facebook -->
 
-						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.facebook?.val}
+						{#if store?.socialSharingButtons?.active && store?.socialSharingButtons?.facebook}
 							<li class="max-w-max">
 								<a
-									href="{store?.socialSharingButtons?.facebook?.val}"
+									href="{store?.socialSharingButtons?.facebook}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for facebook link">
@@ -346,10 +305,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Instagram -->
 
-						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.instagram?.val}
+						{#if store?.socialSharingButtons?.active && store?.socialSharingButtons?.instagram}
 							<li class="max-w-max">
 								<a
-									href="{store?.socialSharingButtons?.instagram?.val}"
+									href="{store?.socialSharingButtons?.instagram}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for instagram link">
@@ -588,14 +547,14 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 		<div class="flex flex-wrap items-center justify-between gap-5 md:justify-between">
 			<p class="whitespace-nowrap">
-				© {store?.websiteName}
+				© {websiteName}
 				Powered by
 				<a
-					href="{store?.saasDomain || 'https://litekart.in'}"
+					href="{store?.saasDomain || '/'}"
 					rel="external"
 					class="hover:underline"
 					target="_blank">
-					{store?.saasName || 'Litekart'}
+					{store?.saasName || ''}
 				</a>
 			</p>
 

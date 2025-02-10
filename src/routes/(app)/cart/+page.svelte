@@ -240,9 +240,30 @@ function updateCheckedCartItemsInGroup() {
 		checkedAllCartItems = true
 	}
 }
+
+console.log('cart: ', cart)
 </script>
 
 <SEO {...seoProps} />
+
+<svelte:head>
+  <script>
+    //Analytics
+    cart.items.forEach((item) => {
+      _paq.push([
+        'addEcommerceItem',
+        item?.general_info?.uuid, // (Required) productSKU
+        item?.general_info?.title, // (Optional) productName
+        item?.general_info?.collection, // (Optional) productCategory
+        item?.general_info?.price, // (Recommended) price
+        item?.quantity // (Optional, defaults to 1) quantity
+      ])
+    })
+
+    // Pass the Cart's Total Value as a numeric parameter
+    _paq.push(['trackEcommerceCartUpdate', cart?.total]);
+  </script>
+</svelte:head>
 
 <section class="min-h-screen w-full px-3 py-5 sm:p-10">
 	<div class="container mx-auto max-w-6xl">

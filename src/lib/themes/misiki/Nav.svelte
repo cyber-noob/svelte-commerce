@@ -143,21 +143,10 @@ async function onSearchSubmit({ detail }) {
 			<!-- Website Logo/Name -->
 
 			<a href="/" aria-label="Go to home" class="block shrink-0">
-				{#if $page.data.store?.logo}
-					<img
-						src="{$page.data.store?.logo}"
-						alt="logo"
-						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
-				{:else if $page.data.store?.websiteName}
-					<h2 class="truncate w-40 sm:w-auto sm:max-w-sm">
-						{$page.data.store?.websiteName}
-					</h2>
-				{:else}
 					<img
 						src="{logo}"
 						alt="logo"
-						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
-				{/if}
+						class="h-20 sm:max-h-16 w-40 object-contain object-left" />
 			</a>
 
 			{#if store?.isHyperlocal}
@@ -333,7 +322,7 @@ async function onSearchSubmit({ detail }) {
 
               {#if me.role === 'Admin' || me.role === 'Seller'}
                 <a
-                  href="/admin/product/add"
+                  href="/admin"
                   aria-label="Click to visit Admin Portal"
                   data-sveltekit-preload-data>
                   <h6

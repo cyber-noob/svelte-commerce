@@ -61,7 +61,7 @@ $: if (images?.length) {
 										<div class="w-full max-h-[500px] overflow-hidden">
 											{#if product_image_dimention === '1x1'}
 												<LazyImg
-													src="{item}"
+													src="{item?.url}"
 													alt="image {ix}"
 													height="512"
 													width="512"
@@ -69,7 +69,7 @@ $: if (images?.length) {
 													class="object-cover object-center w-full h-auto first-line:text-xs" />
 											{:else}
 												<LazyImg
-													src="{item}"
+													src="{item?.url}"
 													alt=""
 													class="block h-full w-full object-contain object-center" />
 											{/if}
@@ -85,14 +85,14 @@ $: if (images?.length) {
 			{:else if images?.length === 1}
 				{#if product_image_dimention === '1x1'}
 					<LazyImg
-						src="{images && images[0]}"
+						src="{images?.url && images[0]?.url}"
 						alt="image 1"
 						height="512"
 						width="512"
 						aspect_ratio="1:1"
 						class="object-cover object-center w-full h-auto first-line:text-xs" />
 				{:else}
-					<LazyImg src="{images && images[0]}" alt="" class="block h-full object-contain" />
+					<LazyImg src="{images?.url && images[0]?.url}" alt="" class="block h-full object-contain" />
 				{/if}
 			{:else}
 				<div
@@ -111,7 +111,7 @@ $: if (images?.length) {
 					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
 					in:fade="{{ duration: 300 }}">
 					<img
-						src="{selectedimg}"
+						src="{selectedimg?.url}"
 						alt="image"
 						class="object-center w-full h-full first-line:text-xs object-contain" />
 				</div>
@@ -144,7 +144,7 @@ $: if (images?.length) {
 											class="relative z-0 col-span-1 border bg-zinc-100 focus:outline-none flex items-center justify-center"
 											on:click="{() => (selectedimg = img)}">
 											<LazyImg
-												src="{img}"
+												src="{img?.url}"
 												alt="image {ix}"
 												height="512"
 												width="512"

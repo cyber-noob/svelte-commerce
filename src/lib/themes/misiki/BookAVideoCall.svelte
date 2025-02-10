@@ -18,6 +18,7 @@
   import { Toast } from 'flowbite-svelte'
   import { fade } from 'svelte/transition'
   import { readable } from 'svelte/store'
+  import { page } from '$app/stores'
 
   export let show: boolean = false
   export let seller: string
@@ -25,6 +26,7 @@
   export let data: {}
 
   let cookies = Cookie()
+  let me = cookies.get('me')
 
   function showCompenent(show) {
     return show ? 'inline-block' : 'hidden'
@@ -55,6 +57,9 @@
   $: loading = false
 
   async function submit(date: string, slot: string) {
+    if (selectedSlot === '')
+      toast('Please select an available slot', 'error')
+
     try {
       console.log('On Razorpay method ....')
       loading = true
@@ -117,8 +122,48 @@
 
   function onDateSelected(date) {
     console.log('Fetching slots for date - ', date)
-    slots = fetchSlots(cookies.get('me').token, seller, date.dateString)
-    selectedDate = date
+
+    if (!me){
+      toast('Please login to continue','error')
+      goto(`/auth/login?ref=${$page?.url?.pathname}`)
+      return
+    }
+
+    try {
+      slots = fetchSlots(me.token, seller, date.dateString)
+      selectedDate = date
+    } catch (error) {
+      console.log(error)
+      if (error.status === 401)
+        goto(`/auth/login?ref=${$page?.url?.pathname}`)
+      else
+        toast('Something went wrong', 'error')
+    }
+  }
+
+  async function onSlotSelected(slot) {
+    console.log('reserving slot: ', slot)
+
+    if (!me){
+      toast('Please login to continue','error')
+      goto(`/auth/login?ref=${$page?.url?.pathname}`)
+      return
+    }
+
+    try {
+      slots = await reserveSlot(cookies.get('me').token, seller, selectedDate.dateString, slot.slot)
+
+      if (slots.code === 'AlreadyBooked')
+        toast('Slot Already Booked. New Available slots updated for you. Please select another slot', 'error')
+      else
+        selectedSlot = slot.slot
+    } catch (error) {
+      console.log(error)
+      if (error.status === 401)
+        goto(`/auth/login?ref=${$page?.url?.pathname}`)
+      else
+        toast('Something went wrong', 'error')
+    }
   }
 
   let text = readable(['Contacting Seller...', 'Working on slots...', 'Making sure the slot is yours....', 'Please wait a little longer...'])
@@ -128,8 +173,6 @@
   $: displayedText = $text[currentIndex % $text.length]
 
   onMount(async () => {
-    // const StripeModule = await import('$lib/components/Stripe.svelte')
-    // Stripe = StripeModule.default
 
     const razorpayScript = document.createElement('script')
     razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
@@ -211,18 +254,15 @@
       {#if slots?.slots.length > 0}
         <div class="flex flex-row items-center gap-2 flex-wrap" role="group">
           {#each slots?.slots as t}
-              {#if t.is_available}
-                <button
-                  on:click="{async () => {
-                  slots = await reserveSlot(cookies.get('me').token, seller, selectedDate.dateString, t.slot)
-                  selectedSlot = t.slot
-                }}"
-                  class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white focus:bg-zinc-900 focus:text-white focus:z-10 border-2 border-zinc-100 shadow-xl font-semibold p-4 w-full sm:w-52 m-2 sm:m-4 rounded-xl">
-                  {t.slot}
-                </button>
+              {#if t.is_available }
+                  <button
+                    on:click="{async () => onSlotSelected(t)}"
+                    class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white focus:bg-zinc-900 focus:text-white focus:z-10 border-2 border-zinc-100 shadow-xl font-semibold p-4 w-full sm:w-52 m-2 sm:m-4 rounded-xl">
+                    {t.slot}
+                  </button>
               {:else}
                 <button disabled
-                        class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white disabled:border-gray-200 focus:bg-zinc-900 focus:text-white focus:z-10 border-4 border-zinc-900 shadow-xl font-semibold p-4 m-4">
+                        class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white disabled:bg-gray-200 focus:bg-zinc-900 focus:text-white focus:z-10 border-4 border-zinc-900 shadow-xl font-semibold p-4 m-4">
                   {t.slot}
                 </button>
               {/if}

@@ -62,6 +62,7 @@
     }
     return result
   }
+
 </script>
 
 <template>
@@ -171,17 +172,17 @@
 
       {#if Object.keys(contract).length > 0}
         {#each Object.keys(contract) as key}
-          {#if contract[key] === 'input'}
+          {#if typeof contract[key] === 'string' || contract[key] instanceof String}
             <div class="w-full">
               <Textbox
-                type="text"
+                type='{contract[key]}'
                 placeholder="{key.split('.').at(-1)}"
                 bind:value="{productPayload[key]}"
                 autoFocus
                 required
                  />
             </div>
-          {:else if Array.isArray(contract[key]) && key !== 'color'}
+          {:else if Array.isArray(contract[key]) && key !== 'color' && key !== 'weight_in_kg'}
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
                 <h6 class="sm:w-60 sm:shrink-0">
                   {key.split('.').at(-1)}
@@ -212,6 +213,27 @@
               </h6>
 
               <CustomDropDown colors={contract[key]} payload={productPayload}/>
+            </div>
+            {:else if key === 'weight_in_kg'}
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+              <h6 class="sm:w-60 sm:shrink-0">
+                {key}
+                <span class="text-accent-500">*</span>
+              </h6>
+
+              <div class="w-full">
+                <select
+                  class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
+                  bind:value={productPayload[key]}
+                  on:change="{() => {
+                    console.log('payload: ', unflatten(productPayload))
+                  }}" required>
+                  <option value="{null}" disabled selected>-- Select {key} --</option>
+                  {#each contract[key] as s}
+                    <option value={s.id} label={s.range} />
+                  {/each}
+                </select>
+              </div>
             </div>
           {/if}
         {/each}

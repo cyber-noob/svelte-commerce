@@ -1,5 +1,5 @@
 <script lang="ts">
-import { authorInfo, WWW_URL, entity, ogLanguage, siteLanguage, siteShortTitle } from '$lib/config'
+  import { authorInfo, WWW_URL, entity, ogLanguage, siteLanguage, siteShortTitle, websiteName } from '$lib/config'
 import OpenGraph from './OpenGraph.svelte'
 import Product from './Product.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
@@ -86,9 +86,9 @@ let canonical = `${$page?.url.origin}${$page?.url.pathname}`
 let pageTitle
 
 if (title) {
-	pageTitle = `${title} - ${$page.data.store?.websiteName}`
+	pageTitle = `${title} - ${websiteName}`
 } else {
-	pageTitle = `${$page.data.store?.websiteName}`
+	pageTitle = `${websiteName}`
 }
 
 const openGraphProps = {

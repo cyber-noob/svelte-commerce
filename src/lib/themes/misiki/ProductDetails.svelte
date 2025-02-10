@@ -85,15 +85,6 @@
   import Textbox from '$lib/ui/Textbox.svelte'
   import viewport from '$lib/actions/useViewPort'
   import WhiteButton from '$lib/ui/WhiteButton.svelte'
-  import ageIcon from '$lib/icons/age.svg'
-  import breedIcon from '$lib/icons/breed.svg'
-  import colorIcon from '$lib/icons/color.svg'
-  import dewormingIcon from '$lib/icons/deworming.svg'
-  import familyIcon from '$lib/icons/family.svg'
-  import genderIcon from '$lib/icons/gender.svg'
-  import vaccineIcon from '$lib/icons/vaccine.svg'
-  import weightIcon from '$lib/icons/weight.svg'
-  import certificateIcon from '$lib/icons/certificate.svg'
   import videoCallIcon from '$lib/icons/vc.svg'
   import { BookAVideoCall } from 'lib/themes/misiki/index'
   import doggoGif from '$lib/icons/thanks.svg'
@@ -415,6 +406,8 @@
 
   console.log('pdp data: ', data.product)
   console.log('$page.data.product?.isWishlisted: ', $page.data.product?.isWishlisted)
+
+  let _paq
 </script>
 
 <SEO {...seoProps} />
@@ -422,6 +415,16 @@
 <svelte:window bind:scrollY="{y}" />
 
 <svelte:head>
+  <script>
+    _paq.push(['setEcommerceView',
+      data.product?.general_info?.uuid, // (Required) productSKU
+      data.product?.general_info?.title, // (Optional) productName
+      data.product?.general_info?.collection, // (Optional) categoryName
+      data.product?.general_info?.price // (Optional) price
+    ]);
+
+    _paq.push(['trackPageView']);
+  </script>
   <title>{data.product?.general_info?.title}</title>
 </svelte:head>
 
@@ -1465,7 +1468,6 @@
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-
 														// await invalidateAll()
 														await applyAction(result)
 													}
@@ -1844,7 +1846,7 @@
 <Gallery
   bind:selectedImgIndex
   bind:showPhotosModal
-  images="{data.product?.images}"
+  images="{data.product?.general_info?.photos}"
   title="{data.product?.businessName}" />
 
 {#if bounceItemFromTop}

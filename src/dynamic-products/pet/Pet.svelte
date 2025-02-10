@@ -59,7 +59,7 @@
         </div>
         <div class="flex flex-row items-center">
           <img src={weightIcon} class="w-8 ml-4 mr-12">
-          {product.weight_in_kg} Kg
+          {product.weight_in_kg}
         </div>
         <div class="flex flex-row items-center">
           <img src={dewormingIcon} class="w-8 ml-4 mr-12">

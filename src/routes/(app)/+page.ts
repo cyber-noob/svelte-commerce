@@ -1,8 +1,9 @@
 import { CollectionService, DealsService, HomeService, ProductService } from '$lib/services'
 import { fetchHome } from 'lib/services/petstore/home-service'
+import { saasDomain, saasName, websiteName } from 'lib/config'
 
 export async function load({ params, parent, url }) {
-	const { store, storeId, origin, sid } = await parent()
+	let { store, storeId, origin, sid } = await parent()
 	const currentPage = +url.searchParams.get('page') || 1
 	const fl = {}
 	const query = url.searchParams

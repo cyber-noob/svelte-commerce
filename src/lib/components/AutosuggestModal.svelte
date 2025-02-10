@@ -10,7 +10,7 @@ import { getCategoriesFromStore } from '$lib/store/categories'
 
 const dispatch = createEventDispatcher()
 
-export let show = false
+export let show = true
 
 let autocomplete: { img: string; name: string }[] = []
 let categories: any = []
@@ -152,7 +152,7 @@ onMount(async () => {
 									bind:this="{searchInput}"
 									placeholder="{$page.data.store?.searchbarText || 'Search...'}"
 									class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 focus:ring-primary-500"
-									on:input="{getData}" />
+									on:input="{(e) => {e.target.value.length > 3 ? getData(e) : null}}" />
 
 								<div class=" flex h-full cursor-pointer justify-end">
 									<button on:click="{resetInput}" type="button">
@@ -185,7 +185,7 @@ onMount(async () => {
 								</div>
 							</form>
 
-							{#if autocomplete?.found}
+							{#if autocomplete?.found > 0}
 								<ul
 									transition:slide="{{ duration: 300 }}"
 									class="mt-1 m-0 p-0 list-none w-full overflow-auto rounded border-zinc-400 bg-white scrollbar-none">
@@ -196,17 +196,17 @@ onMount(async () => {
 												class="p-3 flex w-full items-center justify-between text-left border-b text-zinc-500 hover:bg-zinc-100"
 												on:click="{() => onselect(v)}">
 												<div class="flex-1 flex items-center gap-2 justify-start">
-													{#if v.document.photos[0].url}
+													{#if v.document?.product?.general_info?.photos[0].url}
 														<LazyImg
-															src="{v.document.photos[0].url}"
+															src="{v.document?.product?.general_info?.photos[0].url}"
 															alt=""
 															height="40"
 															class="h-10 object-contain w-auto object-center" />
 													{/if}
 
                           <div class="flex flex-col gap-0.5">
-                            <span class="w-full truncate text-lg font-bold text-zinc-950 capitalize">{v.document.title}</span>
-                            <span class="w-full truncate text-sm font-bold text-zinc-500 capitalize">{v.document.collection}</span>
+                            <span class="w-full truncate text-lg font-bold text-zinc-950 capitalize">{v.document?.product?.general_info?.title}</span>
+                            <span class="w-full truncate text-sm font-bold text-zinc-500 capitalize">{v.document?.product?.general_info?.collection}</span>
                           </div>
 												</div>
 

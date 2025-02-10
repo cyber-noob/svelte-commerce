@@ -1,6 +1,8 @@
 import {PetStoreVideoCallService} from 'lib/services'
 import { redirect } from '@sveltejs/kit';
 
+const isServer = import.meta.env.SSR
+
 export const load = async ({ locals, url }) => {
   const { me } = locals
   const id = url.searchParams.get('id');
@@ -14,5 +16,9 @@ export const load = async ({ locals, url }) => {
   if (allowParticipant.allowed)
     redirect(302, allowParticipant.url)
 
-  return {allowParticipant}
+  return {
+    allowParticipant,
+    vc_order_id: order_id,
+    participant_id: id,
+  }
 }

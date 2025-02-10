@@ -1,3 +1,5 @@
+import { saasDomain, saasName, websiteName } from 'lib/config'
+
 export const load = async ({ locals, url, fetch }) => {
 	const currentPage = +url.searchParams.get('page') || 1
 	const q = url.searchParams.get('q') || ''
@@ -11,5 +13,27 @@ export const load = async ({ locals, url, fetch }) => {
 	// locals.megamenu = storeFromServer.megamenu
 	// locals.menu = storeFromServer.menu
 	// locals.popularSearches = storeFromServer.popularSearches
-	return { ...locals, pathname, host, q, currentPage }
+  let store = {
+    websiteName,
+    saasName,
+    saasDomain,
+    email: [
+      {
+        name: 'Customer Grievance',
+        mail: 'grievance@paradisepethouse.com',
+      },
+      {
+        name: 'Seller Enquiry',
+        mail: 'seller@paradisepethouse.com',
+      }
+    ],
+    phone: '9600552761',
+    guaranteed_response_time: '2 Business Days',
+    socialSharingButtons: {
+      active: true,
+      facebook: 'paradisepethouse',
+      instagram: '@paradisepethouse.com',
+    }
+  }
+	return { ...locals, pathname, host, q, currentPage, store }
 }

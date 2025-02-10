@@ -82,9 +82,9 @@ onMount(async () => {
 </script>
 
 {#if product}
-	<div
+	<button
 		class="group relative col-span-1 block w-full sm:shrink-0 rounded bg-white shadow-effect overflow-hidden sm:overflow-visible
-		{product_image_dimension == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
+		{product_image_dimension === '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
 		on:mouseleave="{hideitems}">
 		<a
@@ -529,7 +529,7 @@ onMount(async () => {
 				</a>
 			{/if}
 		</div>
-	</div>
+	</button>
 
 	{#if showRelatedProducts}
 		<div class="fixed inset-0 z-[100] h-screen w-full">
