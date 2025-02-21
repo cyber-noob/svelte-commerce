@@ -21,7 +21,7 @@ export let data
 // 		price: 3324,
 // 		reviews: 0,
 // 		sku: '21425967430585000549686-pastel-pink',
-// 		slug: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
+// 		[slug]: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
 // 		tags: [],
 // 		muted: false
 // 	},
@@ -39,7 +39,7 @@ export let data
 // 		price: 3324,
 // 		reviews: 0,
 // 		sku: '21425967430585000549686-pastel-pink',
-// 		slug: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
+// 		[slug]: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
 // 		tags: [],
 // 		muted: false
 // 	},
@@ -57,7 +57,7 @@ export let data
 // 		price: 3324,
 // 		reviews: 0,
 // 		sku: '21425967430585000549686-pastel-pink',
-// 		slug: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
+// 		[slug]: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
 // 		tags: [],
 // 		muted: false
 // 	},
@@ -75,7 +75,7 @@ export let data
 // 		price: 3324,
 // 		reviews: 0,
 // 		sku: '21425967430585000549686-pastel-pink',
-// 		slug: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
+// 		[slug]: 'pastel-pink-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt',
 // 		tags: [],
 // 		muted: false
 // 	}

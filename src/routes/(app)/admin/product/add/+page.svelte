@@ -34,6 +34,12 @@
     delete contract['general_info.currency_symbol']
     delete contract['general_info.family']
     delete contract['general_info.collection']
+
+    Object.keys(contract).forEach((key: string) => {
+      if (contract[key] === 'string')
+        contract[key] = 'text'
+    })
+
   }
 
   const flatten = (obj, roots = [], sep = '.') => Object
@@ -75,9 +81,20 @@
       loading = true
 			return async ({ result, update }) => {
 					loading = false
-					toast('Product Added Successfully!', 'success')
-					console.log('path: ', window.location.pathname)
-					await invalidateAll()
+
+          console.log('r -> ', result)
+          if (result.status === 401) {
+            toast('Please login again.', 'error')
+          }
+					else if (result.status === 204) {
+            toast('Product Added Successfully!', 'success')
+            console.log('path: ', window.location.pathname)
+            await invalidateAll()
+					}
+          else {
+            toast('Something went wrong! Please try again or contact admin if issue persists.', 'error')
+            await invalidateAll()
+          }
 			  }
 			}
     }

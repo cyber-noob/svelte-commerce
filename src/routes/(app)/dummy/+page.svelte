@@ -1,456 +1,153 @@
 <!DOCTYPE html>
-<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <!--[if !mso]><!-- -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!--<![endif]-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="format-detection" content="date=no" />
-  <meta name="format-detection" content="address=no" />
-  <meta name="format-detection" content="email=no" />
-  <meta name="x-apple-disable-message-reformatting" />
-  <link href="https://fonts.googleapis.com/css?family=Fira+Sans:ital,wght@0,400;0,400;0,500;0,600" rel="stylesheet" />
-  <title>Untitled</title>
-  <!-- Made with Postcards Email Builder by Designmodo -->
-  <!--[if !mso]><!-- -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Indian Dog Breeds</title>
   <style>
-    /* cyrillic-ext */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 400; src: local('Fira Sans Regular'), local('FiraSans-Regular'), url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5VvmojLazX3dGTP.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
-    /* cyrillic */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 400; src: local('Fira Sans Regular'), local('FiraSans-Regular'), url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5Vvk4jLazX3dGTP.woff2) format('woff2'); unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-    /* latin-ext */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 400; src: local('Fira Sans Regular'), local('FiraSans-Regular'), url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5VvmYjLazX3dGTP.woff2) format('woff2'); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-    /* latin */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 400; src: local('Fira Sans Regular'), local('FiraSans-Regular'), url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5Vvl4jLazX3dA.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-    /* cyrillic-ext */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 500; src: local('Fira Sans Medium'), local('FiraSans-Medium'), url(https://fonts.gstatic.com/s/firasans/v10/va9B4kDNxMZdWfMOD5VnZKveSxf6Xl7Gl3LX.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
-    /* cyrillic */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 500; src: local('Fira Sans Medium'), local('FiraSans-Medium'), url(https://fonts.gstatic.com/s/firasans/v10/va9B4kDNxMZdWfMOD5VnZKveQhf6Xl7Gl3LX.woff2) format('woff2'); unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-    /* latin-ext */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 500; src: local('Fira Sans Medium'), local('FiraSans-Medium'), url(https://fonts.gstatic.com/s/firasans/v10/va9B4kDNxMZdWfMOD5VnZKveSBf6Xl7Gl3LX.woff2) format('woff2'); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-    /* latin */
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 500; src: local('Fira Sans Medium'), local('FiraSans-Medium'), url(https://fonts.gstatic.com/s/firasans/v10/va9B4kDNxMZdWfMOD5VnZKveRhf6Xl7Glw.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-  </style>
-  <!--<![endif]-->
-  <style>
-    html,
     body {
-      margin: 0 !important;
-      padding: 0 !important;
-      min-height: 100% !important;
-      width: 100% !important;
-      -webkit-font-smoothing: antialiased;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      color: #333;
     }
-
-    * {
-      -ms-text-size-adjust: 100%;
+    h1, h2 {
+      color: #2c3e50;
     }
-
-    #outlook a {
-      padding: 0;
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
     }
-
-    .ReadMsgBody,
-    .ExternalClass {
-      width: 100%;
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 10px;
     }
-
-    .ExternalClass,
-    .ExternalClass p,
-    .ExternalClass td,
-    .ExternalClass div,
-    .ExternalClass span,
-    .ExternalClass font {
-      line-height: 100%;
+    p {
+      margin-bottom: 15px;
     }
-
-    table,
-    td,
-    th {
-      mso-table-lspace: 0 !important;
-      mso-table-rspace: 0 !important;
-      border-collapse: collapse;
+    ul {
+      list-style-type: disc;
+      margin-left: 20px;
+      margin-bottom: 15px;
     }
-
-    u + .body table, u + .body td, u + .body th {
-      will-change: transform;
-    }
-
-    body, td, th, p, div, li, a, span {
-      -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 100%;
-      mso-line-height-rule: exactly;
-    }
-
-    img {
-      border: 0;
-      outline: 0;
-      line-height: 100%;
-      text-decoration: none;
-      -ms-interpolation-mode: bicubic;
-    }
-
-    a[x-apple-data-detectors] {
-      color: inherit !important;
-      text-decoration: none !important;
-    }
-
-    .body .pc-project-body {
-      background-color: transparent !important;
-    }
-
-    @media (min-width: 621px) {
-      .pc-lg-hide {
-        display: none;
-      }
-
-      .pc-lg-bg-img-hide {
-        background-image: none !important;
-      }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-style: italic;
+      color: #777;
     }
   </style>
-  <style>
-    @media (max-width: 620px) {
-      .pc-project-body {min-width: 0px !important;}
-      .pc-project-container {width: 100% !important;}
-      .pc-sm-hide, .pc-w620-gridCollapsed-1 > tbody > tr > .pc-sm-hide {display: none !important;}
-      .pc-sm-bg-img-hide {background-image: none !important;}
-      table.pc-w620-spacing-0-0-40-0 {margin: 0px 0px 40px 0px !important;}
-      td.pc-w620-spacing-0-0-40-0,th.pc-w620-spacing-0-0-40-0{margin: 0 !important;padding: 0px 0px 40px 0px !important;}
-      .pc-w620-padding-35-35-35-35 {padding: 35px 35px 35px 35px !important;}
-
-      .pc-w620-gridCollapsed-1 > tbody,.pc-w620-gridCollapsed-1 > tbody > tr,.pc-w620-gridCollapsed-1 > tr {display: inline-block !important;}
-      .pc-w620-gridCollapsed-1.pc-width-fill > tbody,.pc-w620-gridCollapsed-1.pc-width-fill > tbody > tr,.pc-w620-gridCollapsed-1.pc-width-fill > tr {width: 100% !important;}
-      .pc-w620-gridCollapsed-1.pc-w620-width-fill > tbody,.pc-w620-gridCollapsed-1.pc-w620-width-fill > tbody > tr,.pc-w620-gridCollapsed-1.pc-w620-width-fill > tr {width: 100% !important;}
-      .pc-w620-gridCollapsed-1 > tbody > tr > td,.pc-w620-gridCollapsed-1 > tr > td {display: block !important;width: auto !important;padding-left: 0 !important;padding-right: 0 !important;margin-left: 0 !important;}
-      .pc-w620-gridCollapsed-1.pc-width-fill > tbody > tr > td,.pc-w620-gridCollapsed-1.pc-width-fill > tr > td {width: 100% !important;}
-      .pc-w620-gridCollapsed-1.pc-w620-width-fill > tbody > tr > td,.pc-w620-gridCollapsed-1.pc-w620-width-fill > tr > td {width: 100% !important;}
-      .pc-w620-gridCollapsed-1 > tbody > .pc-grid-tr-first > .pc-grid-td-first,.pc-w620-gridCollapsed-1 > .pc-grid-tr-first > .pc-grid-td-first {padding-top: 0 !important;}
-      .pc-w620-gridCollapsed-1 > tbody > .pc-grid-tr-last > .pc-grid-td-last,.pc-w620-gridCollapsed-1 > .pc-grid-tr-last > .pc-grid-td-last {padding-bottom: 0 !important;}
-
-      .pc-w620-gridCollapsed-0 > tbody > .pc-grid-tr-first > td,.pc-w620-gridCollapsed-0 > .pc-grid-tr-first > td {padding-top: 0 !important;}
-      .pc-w620-gridCollapsed-0 > tbody > .pc-grid-tr-last > td,.pc-w620-gridCollapsed-0 > .pc-grid-tr-last > td {padding-bottom: 0 !important;}
-      .pc-w620-gridCollapsed-0 > tbody > tr > .pc-grid-td-first,.pc-w620-gridCollapsed-0 > tr > .pc-grid-td-first {padding-left: 0 !important;}
-      .pc-w620-gridCollapsed-0 > tbody > tr > .pc-grid-td-last,.pc-w620-gridCollapsed-0 > tr > .pc-grid-td-last {padding-right: 0 !important;}
-
-      .pc-w620-tableCollapsed-1 > tbody,.pc-w620-tableCollapsed-1 > tbody > tr,.pc-w620-tableCollapsed-1 > tr {display: block !important;}
-      .pc-w620-tableCollapsed-1.pc-width-fill > tbody,.pc-w620-tableCollapsed-1.pc-width-fill > tbody > tr,.pc-w620-tableCollapsed-1.pc-width-fill > tr {width: 100% !important;}
-      .pc-w620-tableCollapsed-1.pc-w620-width-fill > tbody,.pc-w620-tableCollapsed-1.pc-w620-width-fill > tbody > tr,.pc-w620-tableCollapsed-1.pc-w620-width-fill > tr {width: 100% !important;}
-      .pc-w620-tableCollapsed-1 > tbody > tr > td,.pc-w620-tableCollapsed-1 > tr > td {display: block !important;width: auto !important;}
-      .pc-w620-tableCollapsed-1.pc-width-fill > tbody > tr > td,.pc-w620-tableCollapsed-1.pc-width-fill > tr > td {width: 100% !important;box-sizing: border-box !important;}
-      .pc-w620-tableCollapsed-1.pc-w620-width-fill > tbody > tr > td,.pc-w620-tableCollapsed-1.pc-w620-width-fill > tr > td {width: 100% !important;box-sizing: border-box !important;}
-    }
-    @media (max-width: 520px) {
-      .pc-w520-padding-30-30-30-30 {padding: 30px 30px 30px 30px !important;}
-    }
-  </style>
-  <!--[if !mso]><!-- -->
-  <style>
-    @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 400; src: url('https://fonts.gstatic.com/s/firasans/v17/va9E4kDNxMZdWfMOD5VvmYjN.woff') format('woff'), url('https://fonts.gstatic.com/s/firasans/v17/va9E4kDNxMZdWfMOD5VvmYjL.woff2') format('woff2'); } @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 500; src: url('https://fonts.gstatic.com/s/firasans/v17/va9B4kDNxMZdWfMOD5VnZKveSBf8.woff') format('woff'), url('https://fonts.gstatic.com/s/firasans/v17/va9B4kDNxMZdWfMOD5VnZKveSBf6.woff2') format('woff2'); } @font-face { font-family: 'Fira Sans'; font-style: normal; font-weight: 600; src: url('https://fonts.gstatic.com/s/firasans/v17/va9B4kDNxMZdWfMOD5VnSKzeSBf8.woff') format('woff'), url('https://fonts.gstatic.com/s/firasans/v17/va9B4kDNxMZdWfMOD5VnSKzeSBf6.woff2') format('woff2'); }
-  </style>
-  <!--<![endif]-->
-  <!--[if mso]>
-  <style type="text/css">
-    .pc-font-alt {
-      font-family: Arial, Helvetica, sans-serif !important;
-    }
-  </style>
-  <![endif]-->
-  <!--[if gte mso 9]>
-  <xml>
-    <o:OfficeDocumentSettings>
-      <o:AllowPNG/>
-      <o:PixelsPerInch>96</o:PixelsPerInch>
-    </o:OfficeDocumentSettings>
-  </xml>
-  <![endif]-->
 </head>
+<body>
 
-<body class="body pc-font-alt" style="width: 100% !important; min-height: 100% !important; margin: 0 !important; padding: 0 !important; line-height: 1.5; color: #2D3A41; mso-line-height-rule: exactly; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-variant-ligatures: normal; text-rendering: optimizeLegibility; -moz-osx-font-smoothing: grayscale; background-color: #f4f4f4;" bgcolor="#f4f4f4">
-<table class="pc-project-body" style="table-layout: fixed; min-width: 600px; background-color: #f4f4f4;" bgcolor="#f4f4f4" width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
-  <tr>
-    <td align="center" valign="top">
-      <table class="pc-project-container" align="center" width="600" style="width: 600px; max-width: 600px;" border="0" cellpadding="0" cellspacing="0" role="presentation">
-        <tr>
-          <td style="padding: 20px 0px 20px 0px;" align="left" valign="top">
-            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="width: 100%;">
-              <tr>
-                <td valign="top">
-                  <!-- BEGIN MODULE: Header 2 -->
-                  <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
-                    <tr>
-                      <td style="padding: 0px 0px 0px 0px;">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
-                          <tr>
-                            <td valign="top" class="pc-w520-padding-30-30-30-30 pc-w620-padding-35-35-35-35" style="padding: 40px 40px 40px 40px; height: unset; border-radius: 0px; background-color: #ffffff;" bgcolor="#ffffff">
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td class="pc-w620-spacing-0-0-40-0" align="center" valign="top" style="padding: 0px 0px 60px 0px;">
-                                    <img src="images/logo-white.png" width="125" height="25" alt="" style="display: block; outline: 0; line-height: 100%; -ms-interpolation-mode: bicubic; width: 125px; height: auto; max-width: 100%; border: 0;" />
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="font-size: 18px;line-height: 32px;text-align:center;text-align-last:center;color:#333333;letter-spacing:-0.2px;font-weight:600;font-style:normal;font-variant-ligatures:normal;">
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 18px; line-height: 32px; text-decoration: none; text-transform: uppercase;">Thank You for the trust! We mean it.</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
-                                <tr>
-                                  <td valign="top">
-                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                      <tr>
-                                        <!--[if gte mso 9]>
-                                       <td height="1" valign="top" style="line-height: 1px; font-size: 1px; border-bottom: 2px solid #D9D9D9;">&nbsp;</td>
-                                   <![endif]-->
-                                        <!--[if !gte mso 9]><!-- -->
-                                        <td height="1" valign="top" style="line-height: 1px; font-size: 1px; border-bottom: 2px solid #D9D9D9;">&nbsp;</td>
-                                        <!--<![endif]-->
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="text-align:left;text-align-last:left;font-variant-ligatures:normal;">
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="font-size: 14px;line-height: 18px;text-align:center;text-align-last:center;color:#333333;font-style:normal;font-weight:400;letter-spacing:-0.2px;font-variant-ligatures:normal;">
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 14px; line-height: 18px; text-decoration: none; text-transform: none;">Your video consultation with us has been confirmed for the slot </span>
-                                              </div>
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 14px; line-height: 18px; text-decoration: none; text-transform: none;">12-09-29 12:00pm-13:00pm</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="font-size: 14px;line-height: 21px;text-align:left;text-align-last:left;color:#333333;letter-spacing:-0.2px;font-weight:500;font-style:normal;font-variant-ligatures:normal;">
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 14px; line-height: 21px; text-decoration: none; text-transform: none;">Order Number: $0000</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="text-align:left;text-align-last:left;font-variant-ligatures:normal;">
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="font-size: 14px;line-height: 21px;text-align:left;text-align-last:left;color:#333333;letter-spacing:-0.2px;font-weight:400;font-style:normal;font-variant-ligatures:normal;">
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 14px; line-height: 21px; text-decoration: none; text-transform: none;">Please find the meeting invite attached with the mail.</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="text-align:left;text-align-last:left;font-variant-ligatures:normal;">
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                              <div style="line-height:21px;font-size:15px;">
-                                                <br>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="font-size: 12px;line-height: 18px;text-align:left;text-align-last:left;color:#333333;letter-spacing:-0.2px;font-weight:400;font-style:normal;font-variant-ligatures:normal;">
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 18px; text-decoration: none; text-transform: none;">For any queries or concern feel free to contact us on paradisepethouse@gmail.com.</span>
-                                              </div>
-                                              <div style="line-height:18px;font-size:12px;">
-                                                <br>
-                                              </div>
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 18px; text-decoration: none; text-transform: none;">Note: For queries regarding any orders, Please make sure to attach the order id with the mail. Thanks!</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="text-align:left;text-align-last:left;font-variant-ligatures:normal;">
-                                              <div style="line-height:18px;font-size:12px;">
-                                                <br>
-                                              </div>
-                                              <div style="line-height:18px;font-size:12px;">
-                                                <br>
-                                              </div>
-                                              <div style="line-height:18px;font-size:12px;">
-                                                <br>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
-                                <tr>
-                                  <td valign="top">
-                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                      <tr>
-                                        <!--[if gte mso 9]>
-                                       <td height="1" valign="top" style="line-height: 1px; font-size: 1px; border-bottom: 2px solid #D9D9D9;">&nbsp;</td>
-                                   <![endif]-->
-                                        <!--[if !gte mso 9]><!-- -->
-                                        <td height="1" valign="top" style="line-height: 1px; font-size: 1px; border-bottom: 2px solid #D9D9D9;">&nbsp;</td>
-                                        <!--<![endif]-->
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                              <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                  <td align="left" valign="top">
-                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" align="left" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
-                                      <tr>
-                                        <td valign="top" align="left">
-                                          <div class="pc-font-alt" style="text-decoration: none;">
-                                            <div style="font-size: 12px;line-height: 24px;text-align:left;text-align-last:left;color:#333333;font-style:normal;font-weight:400;letter-spacing:-0.2px;font-variant-ligatures:normal;">
-                                              <div><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 24px; text-decoration: none; text-transform: none;">©</span><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 12px; line-height: 24px; text-decoration: none; text-transform: none;"> Paradise PetHouse 2025</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                  <!-- END MODULE: Header 2 -->
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+<h1>Top Indian Dog Breeds: Pride of the Subcontinent</h1>
+
+<p>India is home to a variety of indigenous dog breeds that are not only well-adapted to the country’s diverse climate but also boast unique traits and rich histories. These breeds are loyal, intelligent, and perfectly suited for Indian households. Here’s a look at the <strong>top Indian dog breeds</strong> that every pet lover should know about.</p>
+
+<h2>1. Indian Pariah Dog (Desi Dog)</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/indian-pariah.webp" alt="Indian Pariah Dog (Desi Dog)" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Indigenous to India, found across the country.</li>
+  <li><strong>Appearance:</strong> Medium-sized, lean body, short coat, and upright ears.</li>
+  <li><strong>Temperament:</strong> Highly intelligent, loyal, and adaptable.</li>
+  <li><strong>Why They’re Special:</strong> Naturally hardy, low-maintenance, and excellent guard dogs.</li>
+</ul>
+
+<h2>2. Rajapalayam</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/rajapalayam.jpg" alt="Rajapalayam" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Tamil Nadu.</li>
+  <li><strong>Appearance:</strong> Large, muscular, with a distinctive white coat and pink nose.</li>
+  <li><strong>Temperament:</strong> Courageous, loyal, and protective.</li>
+  <li><strong>Why They’re Special:</strong> Known as the “Indian Ghost Hound,” they were historically used for hunting and guarding.</li>
+</ul>
+
+<h2>3. Mudhol Hound (Caravan Hound)</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/Mudhol-Hound.jpeg" alt="Mudhol Hound (Caravan Hound)" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Karnataka.</li>
+  <li><strong>Appearance:</strong> Sleek, athletic build with a short coat and long legs.</li>
+  <li><strong>Temperament:</strong> Gentle, alert, and highly energetic.</li>
+  <li><strong>Why They’re Special:</strong> Excellent runners and hunters, often used by royalty.</li>
+</ul>
+
+<h2>4. Kombai (Indian Bear Hound)</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/kombai-dog.webp" alt="Kombai (Indian Bear Hound)" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Tamil Nadu.</li>
+  <li><strong>Appearance:</strong> Medium-sized, reddish-brown coat, and a strong build.</li>
+  <li><strong>Temperament:</strong> Fearless, loyal, and protective.</li>
+  <li><strong>Why They’re Special:</strong> Known for their bravery and hunting skills, especially against wild boars.</li>
+</ul>
+
+<h2>5. Chippiparai</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/chippiparai-dog.png" alt="Chippiparai" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Tamil Nadu.</li>
+  <li><strong>Appearance:</strong> Tall, slender, with a short coat and curved tail.</li>
+  <li><strong>Temperament:</strong> Independent, intelligent, and loyal.</li>
+  <li><strong>Why They’re Special:</strong> Bred for hunting and guarding, they are agile and fast.</li>
+</ul>
+
+<h2>6. Kanni</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/kanni-dog.png" alt="Kanni" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Tamil Nadu.</li>
+  <li><strong>Appearance:</strong> Medium-sized, sleek, with a short coat and long legs.</li>
+  <li><strong>Temperament:</strong> Gentle, loyal, and reserved.</li>
+  <li><strong>Why They’re Special:</strong> Rare and highly valued for their hunting and guarding abilities.</li>
+</ul>
+
+<h2>7. Bully Kutta (Indian Mastiff)</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/bully-kutta.jpg" alt="Bully Kutta (Indian Mastiff)" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Punjab and Sindh regions.</li>
+  <li><strong>Appearance:</strong> Large, muscular, with a short coat and powerful build.</li>
+  <li><strong>Temperament:</strong> Protective, loyal, and courageous.</li>
+  <li><strong>Why They’re Special:</strong> Known as the “Beast from the East,” they are excellent guard dogs.</li>
+</ul>
+
+<h2>8. Gaddi Kutta (Indian Shepherd Dog)</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/gaddi-kutta.webp" alt="Gaddi Kutta (Indian Shepherd Dog)" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Himalayan regions.</li>
+  <li><strong>Appearance:</strong> Large, thick double coat, and strong build.</li>
+  <li><strong>Temperament:</strong> Loyal, hardworking, and protective.</li>
+  <li><strong>Why They’re Special:</strong> Used by shepherds to guard livestock in harsh mountain terrains.</li>
+</ul>
+
+<h2>9. Jonangi</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/jonangi.jpeg" alt="Jonangi" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Andhra Pradesh and Telangana.</li>
+  <li><strong>Appearance:</strong> Medium-sized, short coat, and curled tail.</li>
+  <li><strong>Temperament:</strong> Energetic, alert, and independent.</li>
+  <li><strong>Why They’re Special:</strong> Known for their unique ability to hunt in water and on land.</li>
+</ul>
+
+<h2>10. Rampur Hound</h2>
+<img src="https://pethouse-puppy.fly.storage.tigris.dev/blogs/rampur-greyhound.jpg" alt="Rampur Hound" class="w-96"/>
+<ul>
+  <li><strong>Origin:</strong> Rampur, Uttar Pradesh.</li>
+  <li><strong>Appearance:</strong> Tall, muscular, with a short coat and long legs.</li>
+  <li><strong>Temperament:</strong> Gentle, loyal, and courageous.</li>
+  <li><strong>Why They’re Special:</strong> Bred for hunting big game, they are fast and agile.</li>
+</ul>
+
+<h2>Why Choose an Indian Dog Breed?</h2>
+<ul>
+  <li><strong>Adaptability:</strong> These breeds are naturally suited to India’s climate and environment.</li>
+  <li><strong>Low Maintenance:</strong> Most have short coats and are hardy, requiring minimal grooming.</li>
+  <li><strong>Loyalty:</strong> Indian breeds are known for their unwavering loyalty and protective nature.</li>
+  <li><strong>Cultural Heritage:</strong> Owning an Indian breed helps preserve these unique and historic dogs.</li>
+</ul>
+
+<h2>Conclusion</h2>
+<p>Indian dog breeds are a testament to the country’s rich cultural and natural heritage. From the loyal Indian Pariah Dog to the majestic Rampur Hound, these breeds are not only well-adapted to Indian conditions but also make wonderful companions. By choosing an Indian breed, you’re not just getting a pet—you’re embracing a piece of India’s history and diversity. 🐾</p>
+
+<div class="footer">
+  <p>Happy pet parenting!</p>
+</div>
+
 </body>
-
 </html>

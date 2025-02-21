@@ -873,7 +873,7 @@ let y
 							{#each menuItems as item}
 								<li class="px-4 py-2">
 									<a
-										href="{navigateToProperPath(item.link || item.slug)}"
+										href="{navigateToProperPath(item.link || item.[slug])}"
 										class="block font-semibold link-underline text-sm link-underline-gray">
 										{item.title}
 									</a>
@@ -915,7 +915,7 @@ let y
 						{#each menuItems as item}
 							<li class="px-4">
 								<a
-									href="{navigateToProperPath(item.link || item.slug)}"
+									href="{navigateToProperPath(item.link || item.[slug])}"
 									class="font-semibold block link-underline link-underline-gray">
 									{item.title}
 								</a>

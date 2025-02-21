@@ -42,11 +42,13 @@
       </div>
     </a>
   </div>
-  <div class="relative">
-    <img src={Blog} alt="logo">
-    <div class="absolute inset-0 bg-gray-700 opacity-40"></div>
-    <div class="absolute inset-0 flex flex-col items-center justify-center">
-      <h2 class="font-romantis text-white sm:text-4xl text-base font-extrabold">Learn More About Your Favorite pet</h2>
+  <a href="/blogs">
+    <div class="relative">
+      <img src={Blog} alt="logo">
+      <div class="absolute inset-0 bg-gray-700 opacity-40"></div>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <h2 class="font-romantis text-white sm:text-4xl text-base font-extrabold">Learn More About Your Favorite pet</h2>
+      </div>
     </div>
-  </div>
+  </a>
 </section>

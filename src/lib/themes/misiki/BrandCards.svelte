@@ -12,9 +12,9 @@
       <img
         alt="logo"
         src={brand.link}
-        class="object-fill rounded-full overflow-hidden sm:h-24 h-20 sm:w-24 w-20"
+        class="object-fill rounded-full overflow-hidden sm:h-24 h-16 sm:w-24 w-16"
       />
-    <span class="text-sm font-bold font-mono text-zinc-600 sm:w-44 w-24">
+    <span class="text-sm font-bold font-mono text-zinc-600 sm:w-44 w-20">
       {brand.name}
     </span>
   </button>

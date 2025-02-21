@@ -21,14 +21,14 @@
 
 <SEO {...seoProps} />
 
-<section class="w-screen p-12">
+<section class="w-screen sm:p-12 p-4">
   <div class="flex flex-col gap-8 w-full">
     <a href="/new-trending">
       <div class="flex content-center items-center bg-zinc-950 border-b-2 shadow-xl rounded-xl">
         <img
           alt="logo"
           src={TrendingPets}
-          class="object-fill sm:h-72 h-44"
+          class="object-fill sm:h-72 h-32"
         />
         <div class="flex w-full justify-center items-center content-center">
           <p class="sm:text-5xl text-xl font-extrabold text-green-500">TRENDING PETS ON STORE</p>
@@ -43,13 +43,13 @@
         <img
           alt="logo"
           src={items[key][0].link}
-          class="object-fill rounded-full border-4 border-zinc-200 overflow-hidden sm:h-16 h-20 sm:w-16 w-20"
+          class="object-fill rounded-full border-4 border-zinc-200 overflow-hidden sm:h-16 h-12 sm:w-16 w-12"
         />
         <div class="flex flex-col justify-center text-center prose text-xl font-extrabold capitalize tracking-wider gap-4">
           <span>{key}</span>
         </div>
       </div>
-      <div class="flex w-full items-center content-end sm:gap-12 gap-4 sm:m-4 overflow-auto">
+      <div class="flex sm:flex-row flex-wrap w-full items-center content-end sm:gap-12 gap-4 p-4">
         {#each items[key] as item}
           <BrandCards brand={item} />
         {/each}

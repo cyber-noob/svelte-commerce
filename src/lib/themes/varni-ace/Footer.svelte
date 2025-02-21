@@ -257,7 +257,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								{#each pages as page}
 									<li class="flex max-w-max items-center">
 										<a
-											href="/p/{page.link || page.slug}"
+											href="/p/{page.link || page.[slug]}"
 											aria-label="Click to visit this page"
 											class="capitalize link-underline link-underline-gray whitespace-pre-wrap">
 											{page.name}
@@ -285,7 +285,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								{#each megamenu as category}
 									<li class="flex max-w-max items-center">
 										<a
-											href="/{category.link || category.slug}"
+											href="/{category.link || category.[slug]}"
 											aria-label="Click to visit this page"
 											class="link-underline link-underline-gray whitespace-pre-wrap">
 											{category.name}
@@ -313,7 +313,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								{#each megamenu as category}
 									<li class="flex max-w-max items-center">
 										<a
-											href="/{category.link || category.slug}"
+											href="/{category.link || category.[slug]}"
 											aria-label="Click to visit this page"
 											class="link-underline link-underline-gray whitespace-pre-wrap">
 											{category.name}

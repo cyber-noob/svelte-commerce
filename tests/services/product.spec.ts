@@ -21,7 +21,7 @@ test('Test: fetch reels', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-test('Test: fetch product by id or slug', async ({ request }) => {
+test('Test: fetch product by id or [slug]', async ({ request }) => {
 	const product_id = '63d89121e2e352d94b80980c'
 	const product_slug = 'craft-colorful-design-apple-iphone-8-mobile-cover'
 

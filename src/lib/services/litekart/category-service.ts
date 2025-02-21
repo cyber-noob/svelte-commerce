@@ -112,7 +112,7 @@ export const fetchAllProductsOfCategories = async ({
 		} else {
 			res = await getAPI(catQ, origin)
 		}
-		// must return link:string, slug:string(optional) name:string, new:boolean
+		// must return link:string, [slug]:string(optional) name:string, new:boolean
 		currentPage = res?.page
 		err = !products ? 'No result Not Found' : null
 		facets = res?.facets?.all_aggs

@@ -4,7 +4,7 @@ import Logo from '$lib/assets/logo.png'
 export const id = '62b00e15c4899dc7b1f78cb1'
 export const address = `#22, Global Village, Rourkela,<br/> Odisha - 769002, India`
 export const description = ''
-export const domain = 'litekart.in'
+export const domain = 'https://paradisepethouse.com'
 export const email = 'hi@litekart.in'
 export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPJ'
 export const GOOGLE_CLIENT_ID =
@@ -12,7 +12,7 @@ export const GOOGLE_CLIENT_ID =
 export const GOOGLE_CLIENT_SECRET = "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"
 export const keywords = 'ecommerce, headless, pwa'
 export const logo = Logo
-export const phone = '+91-8249028220'
+export const phone = '+91-9600552761'
 export const websiteLegalName = 'Paradise PetHouse LLP'
 export const websiteName = 'Paradise PetHouse'
 export const saasName = 'Paradise PetHouse'
@@ -22,7 +22,7 @@ export const saasDomain = 'https://paradisepethouse.com'
 // Bellow PWA Settings, can't configure from admin
 export const ogLanguage = 'en_US'
 export const siteLanguage = 'en-US'
-export const icon = 'static/litekart-icon-512x512-black.png'
+export const icon = 'static/android-chrome-512x512.png'
 export const backgroundColor = '#1b4079'
 export const themeColor = '#d62828'
 export const favicon = './favicon.ico'

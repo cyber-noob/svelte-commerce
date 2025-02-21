@@ -108,7 +108,7 @@ onMount(() => {
 							{#each data.home?.categories as category}
 								{#if category?.img || category?.img}
 									<a
-										href="{navigateToProperPath(category.link || category.slug)}"
+										href="{navigateToProperPath(category.link || category.[slug])}"
 										aria-label="Click to get the category related products"
 										class="shrink-0">
 										<LazyImg
@@ -128,7 +128,7 @@ onMount(() => {
 						{#each data.home?.categories as category}
 							{#if category?.img || category?.img}
 								<a
-									href="{navigateToProperPath(category.link || category.slug)}"
+									href="{navigateToProperPath(category.link || category.[slug])}"
 									aria-label="Click to get the category related products"
 									class="col-span-1">
 									<LazyImg

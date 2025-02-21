@@ -35,8 +35,7 @@ export default defineConfig(({ command, mode }) => {
 			host: true,
 			port: 3000,
 			proxy: {
-				'/api': HTTP_ENDPOINT,
-				'/sitemap': 'https://s3.ap-south-1.amazonaws.com/litekart.in'
+				'/api': HTTP_ENDPOINT
 			}
 		}
 	}

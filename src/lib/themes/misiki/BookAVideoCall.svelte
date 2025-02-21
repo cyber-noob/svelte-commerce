@@ -262,7 +262,7 @@
                   </button>
               {:else}
                 <button disabled
-                        class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white disabled:bg-gray-200 focus:bg-zinc-900 focus:text-white focus:z-10 border-4 border-zinc-900 shadow-xl font-semibold p-4 m-4">
+                        class="flex flex-row items-center content-center justify-center text-zinc-900 bg-white disabled:bg-gray-200 focus:bg-zinc-900 focus:text-white focus:z-10 border-zinc-900 shadow-xl font-semibold p-4 w-full sm:w-52 m-2 sm:m-4 rounded-xl">
                   {t.slot}
                 </button>
               {/if}

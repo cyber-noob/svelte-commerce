@@ -704,7 +704,7 @@ function scrollTo(elementId) {
 			</div>
 		</div>
 
-		<!-- Similar products From category slug -->
+		<!-- Similar products From category [slug] -->
 
 		{#await data.streamed?.moreProductDetails}
 			<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">

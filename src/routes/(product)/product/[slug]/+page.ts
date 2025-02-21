@@ -1,5 +1,4 @@
 // import { getCache, setCache } from '$lib/server/redis'
-import { ProductService, ReviewService, WishlistService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 import { fetchProductDetails } from 'lib/services/petstore/pdp-service'
 
@@ -35,8 +34,8 @@ export async function load({ params, url, parent }) {
 	// let products2 = {}
 	// let reviews = {}
 	// products2 = ProductService.fetchProduct2({
-	// 	id: slug,
-	// 	slug,
+	// 	id: [slug],
+	// 	[slug],
 	// 	origin,
 	// 	storeId
 	// })
@@ -44,7 +43,7 @@ export async function load({ params, url, parent }) {
 	// reviews = ReviewService.fetchProductReviews({
 	// 	origin,
 	// 	page,
-	// 	slug,
+	// 	[slug],
 	// 	storeId
 	// })
 	// console.log(products2)

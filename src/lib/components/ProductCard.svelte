@@ -384,7 +384,7 @@ onMount(async () => {
 
 			<!-- <div class="sm:hidden">
 				<a
-					href="/product/{product.slug}"
+					href="/product/{product.[slug]}"
 					rel="noopener noreferrer"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
@@ -415,7 +415,7 @@ onMount(async () => {
 					</div>
 
 					<h3
-						href="{'/' + product.slug}"
+						href="{'/' + product.[slug]}"
 						rel="noopener noreferrer"
 						class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm font-medium group-hover:underline">
 						{#if product.name}

@@ -9,7 +9,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 
 		res = await getMedusajsApi(`autocomplete`, {})
 
-		// must return name:string, slug:string type:string
+		// must return name:string, [slug]:string type:string
 		return data || []
 	} catch (e) {
 		error(e.status, e.message)

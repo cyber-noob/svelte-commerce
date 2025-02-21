@@ -1,40 +1,34 @@
-import { domain, id } from '$lib/config'
-import { getBySid } from '$lib/utils/server'
-export async function GET() {
-	const resP = await getBySid(`es/products?store=${id}`)
-	const products = resP?.data?.map((product) => {
-		product = {
-			name: product._source.name.replace('&', ''),
-			slug: product._source.slug,
-			description: product._source.description,
-			updatedAt: product._source.updatedAt
-		}
-		return product
-	})
-	const resPages = await getBySid(`pages?store=${id}`)
-	const pages = resPages?.data?.map((page) => {
-		page = {
-			name: page._source.name.replace('&', ''),
-			slug: page._source.slug,
-			description: page._source.description,
-			updatedAt: page._source.updatedAt
-		}
-		return page
-	})
-	if (!products) return new Response(undefined, { status: 404 })
-	const body = sitemap(products, pages)
+import { domain } from '$lib/config'
+import { PetStoreSitemapService } from '$lib/services'
 
-	const headers = {
-		'Cache-Control': 'max-age=0, s-maxage=3600',
-		'Content-Type': 'application/xml'
-	}
-	return {
-		headers,
-		body
-	}
+export async function GET() {
+  const resP = await PetStoreSitemapService.fetchProducts()
+  const products = resP?.map((product) => {
+    product = {
+      slug: product.slug
+    }
+    return product
+  })
+
+  const blogRes = await PetStoreSitemapService.fetchBlogs()
+  const blogs = blogRes.map((blog) => {
+    blog = {
+      slug: blog.slug
+    }
+    return blog
+  })
+
+  if (!products) return new Response(undefined, { status: 404 })
+  const body = sitemap(products, blogs)
+
+  const headers = {
+    'Cache-Control': 'max-age=0, s-maxage=3600',
+    'Content-Type': 'application/xml'
+  }
+  return new Response(body, { headers })
 }
 
-const sitemap = (products, pages) => `<?xml version="1.0" encoding="UTF-8" ?>
+const sitemap = (products, blogs) => `<?xml version="1.0" encoding="UTF-8" ?>
       <urlset
         xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="https://www.w3.org/1999/xhtml"
@@ -48,29 +42,43 @@ const sitemap = (products, pages) => `<?xml version="1.0" encoding="UTF-8" ?>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
       </url>
+
+      <url>
+        <loc>${domain}/new-trending</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+      </url>
+
+      <url>
+        <loc>${domain}/blogs</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+      </url>
+
         ${products
-					.map(
-						(product) =>
-							`
+  .map(
+    (product) =>
+      `
               <url>
-                <loc>${domain}/${product.slug}</loc>
+                <loc>${domain}${product.slug}</loc>
                 <changefreq>daily</changefreq>
                 <priority>0.7</priority>
               </url>
             `
-					)
-					.join('')} 
-          ${products
-						.map(
-							(product) =>
-								`
+  )
+  .join('')}
+
+					 ${blogs
+  .map(
+    (blog) =>
+      `
               <url>
-                <loc>${domain}/${product.slug}</loc>
+                <loc>${domain}${blog.slug}</loc>
                 <changefreq>daily</changefreq>
                 <priority>0.7</priority>
               </url>
             `
-						)
-						.join('')}
+  )
+  .join('')}
       </urlset>
     `
